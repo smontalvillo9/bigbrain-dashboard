@@ -9,36 +9,36 @@
   },
   "top3": [
     {
-      "event": "FC St. Pauli vs 1. FC Köln",
+      "event": "FC Barcelona Bàsquet vs Panathinaikos",
+      "pick": "FC Barcelona Bàsquet",
+      "odds": 2.23,
+      "bookmaker": "Unibet (SE)",
+      "ev": 7.33,
+      "confidence": 9,
+      "sport": "basketball_euroleague"
+    },
+    {
+      "event": "Crystal Palace vs West Ham United",
+      "pick": "Draw",
+      "odds": 3.5,
+      "bookmaker": "Unibet (NL)",
+      "ev": 5.65,
+      "confidence": 8,
+      "sport": "soccer_epl"
+    },
+    {
+      "event": "FSV Mainz 05 vs SC Freiburg",
       "pick": "Draw",
       "odds": 3.4,
-      "bookmaker": "1xBet",
-      "ev": 15.1,
-      "confidence": 10,
+      "bookmaker": "FanDuel",
+      "ev": 4.35,
+      "confidence": 8,
       "sport": "soccer_germany_bundesliga"
-    },
-    {
-      "event": "Union Berlin vs VfL Wolfsburg",
-      "pick": "VfL Wolfsburg",
-      "odds": 3.25,
-      "bookmaker": "Coolbet",
-      "ev": 25.95,
-      "confidence": 10,
-      "sport": "soccer_germany_bundesliga"
-    },
-    {
-      "event": "Como vs Inter Milan",
-      "pick": "Como",
-      "odds": 3.27,
-      "bookmaker": "1xBet",
-      "ev": 24.22,
-      "confidence": 10,
-      "sport": "soccer_italy_serie_a"
     }
   ],
   "combinada": {
-    "odds": 36.13,
-    "ev": 80.6,
+    "odds": 26.54,
+    "ev": 18.3,
     "legs": 3
   }
 }
