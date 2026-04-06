@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<title>BigBrain Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg1:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --text1:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;
+  --border:#30363d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg1);color:var(--text1);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;line-height:1.5;min-height:100vh}
+
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{font-size:1rem;font-weight:700}
+.status-dot{width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block;margin-right:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+#lastUpdate{color:var(--text2);font-size:.72rem}
+
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 8px;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch}
+.tab{padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);font-weight:600;font-size:.78rem;transition:.2s;white-space:nowrap;user-select:none}
+.tab.active{color:var(--text1);border-bottom-color:var(--blue)}
+.tab-content{display:none;padding:14px 16px}
+.tab-content.active{display:block}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.card-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+.metric{background:var(--bg3);border-radius:8px;padding:10px;text-align:center}
+.metric-val{font-size:1.25rem;font-weight:700}
+.metric-lbl{font-size:.62rem;color:var(--text2);margin-top:2px}
+.metric-delta{font-size:.65rem;margin-top:3px}
+
+.badge{padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600}
+.badge-green{background:rgba(63,185,80,.2);color:var(--green)}
+.badge-yellow{background:rgba(210,153,34,.2);color:var(--yellow)}
+.badge-red{background:rgba(248,81,73,.2);color:var(--red)}
+.badge-blue{background:rgba(88,166,255,.2);color:var(--blue)}
+.badge-purple{background:rgba(188,140,255,.2);color:var(--purple)}
+
+.progress-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px;transition:width 1s}
+.chart-container{position:relative;height:160px;margin-top:8px}
+
+.pick-card{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:8px}
+.pick-header{display:flex;justify-content:space-between;align-items:center}
+.pick-event{font-weight:600;font-size:.82rem}
+.pick-detail{font-size:.72rem;color:var(--text2);margin-top:4px}
+.pick-ev{font-weight:700;font-size:.85rem}
+
+.project-row{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.project-name{font-weight:600;font-size:.82rem;flex:1}
+.project-progress{width:80px}
+
+.macro-bar{margin-bottom:7px}
+.macro-label{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:3px}
+.macro-track{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.macro-fill{height:100%;border-radius:3px;transition:width 1s}
+
+.post-item{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:6px}
+.post-title{font-weight:600;font-size:.78rem}
+.post-stats{font-size:.68rem;color:var(--text2);margin-top:3px}
+
+.proto-badge{padding:8px 14px;border-radius:8px;font-weight:700;font-size:.9rem;margin-bottom:8px;text-align:center}
+.proto-detail{font-size:.75rem;color:var(--text2)}
+
+@media(max-width:600px){
+  .grid2{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr 1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+  .tab{padding:10px 10px;font-size:.72rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧠 BigBrain Dashboard</h1>
+  <span><span class="status-dot"></span><span id="lastUpdate">Cargando...</span></span>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('home',this)">🏠 Home</div>
+  <div class="tab" onclick="switchTab('salud',this)">💪 Salud</div>
+  <div class="tab" onclick="switchTab('betting',this)">🎯 Betting</div>
+  <div class="tab" onclick="switchTab('linkedin',this)">💼 LinkedIn</div>
+  <div class="tab" onclick="switchTab('ingles',this)">🎓 Ingles</div>
+  <div class="tab" onclick="switchTab('proyectos',this)">📋 Proyectos</div>
+</div>
+
+<!-- ===== HOME ===== -->
+<div id="tab-home" class="tab-content active">
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">⌚ Whoop Recovery</div>
+      <div class="grid3" id="homeWhoop"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Protocolo del dia</div>
+      <div id="homeProtocol"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🍽 Macros hoy</div>
+    <div id="homeMacros"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎯 Top pick del dia</div>
+    <div id="homeTopPick"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🎓 Ingles C1</div>
+      <div id="homeIngles"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💼 LinkedIn</div>
+      <div id="homeLinkedin"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SALUD ===== -->
+<div id="tab-salud" class="tab-content">
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">⌚ Whoop detalle</div>
+      <div class="grid3" id="saludWhoop"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏋 Body comp</div>
+      <div class="grid3" id="saludBody"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📈 Recovery & HRV — 7 dias</div>
+    <div class="chart-container"><canvas id="chartRecovery"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🍽 Macros — Detalle</div>
+    <div id="saludMacroDetail"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📊 Peso — Tendencia</div>
+    <div class="chart-container"><canvas id="chartWeight"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏆 PRs actuales</div>
+    <div class="grid4" id="saludPRs"></div>
+  </div>
+</div>
+
+<!-- ===== BETTING ===== -->
+<div id="tab-betting" class="tab-content">
+  <div class="card">
+    <div class="card-title">📊 Paper Track</div>
+    <div class="grid4" id="bettingStats"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏆 Top 3 Picks hoy</div>
+    <div id="bettingPicks"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎰 Combinada sugerida</div>
+    <div id="bettingCombi"></div>
+  </div>
+</div>
+
+<!-- ===== LINKEDIN ===== -->
+<div id="tab-linkedin" class="tab-content">
+  <div class="card">
+    <div class="card-title">📊 Metricas</div>
+    <div class="grid4" id="linkedinStats"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📅 Proximo post</div>
+    <div id="linkedinNext"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔥 Top posts</div>
+    <div id="linkedinPosts"></div>
+  </div>
+</div>
+
+<!-- ===== INGLES ===== -->
+<div id="tab-ingles" class="tab-content">
+  <div class="card">
+    <div class="card-title">📊 Progreso C1</div>
+    <div class="grid3" id="inglesStats"></div>
+    <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" id="inglesFill" style="width:0%;background:var(--blue)"></div></div>
+    <div style="text-align:center;font-size:.7rem;color:var(--text2);margin-top:4px" id="inglesLabel"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📚 Tema actual</div>
+      <div id="inglesTopic"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Proxima clase</div>
+      <div id="inglesNext"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROYECTOS ===== -->
+<div id="tab-proyectos" class="tab-content">
+  <div class="card">
+    <div class="card-title">📋 Proyectos activos</div>
+    <div id="projectsList"></div>
+  </div>
+</div>
+
+<script>
+// ═══ DATA LOADING ═══
+const BASE = window.location.hostname === 'localhost' ? '.' : '.';
+let D = {};
+
+async function loadData() {
+  const files = ['whoop','macros','betting','linkedin','ingles','projects'];
+  await Promise.all(files.map(async f => {
+    try {
+      const r = await fetch(`${BASE}/data/${f}.json?t=${Date.now()}`);
+      D[f] = await r.json();
+    } catch(e) { D[f] = null; console.warn(`No data: ${f}`); }
+  }));
+  render();
+}
+
+// ═══ TABS ═══
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ═══ HELPERS ═══
+function metric(val, lbl, color) {
+  return `<div class="metric"><div class="metric-val" style="color:var(--${color||'text1'})">${val}</div><div class="metric-lbl">${lbl}</div></div>`;
+}
+function recoveryColor(v) { return v >= 67 ? 'green' : v >= 34 ? 'yellow' : 'red'; }
+function statusBadge(s) {
+  const m = {operativo:'green',activo:'blue',dev:'purple',validacion:'yellow',banco:'text2'};
+  return `<span class="badge badge-${m[s]||'blue'}">${s}</span>`;
+}
+
+// ═══ RENDER ═══
+function render() {
+  document.getElementById('lastUpdate').textContent = `Datos: ${D.whoop?.date || '—'}`;
+
+  // HOME
+  if (D.whoop) {
+    const w = D.whoop;
+    const rc = recoveryColor(w.recovery);
+    document.getElementById('homeWhoop').innerHTML = [
+      metric(w.recovery+'%','Recovery',rc),
+      metric(w.hrv+' ms','HRV','blue'),
+      metric(w.sleep_hours+'h','Sueno','purple')
+    ].join('');
+
+    const protoBg = {POWER:'rgba(63,185,80,.15)',NORMAL:'rgba(88,166,255,.15)',MODERADO:'rgba(210,153,34,.15)',RECUPERACION:'rgba(248,81,73,.15)'};
+    const protoColor = {POWER:'var(--green)',NORMAL:'var(--blue)',MODERADO:'var(--yellow)',RECUPERACION:'var(--red)'};
+    document.getElementById('homeProtocol').innerHTML = `
+      <div class="proto-badge" style="background:${protoBg[w.protocol]||protoBg.NORMAL};color:${protoColor[w.protocol]||protoColor.NORMAL}">${w.protocol}</div>
+      <div class="proto-detail">${w.protocol_detail}</div>`;
+  }
+
+  if (D.macros) {
+    const m = D.macros;
+    document.getElementById('homeMacros').innerHTML = `
+      <div style="font-size:.75rem;color:var(--text2);margin-bottom:8px">Tipo dia: <strong style="color:var(--text1)">${m.day_type}</strong> | Objetivo: ${m.target.kcal} kcal</div>
+      ${macroBar('Proteina', m.consumed.protein, m.target.protein, 'blue')}
+      ${macroBar('HC', m.consumed.carbs, m.target.carbs, 'yellow')}
+      ${macroBar('Grasa', m.consumed.fat, m.target.fat, 'orange')}
+    `;
+  }
+
+  if (D.betting && D.betting.top3.length > 0) {
+    const p = D.betting.top3[0];
+    const emoji = p.sport === 'soccer' ? '⚽' : p.sport === 'basketball' ? '🏀' : '🎾';
+    document.getElementById('homeTopPick').innerHTML = `
+      <div class="pick-card">
+        <div class="pick-header">
+          <span class="pick-event">${emoji} ${p.event}</span>
+          <span class="pick-ev" style="color:var(--green)">EV +${p.ev}%</span>
+        </div>
+        <div class="pick-detail">${p.pick} @ ${p.odds} (${p.bookmaker}) | ⭐ ${p.confidence}/10</div>
+      </div>`;
+  }
+
+  if (D.ingles) {
+    document.getElementById('homeIngles').innerHTML = `
+      <div style="font-size:1.1rem;font-weight:700;color:var(--blue)">${D.ingles.progress_pct}%</div>
+      <div style="font-size:.7rem;color:var(--text2)">Clase ${D.ingles.class_number}/${D.ingles.total_classes}</div>
+      <div style="font-size:.68rem;color:var(--text3);margin-top:4px">${D.ingles.current_topic}</div>`;
+  }
+
+  if (D.linkedin) {
+    document.getElementById('homeLinkedin').innerHTML = `
+      <div style="font-size:1.1rem;font-weight:700;color:var(--blue)">${D.linkedin.followers}</div>
+      <div style="font-size:.7rem;color:var(--text2)">Followers</div>
+      <div style="font-size:.68rem;color:var(--green);margin-top:4px">+${D.linkedin.followers_delta_7d} esta semana</div>`;
+  }
+
+  // SALUD
+  if (D.whoop) {
+    const w = D.whoop;
+    document.getElementById('saludWhoop').innerHTML = [
+      metric(w.recovery+'%','Recovery',recoveryColor(w.recovery)),
+      metric(w.hrv+' ms','HRV','blue'),
+      metric(w.rhr+' bpm','RHR','purple'),
+      metric(w.sleep_hours+'h','Sueno','blue'),
+      metric(w.strain,'Strain','orange'),
+      metric(w.spo2+'%','SpO2','green')
+    ].join('');
+
+    // Chart recovery
+    const ctx = document.getElementById('chartRecovery').getContext('2d');
+    new Chart(ctx, {
+      type:'line',
+      data:{
+        labels: w.trend_7d.dates,
+        datasets:[
+          {label:'Recovery %',data:w.trend_7d.recovery,borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.1)',fill:true,tension:.4},
+          {label:'HRV ms',data:w.trend_7d.hrv,borderColor:'#58a6ff',backgroundColor:'rgba(88,166,255,.1)',fill:true,tension:.4}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{size:10}}}},scales:{x:{ticks:{color:'#6e7681',font:{size:9}}},y:{ticks:{color:'#6e7681',font:{size:9}}}}}
+    });
+  }
+
+  if (D.macros) {
+    const m = D.macros;
+    document.getElementById('saludBody').innerHTML = [
+      metric(m.weight_kg+'kg','Peso','text1'),
+      metric(m.body_fat_pct+'%','Grasa','yellow'),
+      metric(m.muscle_kg+'kg','Musculo','green')
+    ].join('');
+
+    document.getElementById('saludMacroDetail').innerHTML = `
+      <div style="font-size:.75rem;color:var(--text2);margin-bottom:8px">${m.day_type.toUpperCase()} | Objetivo: ${m.target.kcal} kcal | P:${m.target.protein}g HC:${m.target.carbs}g G:${m.target.fat}g</div>
+      ${macroBar('Proteina', m.consumed.protein, m.target.protein, 'blue')}
+      ${macroBar('Hidratos', m.consumed.carbs, m.target.carbs, 'yellow')}
+      ${macroBar('Grasa', m.consumed.fat, m.target.fat, 'orange')}
+      ${macroBar('Calorias', m.consumed.kcal, m.target.kcal, 'green')}
+    `;
+
+    document.getElementById('saludPRs').innerHTML = Object.entries(m.prs).map(([k,v]) =>
+      metric(v, k.toUpperCase(), 'yellow')
+    ).join('');
+
+    // Weight chart
+    const ctx2 = document.getElementById('chartWeight').getContext('2d');
+    new Chart(ctx2, {
+      type:'line',
+      data:{
+        labels: ['S-6','S-5','S-4','S-3','S-2','S-1','Hoy'],
+        datasets:[{label:'Peso kg',data:m.weight_trend,borderColor:'#58a6ff',backgroundColor:'rgba(88,166,255,.1)',fill:true,tension:.4}]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#6e7681',font:{size:9}}},y:{min:64,max:67,ticks:{color:'#6e7681',font:{size:9}}}}}
+    });
+  }
+
+  // BETTING
+  if (D.betting) {
+    const b = D.betting;
+    document.getElementById('bettingStats').innerHTML = [
+      metric(b.paper_track.total,'Picks totales','blue'),
+      metric(b.paper_track.resolved,'Resueltos','text1'),
+      metric(b.paper_track.wr+'%','Win Rate', b.paper_track.wr >= 40 ? 'green':'yellow'),
+      metric((b.paper_track.roi >= 0 ? '+':'')+b.paper_track.roi+'%','ROI', b.paper_track.roi >= 5 ? 'green':'yellow')
+    ].join('');
+
+    document.getElementById('bettingPicks').innerHTML = b.top3.map((p,i) => {
+      const medals = ['🥇','🥈','🥉'];
+      const emoji = p.sport === 'soccer' ? '⚽' : p.sport === 'basketball' ? '🏀' : '🎾';
+      return `<div class="pick-card">
+        <div class="pick-header">
+          <span class="pick-event">${medals[i]} ${emoji} ${p.event}</span>
+          <span class="pick-ev" style="color:var(--green)">EV +${p.ev}%</span>
+        </div>
+        <div class="pick-detail">${p.pick} @ ${p.odds} (${p.bookmaker}) | ⭐ ${p.confidence}/10</div>
+      </div>`;
+    }).join('');
+
+    if (b.combinada) {
+      document.getElementById('bettingCombi').innerHTML = `
+        <div style="font-size:.85rem;font-weight:700;color:var(--purple)">Cuota: ${b.combinada.odds} | EV: +${b.combinada.ev}%</div>
+        <div style="font-size:.72rem;color:var(--text2);margin-top:4px">${b.combinada.legs} selecciones</div>`;
+    }
+  }
+
+  // LINKEDIN
+  if (D.linkedin) {
+    const l = D.linkedin;
+    document.getElementById('linkedinStats').innerHTML = [
+      metric(l.followers,'Followers','blue'),
+      metric('+'+l.followers_delta_7d,'7d','green'),
+      metric(l.impressions_7d,'Impresiones','purple'),
+      metric(l.engagement_rate+'%','Engagement','yellow')
+    ].join('');
+
+    document.getElementById('linkedinNext').innerHTML = `
+      <div style="font-size:.85rem"><strong>${l.next_post.day}</strong> — ${l.next_post.type}</div>
+      <div style="margin-top:4px">${statusBadge(l.next_post.status.toLowerCase())}</div>`;
+
+    document.getElementById('linkedinPosts').innerHTML = l.top_posts.map(p => `
+      <div class="post-item">
+        <div class="post-title">${p.title}</div>
+        <div class="post-stats">${p.impressions} impresiones · ${p.likes} likes</div>
+      </div>`).join('');
+  }
+
+  // INGLES
+  if (D.ingles) {
+    const e = D.ingles;
+    document.getElementById('inglesStats').innerHTML = [
+      metric(e.level_estimate,'Nivel actual','yellow'),
+      metric(e.class_number+'/'+e.total_classes,'Clases','blue'),
+      metric(e.streak_days+' dias','Racha','green')
+    ].join('');
+    document.getElementById('inglesFill').style.width = e.progress_pct+'%';
+    document.getElementById('inglesLabel').textContent = `${e.progress_pct}% hacia ${e.target} — Deadline: ${e.deadline}`;
+    document.getElementById('inglesTopic').innerHTML = `<div style="font-size:.9rem;font-weight:600">${e.current_topic}</div><div style="font-size:.7rem;color:var(--text2);margin-top:4px">Semana ${e.week}</div>`;
+    document.getElementById('inglesNext').innerHTML = `<div style="font-size:.9rem;font-weight:600">${e.next_class}</div><div style="font-size:.7rem;color:var(--text2);margin-top:4px">${e.vocab_to_review} palabras para repasar</div>`;
+  }
+
+  // PROYECTOS
+  if (D.projects) {
+    document.getElementById('projectsList').innerHTML = D.projects.projects.map(p => `
+      <div class="project-row">
+        <span style="font-size:1.1rem">${p.emoji}</span>
+        <span class="project-name">${p.name}</span>
+        ${statusBadge(p.status)}
+        <div class="project-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%;background:var(--blue)"></div></div>
+          <div style="font-size:.6rem;color:var(--text3);text-align:right;margin-top:2px">${p.progress}%</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function macroBar(label, current, target, color) {
+  const pct = Math.min((current/target)*100, 100);
+  const remaining = target - current;
+  return `<div class="macro-bar">
+    <div class="macro-label"><span>${label}</span><span>${current}/${target}g (faltan ${remaining}g)</span></div>
+    <div class="macro-track"><div class="macro-fill" style="width:${pct}%;background:var(--${color})"></div></div>
+  </div>`;
+}
+
+// ═══ INIT ═══
+loadData();
+</script>
+</body>
+</html>

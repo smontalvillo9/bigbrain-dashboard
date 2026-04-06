@@ -1,0 +1,12 @@
+{
+  "date": "2026-04-06",
+  "projects": [
+    {"name": "Betting SaaS", "status": "dev", "priority": 1, "progress": 15, "emoji": "🎰"},
+    {"name": "Salud", "status": "operativo", "priority": 2, "progress": 80, "emoji": "🏋️"},
+    {"name": "Ingles C1", "status": "activo", "priority": 3, "progress": 70, "emoji": "🎓"},
+    {"name": "LinkedIn", "status": "activo", "priority": 4, "progress": 60, "emoji": "💼"},
+    {"name": "Betting Tips", "status": "validacion", "priority": 5, "progress": 25, "emoji": "🎯"},
+    {"name": "Shop Assistant", "status": "operativo", "priority": 6, "progress": 90, "emoji": "🛒"},
+    {"name": "Ideas", "status": "banco", "priority": 7, "progress": 10, "emoji": "💡"}
+  ]
+}
