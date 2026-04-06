@@ -1,14 +1,221 @@
 {
-  "date": "2026-04-06",
-  "week": 5,
-  "class_number": 28,
+  "last_updated": "2026-04-06T16:37:35",
+  "progress_pct": 72,
+  "class_number": 29,
   "total_classes": 40,
-  "progress_pct": 70,
-  "current_topic": "Participle Clauses",
-  "next_class": "Lunes 07-Abr 22:30",
-  "level_estimate": "B2+",
-  "target": "C1",
+  "level_estimate": "B2+/C1",
+  "week": 5,
+  "current_topic": "Advanced Listening + C1 Essay Writing",
+  "next_class": "Clase 30",
+  "start_date": "2026-02-28",
   "deadline": "2026-04-23",
-  "vocab_to_review": 45,
-  "streak_days": 12
+  "target": "C1",
+  "streak_days": 5,
+  "hours_total": 29,
+  "vocab_to_review": 497,
+  "vocabulary": {
+    "total_unique": 497,
+    "by_status": {
+      "new": 0,
+      "learning": 365,
+      "mature": 132,
+      "mastered": 0
+    },
+    "due_today": 497,
+    "categories": {
+      "supply-chain": 13,
+      "general": 435,
+      "linking-words": 6,
+      "finance": 17,
+      "negotiation": 12,
+      "pronunciation": 12,
+      "formal-register": 2
+    },
+    "weekly_new": []
+  },
+  "errors": {
+    "total_tracked": 177,
+    "active": 177,
+    "resolved": 0,
+    "top_active": [
+      {
+        "title": "INTERFERENCIA ESPAÑOL → INGLÉS EN ORDEN DE PALABRAS: \"MATCHES OF FOOTBALL\"",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "\"WE ARE 30 EMPLOYEES\" — CONFUSIÓN IDENTIDAD vs CANTIDAD",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "SPELLING: ESPAÑOLIZACIÓN DE PALABRAS",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "ERRORES GRAMATICALES EN WRITING: MÚLTIPLES PATRONES",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "OLVIDAR \"HAVE\" EN CONDICIONAL TYPE 3: \"WOULD PASSED\"",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "\"WAS\" vs \"WERE\" EN CONDICIONAL TYPE 2 (SUBJUNTIVO)",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "spanish_interference",
+        "priority": "alta"
+      },
+      {
+        "title": "PARTICIPIOS IRREGULARES: \"HELPT\", \"COUGHT\", \"DRIVED\"",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "general",
+        "priority": "alta"
+      },
+      {
+        "title": "ESTRUCTURA COMPLETAMENTE ROTA BAJO PRESIÓN",
+        "description": "### El problema",
+        "occurrences": 1,
+        "category": "vocabulary",
+        "priority": "alta"
+      }
+    ],
+    "by_category": {
+      "spanish_interference": 99,
+      "general": 56,
+      "vocabulary": 9,
+      "tense_agreement": 9,
+      "pronunciation": 1,
+      "prepositions": 2,
+      "word_order": 1
+    }
+  },
+  "grammar": {
+    "topics": [
+      {
+        "topic": "Mixed Conditionals",
+        "done": true,
+        "class": 8
+      },
+      {
+        "topic": "Inversions",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Cleft Sentences",
+        "done": true,
+        "class": 23
+      },
+      {
+        "topic": "Subjunctive",
+        "done": true,
+        "class": 25
+      },
+      {
+        "topic": "Participle Clauses",
+        "done": true,
+        "class": 28
+      },
+      {
+        "topic": "Wish / If Only",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Ellipsis & Substitution",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Passive Voice (advanced)",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Reported Speech (advanced)",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Relative Clauses (advanced)",
+        "done": true,
+        "class": 11
+      },
+      {
+        "topic": "Modal Verbs (deduction)",
+        "done": true,
+        "class": null
+      },
+      {
+        "topic": "Word Formation",
+        "done": true,
+        "class": 15
+      },
+      {
+        "topic": "Formal vs Informal Register",
+        "done": true,
+        "class": 27
+      }
+    ],
+    "coverage_pct": 100
+  },
+  "exercises": {
+    "total_completed": 43,
+    "average_score_pct": 69,
+    "weekly_scores": [
+      {
+        "week": 1,
+        "avg_score": 71,
+        "exercises": 15
+      },
+      {
+        "week": 2,
+        "avg_score": 64,
+        "exercises": 8
+      },
+      {
+        "week": 3,
+        "avg_score": 68,
+        "exercises": 11
+      },
+      {
+        "week": 4,
+        "avg_score": 70,
+        "exercises": 9
+      },
+      {
+        "week": 5,
+        "avg_score": 0,
+        "exercises": 0
+      }
+    ]
+  },
+  "srs": {
+    "total_cards": 497,
+    "due_today": 497,
+    "retention_rate_pct": 80,
+    "reviews_today": 0,
+    "streak_days": 0
+  },
+  "recommendations": [
+    "Revisa 497 palabras pendientes en tu SRS",
+    "Drill error recurrente: INTERFERENCIA ESPAÑOL → INGLÉS EN ORDEN DE PALABRAS: \"MATCHE",
+    "Refuerza ejercicios — score semanal por debajo del 70%"
+  ]
 }

@@ -197,7 +197,7 @@ header h1{font-size:1rem;font-weight:700}
 <div id="tab-ingles" class="tab-content">
   <div class="card">
     <div class="card-title">📊 Progreso C1</div>
-    <div class="grid3" id="inglesStats"></div>
+    <div class="grid4" id="inglesStats"></div>
     <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" id="inglesFill" style="width:0%;background:var(--blue)"></div></div>
     <div style="text-align:center;font-size:.7rem;color:var(--text2);margin-top:4px" id="inglesLabel"></div>
   </div>
@@ -207,9 +207,46 @@ header h1{font-size:1rem;font-weight:700}
       <div id="inglesTopic"></div>
     </div>
     <div class="card">
-      <div class="card-title">📅 Proxima clase</div>
-      <div id="inglesNext"></div>
+      <div class="card-title">🔄 SRS — Spaced Repetition</div>
+      <div id="inglesSRS"></div>
     </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📖 Vocabulario — Mastery</div>
+    <div id="inglesVocabStats"></div>
+    <div style="margin-top:10px">
+      <div style="height:18px;border-radius:4px;overflow:hidden;display:flex" id="inglesVocabBar"></div>
+      <div style="display:flex;gap:12px;margin-top:6px;font-size:.62rem;color:var(--text2)" id="inglesVocabLegend"></div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <div style="font-size:.68rem;font-weight:600;color:var(--text2);margin-bottom:6px">POR CATEGORIA</div>
+        <div id="inglesVocabCats"></div>
+      </div>
+      <div class="chart-container" style="height:140px"><canvas id="chartVocabCat"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">✅ Grammar C1 — Cobertura</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="font-size:1.3rem;font-weight:700;color:var(--green)" id="inglesGrammarPct"></div>
+      <div style="flex:1"><div class="progress-bar"><div class="progress-fill" id="inglesGrammarFill" style="width:0%;background:var(--green)"></div></div></div>
+    </div>
+    <div id="inglesGrammarList" style="display:grid;grid-template-columns:1fr 1fr;gap:4px"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">⚠️ Top Errores Activos</div>
+      <div id="inglesErrors"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 Score Semanal</div>
+      <div class="chart-container"><canvas id="chartExercises"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">💡 Recomendaciones</div>
+    <div id="inglesRecs"></div>
   </div>
 </div>
 
@@ -425,15 +462,144 @@ function render() {
   // INGLES
   if (D.ingles) {
     const e = D.ingles;
+
+    // Progress overview
     document.getElementById('inglesStats').innerHTML = [
-      metric(e.level_estimate,'Nivel actual','yellow'),
+      metric(e.level_estimate,'Nivel','yellow'),
       metric(e.class_number+'/'+e.total_classes,'Clases','blue'),
-      metric(e.streak_days+' dias','Racha','green')
+      metric(e.hours_total+'h','Horas','purple'),
+      metric('S'+e.week+'/8','Semana','green')
     ].join('');
     document.getElementById('inglesFill').style.width = e.progress_pct+'%';
     document.getElementById('inglesLabel').textContent = `${e.progress_pct}% hacia ${e.target} — Deadline: ${e.deadline}`;
-    document.getElementById('inglesTopic').innerHTML = `<div style="font-size:.9rem;font-weight:600">${e.current_topic}</div><div style="font-size:.7rem;color:var(--text2);margin-top:4px">Semana ${e.week}</div>`;
-    document.getElementById('inglesNext').innerHTML = `<div style="font-size:.9rem;font-weight:600">${e.next_class}</div><div style="font-size:.7rem;color:var(--text2);margin-top:4px">${e.vocab_to_review} palabras para repasar</div>`;
+
+    // Current topic
+    document.getElementById('inglesTopic').innerHTML = `
+      <div style="font-size:.9rem;font-weight:600">${e.current_topic}</div>
+      <div style="font-size:.7rem;color:var(--text2);margin-top:4px">Semana ${e.week} | ${e.next_class}</div>`;
+
+    // SRS status
+    const srs = e.srs || {};
+    const dueBadge = srs.due_today > 0
+      ? `<span class="badge badge-yellow">${srs.due_today} pendientes</span>`
+      : `<span class="badge badge-green">Al dia</span>`;
+    document.getElementById('inglesSRS').innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="font-size:1.3rem;font-weight:700;color:var(--blue)">${srs.total_cards||0}</div>
+        <div style="font-size:.7rem;color:var(--text2)">tarjetas totales</div>
+        ${dueBadge}
+      </div>
+      <div class="grid3">
+        ${metric(srs.due_today||0,'Due hoy','yellow')}
+        ${metric((srs.retention_rate_pct||0)+'%','Retencion','green')}
+        ${metric(srs.reviews_today||0,'Reviews hoy','blue')}
+      </div>`;
+
+    // Vocabulary mastery
+    const v = e.vocabulary || {};
+    const bs = v.by_status || {};
+    const total = v.total_unique || 1;
+    document.getElementById('inglesVocabStats').innerHTML = `
+      <div style="font-size:.75rem;color:var(--text2)">${v.total_unique||0} palabras unicas extraidas de ${e.class_number} clases</div>`;
+
+    const segments = [
+      {label:'Mature',count:bs.mature||0,color:'var(--green)'},
+      {label:'Learning',count:bs.learning||0,color:'var(--blue)'},
+      {label:'New',count:bs.new||0,color:'var(--yellow)'},
+    ];
+    document.getElementById('inglesVocabBar').innerHTML = segments.map(s =>
+      `<div style="flex:${s.count};background:${s.color};min-width:${s.count>0?'2px':'0'}"></div>`
+    ).join('');
+    document.getElementById('inglesVocabLegend').innerHTML = segments.map(s =>
+      `<span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${s.color};margin-right:3px"></span>${s.label}: ${s.count}</span>`
+    ).join('');
+
+    // Vocabulary categories
+    const cats = v.categories || {};
+    const catEntries = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+    document.getElementById('inglesVocabCats').innerHTML = catEntries.map(([cat,count]) =>
+      `<div style="display:flex;justify-content:space-between;font-size:.7rem;padding:2px 0;border-bottom:1px solid var(--bg4)">
+        <span>${cat}</span><span style="color:var(--blue);font-weight:600">${count}</span>
+      </div>`
+    ).join('');
+
+    // Vocabulary doughnut chart
+    if (catEntries.length > 0) {
+      const ctxCat = document.getElementById('chartVocabCat').getContext('2d');
+      new Chart(ctxCat, {
+        type:'doughnut',
+        data:{
+          labels: catEntries.map(c=>c[0]),
+          datasets:[{data:catEntries.map(c=>c[1]),backgroundColor:['#3fb950','#58a6ff','#d29922','#bc8cff','#f0883e','#f85149','#8b949e']}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#8b949e',font:{size:9},boxWidth:8}}}}
+      });
+    }
+
+    // Grammar coverage
+    const g = e.grammar || {};
+    document.getElementById('inglesGrammarPct').textContent = (g.coverage_pct||0)+'%';
+    document.getElementById('inglesGrammarFill').style.width = (g.coverage_pct||0)+'%';
+    document.getElementById('inglesGrammarList').innerHTML = (g.topics||[]).map(t =>
+      `<div style="font-size:.72rem;padding:3px 0;display:flex;align-items:center;gap:4px">
+        <span style="color:${t.done?'var(--green)':'var(--text3)'}">
+          ${t.done?'✓':'○'}
+        </span>
+        <span style="color:${t.done?'var(--text1)':'var(--text3)'}">${t.topic}</span>
+        ${t.class?`<span style="font-size:.58rem;color:var(--text3)">C${t.class}</span>`:''}
+      </div>`
+    ).join('');
+
+    // Top errors
+    const errs = (e.errors||{}).top_active || [];
+    document.getElementById('inglesErrors').innerHTML = errs.length === 0
+      ? '<div style="font-size:.75rem;color:var(--text3)">Sin errores activos</div>'
+      : errs.slice(0,5).map(err => {
+        const prioColor = err.priority==='alta'?'red':err.priority==='media'?'yellow':'green';
+        return `<div style="background:var(--bg3);border-radius:6px;padding:8px;margin-bottom:4px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.75rem;font-weight:600">${err.title.substring(0,50)}</span>
+            <span class="badge badge-${prioColor}">${err.priority}</span>
+          </div>
+          <div style="font-size:.65rem;color:var(--text2);margin-top:2px">${err.category} | x${err.occurrences}</div>
+        </div>`;
+      }).join('');
+
+    // Exercise score trend chart
+    const ws = (e.exercises||{}).weekly_scores || [];
+    if (ws.length > 0) {
+      const ctxEx = document.getElementById('chartExercises').getContext('2d');
+      new Chart(ctxEx, {
+        type:'line',
+        data:{
+          labels: ws.map(w=>'S'+w.week),
+          datasets:[{
+            label:'Score medio %',
+            data:ws.map(w=>w.avg_score),
+            borderColor:'#58a6ff',
+            backgroundColor:'rgba(88,166,255,.1)',
+            fill:true,tension:.4,
+            pointBackgroundColor:ws.map(w=>w.avg_score>=70?'#3fb950':'#d29922')
+          }]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{ticks:{color:'#6e7681',font:{size:9}}},
+            y:{min:0,max:100,ticks:{color:'#6e7681',font:{size:9}}}
+          }
+        }
+      });
+    }
+
+    // Recommendations
+    const recs = e.recommendations || [];
+    document.getElementById('inglesRecs').innerHTML = recs.map(r =>
+      `<div style="font-size:.78rem;padding:6px 0;border-bottom:1px solid var(--bg4);display:flex;align-items:center;gap:6px">
+        <span style="color:var(--yellow)">→</span> ${r}
+      </div>`
+    ).join('');
   }
 
   // PROYECTOS
