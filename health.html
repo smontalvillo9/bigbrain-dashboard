@@ -558,18 +558,31 @@ let expandedRecipes = {};
 // ═══════════════════════════════════════════════════════════
 async function init() {
   loadMealsFromStorage();
+
+  // Load whoop.json
   try {
-    const [wr, hr] = await Promise.all([
-      fetch('data/whoop.json').then(r => r.json()),
-      fetch('data/health.json').then(r => r.json()).catch(() => null)
-    ]);
-    W = wr;
-    H = hr;
+    const wr = await fetch('data/whoop.json?t='+Date.now());
+    if (wr.ok) W = await wr.json();
+    else W = getFallbackWhoop();
   } catch(e) {
+    console.warn('Whoop fetch failed:', e);
     W = getFallbackWhoop();
-    H = null;
   }
-  if (!H) H = getFallbackHealth();
+
+  // Load health.json (independent — don't let whoop failure kill this)
+  try {
+    const hr = await fetch('data/health.json?t='+Date.now());
+    if (hr.ok) {
+      H = await hr.json();
+      console.log('Health data loaded:', H.recipes?.length, 'recipes,', H.whoop_history?.length, 'whoop entries');
+    } else {
+      console.warn('Health fetch status:', hr.status);
+      H = getFallbackHealth();
+    }
+  } catch(e) {
+    console.warn('Health fetch failed:', e);
+    H = getFallbackHealth();
+  }
 
   renderAll();
 }
@@ -1146,13 +1159,18 @@ function renderBilbo() {
 // ═══════════════════════════════════════════════════════════
 // RECETAS
 // ═══════════════════════════════════════════════════════════
-const FORBIDDEN_INGREDIENTS = ['tomate fresco', 'pimiento', 'lechuga'];
+const FORBIDDEN_INGREDIENTS = ['tomate fresco', 'lechuga'];
+// "pimiento" (bell pepper) prohibited, but NOT "pimenton" (paprika spice)
+const FORBIDDEN_PATTERNS = [/\bpimiento\b/i];
 
 function isForbidden(recipe) {
-  const ingredients = (recipe.ingredients || []).join(' ').toLowerCase();
-  const name = recipe.name.toLowerCase();
-  const full = ingredients + ' ' + name;
-  return FORBIDDEN_INGREDIENTS.some(f => full.includes(f));
+  // Handle ingredients as string or array
+  const ing = recipe.ingredients || '';
+  const ingText = Array.isArray(ing) ? ing.join(' ') : String(ing);
+  const full = (ingText + ' ' + (recipe.name || '')).toLowerCase();
+  if (FORBIDDEN_INGREDIENTS.some(f => full.includes(f))) return true;
+  if (FORBIDDEN_PATTERNS.some(p => p.test(full))) return true;
+  return false;
 }
 
 function getCategories() {
