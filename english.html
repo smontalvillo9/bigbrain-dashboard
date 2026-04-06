@@ -477,7 +477,6 @@ let quizState = {
 };
 
 // Chat
-let chatHistory = [];
 
 // ============================================================
 // NAVIGATION
@@ -1208,194 +1207,62 @@ function renderQuizHistory() {
 // ============================================================
 // PROFESOR TAB
 // ============================================================
-const SYSTEM_PROMPT = `You are BigBrain (BB), Sergio's English C1 professor. You teach English grammar, vocabulary, and communication skills.
-
-Rules:
-- Explain grammar rules in SPANISH (castellano), give examples in ENGLISH
-- Be direct, no fluff, data-driven
-- Correct errors with explanation of WHY
-- Focus on C1 level: formal register, advanced grammar, business English
-- Sergio works in supply chain/logistics at Clarel (Grupo DIA) in Madrid
-- His weaknesses: speaking confidence, present continuous confusion, Spanish interference patterns
-- His strengths: reading comprehension, technical vocabulary, discipline`;
-
 function renderProf() {
-  const apiKey = localStorage.getItem('bb_api_key');
   const container = document.getElementById('prof-inner');
-
-  if (!apiKey) {
-    container.innerHTML = `
-      <div style="padding:14px 16px">
-        <div class="chat-setup">
-          <div style="font-size:2rem;margin-bottom:12px">✦</div>
-          <h2>Configura tu Profesor IA</h2>
-          <p>Para usar el chat con Claude necesitas una API key de Anthropic. Puedes obtenerla en <strong>console.anthropic.com</strong>.</p>
-          <input type="password" class="api-input" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
-          <div class="api-hint">Tu key se guarda solo en este dispositivo (localStorage). Nunca se envia a ningun servidor externo.</div>
-          <button class="btn btn-primary btn-lg" onclick="saveApiKey()">Guardar y conectar</button>
-        </div>
-      </div>
-    `;
-    setTimeout(() => document.getElementById('api-key-input')?.focus(), 100);
-    return;
-  }
-
-  // Render chat UI
   container.innerHTML = `
-    <div class="chat-wrap">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--bg2)">
-        <div style="font-size:.78rem;font-weight:600;color:var(--text2)">BigBrain Profesor — claude-sonnet-4-20250514</div>
-        <button class="chat-clear-btn" onclick="clearChat()" title="Borrar chat">Borrar chat</button>
+    <div style="padding:20px 16px;text-align:center">
+      <div style="font-size:3rem;margin-bottom:16px">🎓</div>
+      <h2 style="font-size:1.1rem;margin-bottom:8px">BigBrain — Tu Profesor C1</h2>
+      <p style="color:var(--text2);font-size:.8rem;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto">
+        Preguntale dudas de grammar, pide que te explique reglas, practica writing, o que corrija tus textos. Usa tu cuenta de Claude Max.
+      </p>
+      <a href="https://claude.ai/new" target="_blank" rel="noopener"
+         style="display:inline-block;background:var(--blue);color:#fff;padding:14px 32px;border-radius:10px;font-weight:700;font-size:.9rem;text-decoration:none;margin-bottom:16px">
+        Abrir Claude Chat
+      </a>
+      <div style="color:var(--text3);font-size:.68rem;margin-bottom:24px">Se abre en nueva pestana. Usa tu suscripcion Max.</div>
+
+      <div class="card" style="text-align:left;max-width:420px;margin:0 auto">
+        <div class="card-title">📋 Prompt para copiar y pegar</div>
+        <p style="font-size:.7rem;color:var(--text2);margin-bottom:8px">Pega esto como primer mensaje en Claude Chat para activar el modo profesor:</p>
+        <div id="prof-prompt" style="background:var(--bg3);border-radius:8px;padding:12px;font-size:.72rem;line-height:1.6;color:var(--text1);max-height:200px;overflow-y:auto;cursor:pointer" onclick="copyPrompt()">
+Eres BigBrain (BB), mi profesor de ingles C1. Reglas:
+- Explica la gramatica en CASTELLANO, ejemplos en INGLES
+- Directo, sin fluff, data-driven
+- Corrige errores explicando el POR QUE
+- Nivel C1: registro formal, gramatica avanzada, business English
+- Trabajo en supply chain/logistics en Clarel (Grupo DIA), Madrid
+- Mis debilidades: speaking confidence, present continuous, interferencia del espanol
+- Mis fortalezas: reading comprehension, vocabulario tecnico, disciplina
+        </div>
+        <button onclick="copyPrompt()" style="margin-top:8px;background:var(--bg4);color:var(--text1);border:none;padding:8px 16px;border-radius:6px;font-size:.72rem;cursor:pointer;width:100%">
+          📋 Copiar prompt
+        </button>
       </div>
-      <div class="chat-messages" id="chat-messages">
-        <div class="msg assistant">
-          <div class="msg-bubble">
-            <div class="md-content"><p>Hola Sergio. Soy tu profesor de ingles C1. Preguntame sobre gramatica, vocabulario, errores especificos, o pide que corrija un texto. En que trabajamos hoy?</p></div>
-          </div>
-          <div class="msg-time">${getTimeStr()}</div>
+
+      <div class="card" style="text-align:left;max-width:420px;margin:16px auto 0">
+        <div class="card-title">💡 Preguntas ejemplo</div>
+        <div style="font-size:.75rem;color:var(--text2);line-height:1.8">
+          → "Explicame cuando usar wish + past simple vs wish + past perfect"<br>
+          → "Corrige este email: Dear supplier, I want to inform that..."<br>
+          → "Dame 5 frases con inversions para practicar"<br>
+          → "Cual es la diferencia entre however, nevertheless y nonetheless?"<br>
+          → "Hazme un quiz de 10 preguntas sobre passive voice"
         </div>
       </div>
-      <div id="typing-indicator" style="display:none;padding:8px 16px 0">
-        <div class="msg assistant" style="max-width:80px">
-          <div class="msg-bubble" style="padding:10px 16px">
-            <div class="typing-indicator">
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-bar">
-        <textarea class="chat-textarea" id="chat-input" placeholder="Escribe tu pregunta..."
-          rows="1" onkeydown="chatKeydown(event)" oninput="autoResizeTextarea(this)"></textarea>
-        <button class="chat-send" id="chat-send-btn" onclick="sendMessage()" aria-label="Enviar mensaje">›</button>
-      </div>
-      <div class="chat-key-hint">Enter envia · Shift+Enter nueva linea · <span style="cursor:pointer;color:var(--red)" onclick="clearApiKey()">Cambiar API key</span></div>
     </div>
   `;
-
-  setTimeout(() => document.getElementById('chat-input')?.focus(), 100);
 }
 
-function saveApiKey() {
-  const val = document.getElementById('api-key-input')?.value?.trim();
-  if (!val || !val.startsWith('sk-')) {
-    showToast('API key invalida. Debe empezar por "sk-"', 'error');
-    return;
-  }
-  localStorage.setItem('bb_api_key', val);
-  renderProf();
-}
-
-function clearApiKey() {
-  localStorage.removeItem('bb_api_key');
-  chatHistory = [];
-  renderProf();
-}
-
-function clearChat() {
-  chatHistory = [];
-  renderProf();
-}
-
-function autoResizeTextarea(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function chatKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const sendBtn = document.getElementById('chat-send-btn');
-  if (!input) return;
-  const text = input.value.trim();
-  if (!text) return;
-
-  const apiKey = localStorage.getItem('bb_api_key');
-  if (!apiKey) { renderProf(); return; }
-
-  input.value = '';
-  input.style.height = 'auto';
-  input.disabled = true;
-  sendBtn.disabled = true;
-
-  // Append user message
-  chatHistory.push({role: 'user', content: text});
-  appendMessage('user', text);
-
-  // Show typing
-  const typingEl = document.getElementById('typing-indicator');
-  if (typingEl) typingEl.style.display = 'block';
-  scrollChatToBottom();
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        system: SYSTEM_PROMPT,
-        messages: chatHistory
-      })
+function copyPrompt() {
+  const text = document.getElementById('prof-prompt')?.innerText;
+  if (text) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Prompt copiado al portapapeles', 'success');
+    }).catch(() => {
+      showToast('No se pudo copiar. Seleccionalo manualmente.', 'error');
     });
-
-    if (typingEl) typingEl.style.display = 'none';
-
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      const msg = err.error?.message || `Error ${resp.status}`;
-      appendMessage('assistant', `**Error:** ${msg}`, true);
-      chatHistory.pop(); // remove failed user msg
-    } else {
-      const data = await resp.json();
-      const assistantText = data.content?.[0]?.text || '(respuesta vacia)';
-      chatHistory.push({role: 'assistant', content: assistantText});
-      appendMessage('assistant', assistantText, true);
-    }
-  } catch(e) {
-    if (typingEl) typingEl.style.display = 'none';
-    appendMessage('assistant', `**Error de red:** ${e.message}. Verifica tu conexion.`, true);
-    chatHistory.pop();
   }
-
-  input.disabled = false;
-  sendBtn.disabled = false;
-  input.focus();
-  scrollChatToBottom();
-}
-
-function appendMessage(role, text, isMarkdown = false) {
-  const messagesEl = document.getElementById('chat-messages');
-  if (!messagesEl) return;
-  const msgEl = document.createElement('div');
-  msgEl.className = `msg ${role}`;
-  const content = isMarkdown
-    ? `<div class="md-content">${marked.parse(text)}</div>`
-    : escHtml(text);
-  msgEl.innerHTML = `
-    <div class="msg-bubble">${content}</div>
-    <div class="msg-time">${getTimeStr()}</div>
-  `;
-  messagesEl.appendChild(msgEl);
-  scrollChatToBottom();
-}
-
-function scrollChatToBottom() {
-  const el = document.getElementById('chat-messages');
-  if (el) el.scrollTop = el.scrollHeight;
 }
 
 // ============================================================
