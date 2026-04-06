@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BB Salud">
+<link rel="manifest" href="manifest.json">
+<title>BB Salud</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg1:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --text1:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;
+  --border:#30363d;
+  --nav-h:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg1);color:var(--text1);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:13px;line-height:1.5;
+  display:flex;flex-direction:column;
+}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.app-header h1{font-size:.95rem;font-weight:700;letter-spacing:-.3px}
+.header-right{display:flex;align-items:center;gap:8px}
+.day-type-badge{padding:3px 10px;border-radius:12px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── SCROLL AREA ── */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  height:var(--nav-h);background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;flex-shrink:0;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;cursor:pointer;color:var(--text3);transition:.15s;
+  border:none;background:none;padding:8px 4px;min-height:44px;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-btn.active{color:var(--blue)}
+.nav-btn svg{width:20px;height:20px;fill:currentColor}
+.nav-btn span{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── TAB PANELS ── */
+.tab-panel{display:none;padding:12px 14px}
+.tab-panel.active{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.card-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+/* ── METRIC TILES ── */
+.metric{background:var(--bg3);border-radius:8px;padding:10px 6px;text-align:center}
+.metric-val{font-size:1.2rem;font-weight:700;line-height:1.2}
+.metric-lbl{font-size:.6rem;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.metric-sub{font-size:.62rem;margin-top:2px}
+
+/* ── BADGES ── */
+.badge{padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:700}
+.badge-green{background:rgba(63,185,80,.18);color:var(--green)}
+.badge-yellow{background:rgba(210,153,34,.18);color:var(--yellow)}
+.badge-red{background:rgba(248,81,73,.18);color:var(--red)}
+.badge-blue{background:rgba(88,166,255,.18);color:var(--blue)}
+.badge-purple{background:rgba(188,140,255,.18);color:var(--purple)}
+.badge-orange{background:rgba(240,136,62,.18);color:var(--orange)}
+
+/* ── MACRO BARS ── */
+.macro-row{margin-bottom:9px}
+.macro-row:last-child{margin-bottom:0}
+.macro-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.macro-name{font-size:.7rem;font-weight:600}
+.macro-nums{font-size:.68rem;color:var(--text2)}
+.macro-track{height:7px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.macro-fill{height:100%;border-radius:4px;transition:width .8s ease}
+
+/* ── ALERTS ── */
+.alert-fat{
+  background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.4);
+  border-radius:8px;padding:8px 12px;margin-bottom:8px;
+  font-size:.72rem;color:var(--red);font-weight:600;
+}
+.alert-protein{
+  background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);
+  border-radius:8px;padding:8px 12px;margin-bottom:8px;
+  font-size:.72rem;color:var(--blue);font-weight:600;
+}
+
+/* ── RECOVERY RING ── */
+.recovery-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0}
+.recovery-ring{position:relative;width:100px;height:100px}
+.recovery-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--bg4);stroke-width:10}
+.ring-fill{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.ring-label{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.ring-pct{font-size:1.5rem;font-weight:700;line-height:1}
+.ring-text{font-size:.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+
+/* ── CHARTS ── */
+.chart-wrap{position:relative;height:150px;margin-top:10px}
+
+/* ── COMIDAS ── */
+.meal-item{
+  background:var(--bg3);border-radius:8px;padding:10px 12px;
+  margin-bottom:6px;display:flex;align-items:center;gap:10px;
+}
+.meal-info{flex:1}
+.meal-name{font-weight:600;font-size:.8rem}
+.meal-time{font-size:.62rem;color:var(--text3);margin-top:1px}
+.meal-macros{display:flex;gap:8px;font-size:.65rem;margin-top:3px}
+.meal-macro{color:var(--text2)}
+.meal-del{
+  background:none;border:none;color:var(--text3);cursor:pointer;
+  padding:4px;border-radius:4px;transition:.15s;font-size:14px;min-width:28px;min-height:28px;
+  display:flex;align-items:center;justify-content:center;
+}
+.meal-del:hover{color:var(--red);background:rgba(248,81,73,.1)}
+
+.empty-meals{
+  text-align:center;padding:24px 16px;color:var(--text3);font-size:.78rem;
+}
+
+/* ── ADD MEAL FORM ── */
+.section-title{font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.recipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.recipe-btn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:8px 10px;cursor:pointer;text-align:left;transition:.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.recipe-btn:hover{border-color:var(--blue);background:var(--bg4)}
+.recipe-btn-name{font-size:.72rem;font-weight:600;color:var(--text1);line-height:1.3}
+.recipe-btn-macros{font-size:.6rem;color:var(--text2);margin-top:3px}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.form-field{display:flex;flex-direction:column;gap:3px}
+.form-field label{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+.form-field input, .form-field select{
+  background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+  padding:8px 10px;color:var(--text1);font-size:.8rem;
+  width:100%;outline:none;transition:border-color .15s;
+  -webkit-appearance:none;
+}
+.form-field input:focus, .form-field select:focus{border-color:var(--blue)}
+.form-field input[type=number]{-moz-appearance:textfield}
+.form-field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+.btn-primary{
+  background:var(--blue);color:#fff;border:none;border-radius:8px;
+  padding:10px 20px;font-size:.8rem;font-weight:700;cursor:pointer;
+  width:100%;transition:.15s;min-height:44px;
+}
+.btn-primary:hover{background:#79b8ff}
+.btn-primary:active{transform:scale(.98)}
+.btn-secondary{
+  background:var(--bg3);color:var(--text2);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;font-size:.75rem;font-weight:600;
+  cursor:pointer;transition:.15s;min-height:44px;
+}
+.btn-secondary:hover{border-color:var(--text2);color:var(--text1)}
+
+.tabs-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filter-btn{
+  padding:5px 12px;border-radius:16px;font-size:.68rem;font-weight:600;
+  border:1px solid var(--border);background:var(--bg3);color:var(--text2);
+  cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;
+}
+.filter-btn.active{background:rgba(88,166,255,.15);border-color:var(--blue);color:var(--blue)}
+
+/* ── HISTORY ROWS ── */
+.hist-row{
+  background:var(--bg3);border-radius:8px;padding:10px 12px;
+  margin-bottom:6px;display:flex;align-items:center;gap:10px;
+}
+.hist-date{font-size:.7rem;font-weight:600;flex:1}
+.hist-macros{font-size:.62rem;color:var(--text2)}
+
+/* ── RECIPE CARDS ── */
+.recipe-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s;
+}
+.recipe-card:hover{border-color:var(--blue)}
+.recipe-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.recipe-card-name{font-weight:600;font-size:.82rem;flex:1}
+.recipe-card-macros{display:flex;gap:10px;margin-top:5px;font-size:.65rem}
+.recipe-card-macro{color:var(--text2)}
+.recipe-card-macro span{color:var(--text1);font-weight:600}
+.recipe-expand{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:none}
+.recipe-expand.open{display:block}
+.recipe-ingredients{font-size:.72rem;color:var(--text2);margin-bottom:8px;line-height:1.7}
+.recipe-steps{font-size:.72rem;color:var(--text2);line-height:1.6}
+.recipe-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+
+/* ── BODY COMP ── */
+.body-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.body-stat{background:var(--bg3);border-radius:8px;padding:10px;text-align:center}
+.body-stat-val{font-size:1.1rem;font-weight:700}
+.body-stat-lbl{font-size:.6rem;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.body-stat-target{font-size:.62rem;margin-top:3px}
+
+/* ── PR ITEMS ── */
+.pr-item{
+  background:var(--bg3);border-radius:8px;padding:10px 12px;
+  margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;
+}
+.pr-name{font-size:.78rem;font-weight:600}
+.pr-val{font-size:.85rem;font-weight:700;color:var(--purple)}
+
+/* ── BILBO CARD ── */
+.bilbo-ex{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.bilbo-ex-name{font-weight:600;font-size:.78rem;margin-bottom:4px}
+.bilbo-ex-detail{font-size:.7rem;color:var(--text2)}
+.bilbo-next{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);border-radius:8px;padding:10px 12px;margin-top:8px}
+.bilbo-next-title{font-size:.65rem;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.bilbo-next-item{font-size:.72rem;color:var(--text2);margin-bottom:3px}
+
+/* ── PROGRESS INDICATOR ── */
+.days-until{text-align:center;padding:4px 0;font-size:.75rem;color:var(--text2)}
+.days-until strong{color:var(--text1);font-size:1rem}
+
+/* ── SECTION SEPARATOR ── */
+.sep{height:1px;background:var(--border);margin:12px 0}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:calc(var(--nav-h) + 10px);left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--bg4);border:1px solid var(--border);border-radius:8px;
+  padding:8px 16px;font-size:.78rem;font-weight:600;opacity:0;
+  transition:opacity .2s, transform .2s;pointer-events:none;z-index:999;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── PROTOCOL BANNER ── */
+.proto-banner{
+  border-radius:10px;padding:12px 14px;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.proto-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;opacity:.8}
+.proto-name{font-size:1.1rem;font-weight:700;margin:2px 0}
+.proto-detail{font-size:.72rem;opacity:.85}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:400px){
+  .g4{grid-template-columns:1fr 1fr}
+  .recipe-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+
+.collapsible-toggle{
+  width:100%;background:none;border:none;color:var(--text2);
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  padding:8px 0 4px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  -webkit-tap-highlight-color:transparent;
+}
+.collapsible-toggle:hover{color:var(--text1)}
+.collapsible-body{display:none}
+.collapsible-body.open{display:block}
+
+.add-custom-section{margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>BB Salud</h1>
+  <div class="header-right">
+    <span id="hdayBadge" class="day-type-badge badge-blue">—</span>
+  </div>
+</div>
+
+<div class="scroll-area" id="scrollArea">
+  <!-- HOME -->
+  <div id="panel-home" class="tab-panel active">
+
+    <div id="protoBanner"></div>
+
+    <!-- Whoop summary -->
+    <div class="card">
+      <div class="card-title">Whoop hoy</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div class="recovery-ring-wrap">
+          <div class="recovery-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle class="ring-bg" cx="50" cy="50" r="42"/>
+              <circle id="homeRingFill" class="ring-fill" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+            </svg>
+            <div class="ring-label">
+              <span id="homeRecPct" class="ring-pct">—</span>
+              <span class="ring-text">recovery</span>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1">
+          <div class="g3" id="homeWhoopGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Macros -->
+    <div class="card" id="homeMacrosCard">
+      <div class="card-title" style="display:flex;justify-content:space-between">
+        <span>Macros hoy</span>
+        <span id="homeKcalBadge" class="badge">0 kcal</span>
+      </div>
+      <div id="homeMacroAlerts"></div>
+      <div id="homeMacroBars"></div>
+    </div>
+
+    <!-- Body comp snapshot -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Composicion corporal</span>
+        <span id="homeWeekBadge" class="badge badge-purple">S—</span>
+      </div>
+      <div class="body-stat-row" id="homeBodyStats"></div>
+      <div class="days-until" id="homeDaysUntil" style="margin-top:10px"></div>
+    </div>
+
+  </div>
+
+  <!-- COMIDAS -->
+  <div id="panel-comidas" class="tab-panel">
+
+    <!-- Running total -->
+    <div class="card" id="comidasTotalsCard">
+      <div class="card-title" style="display:flex;justify-content:space-between">
+        <span>Total del dia</span>
+        <span id="comidasKcalBadge" class="badge">0 kcal</span>
+      </div>
+      <div id="comidasAlerts"></div>
+      <div id="comidasMacroBars"></div>
+    </div>
+
+    <!-- Today's log -->
+    <div class="card">
+      <div class="card-title">Comidas registradas hoy</div>
+      <div id="mealsLog"></div>
+    </div>
+
+    <!-- Add quick from recipes -->
+    <div class="card">
+      <button class="collapsible-toggle" onclick="toggleCollapse('quickAdd')">
+        Anadir rapido (recetas)
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" id="quickAddArrow"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="collapsible-body" id="quickAdd">
+        <div class="tabs-filter" id="quickCatFilter" style="margin-top:8px"></div>
+        <div id="quickRecipeGrid" class="recipe-grid"></div>
+      </div>
+    </div>
+
+    <!-- Add custom -->
+    <div class="card">
+      <button class="collapsible-toggle" onclick="toggleCollapse('customAdd')">
+        Anadir comida personalizada
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" id="customAddArrow"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="collapsible-body" id="customAdd">
+        <div style="margin-top:8px">
+          <div class="form-row">
+            <div class="form-field" style="grid-column:1/-1">
+              <label>Nombre</label>
+              <input type="text" id="customName" placeholder="Ej: Pechuga a la plancha">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Kcal</label>
+              <input type="number" id="customKcal" placeholder="0" min="0">
+            </div>
+            <div class="form-field">
+              <label>Proteina (g)</label>
+              <input type="number" id="customProtein" placeholder="0" min="0">
+            </div>
+            <div class="form-field">
+              <label>Hidratos (g)</label>
+              <input type="number" id="customCarbs" placeholder="0" min="0">
+            </div>
+            <div class="form-field">
+              <label>Grasa (g)</label>
+              <input type="number" id="customFat" placeholder="0" min="0">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="addCustomMeal()">Registrar comida</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card">
+      <div class="card-title">Historial 7 dias</div>
+      <div id="mealHistory"></div>
+    </div>
+
+  </div>
+
+  <!-- PROGRESO -->
+  <div id="panel-progreso" class="tab-panel">
+
+    <!-- Body comp current vs objetivo -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Composicion actual</span>
+        <span id="progresoWeekBadge" class="badge badge-purple">S—</span>
+      </div>
+      <div class="body-stat-row" id="progresoBodyStats" style="margin-bottom:8px"></div>
+      <div class="days-until" id="progresoDaysUntil"></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="card">
+      <div class="card-title">Peso corporal (kg)</div>
+      <div class="chart-wrap"><canvas id="chartPeso"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">% Grasa corporal</div>
+      <div class="chart-wrap"><canvas id="chartGrasa"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Musculo (kg)</div>
+      <div class="chart-wrap"><canvas id="chartMusculo"></canvas></div>
+    </div>
+
+    <!-- PRs -->
+    <div class="card">
+      <div class="card-title">Records personales</div>
+      <div id="prList"></div>
+    </div>
+
+    <!-- Bilbo -->
+    <div class="card">
+      <div class="card-title">Bilbo — Progresion</div>
+      <div id="bilboContent"></div>
+    </div>
+
+  </div>
+
+  <!-- RECETAS -->
+  <div id="panel-recetas" class="tab-panel">
+
+    <div class="tabs-filter" id="recetasCatFilter"></div>
+    <div style="font-size:.65rem;color:var(--text3);margin-bottom:8px" id="recetasSortInfo">Ordenado por proteina</div>
+    <div id="recetasList"></div>
+
+  </div>
+
+  <!-- WHOOP -->
+  <div id="panel-whoop" class="tab-panel">
+
+    <div class="card" style="text-align:center;padding:20px">
+      <div style="font-size:.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Recovery Score</div>
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        <div class="recovery-ring">
+          <svg viewBox="0 0 100 100" width="120" height="120">
+            <circle class="ring-bg" cx="50" cy="50" r="42"/>
+            <circle id="whoopRingFill" class="ring-fill" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+          </svg>
+          <div class="ring-label">
+            <span id="whoopRecPct" class="ring-pct" style="font-size:2rem">—</span>
+            <span class="ring-text">%</span>
+          </div>
+        </div>
+      </div>
+      <div id="whoopProtoBadge" style="margin-bottom:8px"></div>
+      <div id="whoopProtoDetail" style="font-size:.75rem;color:var(--text2)"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Metricas</div>
+      <div class="g3" id="whoopMetrics"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recovery 14 dias</div>
+      <div class="chart-wrap"><canvas id="chartWhoopRecovery"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">HRV 14 dias</div>
+      <div class="chart-wrap"><canvas id="chartWhoopHrv"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sueno 14 dias</div>
+      <div class="chart-wrap"><canvas id="chartWhoopSleep"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Inicio</span>
+  </button>
+  <button class="nav-btn" id="nav-comidas" onclick="switchTab('comidas')">
+    <svg viewBox="0 0 24 24"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v.99c0 .55-.45 1-1.01 1H2.01c-.56 0-1.01-.45-1.01-1zm15.03-7c0-8-15.03-8-15.03 0h15.03zM1.02 17h15v2h-15z"/></svg>
+    <span>Comidas</span>
+  </button>
+  <button class="nav-btn" id="nav-progreso" onclick="switchTab('progreso')">
+    <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+    <span>Progreso</span>
+  </button>
+  <button class="nav-btn" id="nav-recetas" onclick="switchTab('recetas')">
+    <svg viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
+    <span>Recetas</span>
+  </button>
+  <button class="nav-btn" id="nav-whoop" onclick="switchTab('whoop')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+    <span>Whoop</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA & STATE
+// ═══════════════════════════════════════════════════════════
+let W = null; // whoop.json
+let H = null; // health.json
+let meals = []; // today's logged meals (localStorage)
+let currentTab = 'home';
+let recetasCat = 'todos';
+let quickCat = 'todos';
+let chartsInitialized = {};
+let expandedRecipes = {};
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+async function init() {
+  loadMealsFromStorage();
+  try {
+    const [wr, hr] = await Promise.all([
+      fetch('data/whoop.json').then(r => r.json()),
+      fetch('data/health.json').then(r => r.json()).catch(() => null)
+    ]);
+    W = wr;
+    H = hr;
+  } catch(e) {
+    W = getFallbackWhoop();
+    H = null;
+  }
+  if (!H) H = getFallbackHealth();
+
+  renderAll();
+}
+
+function getFallbackWhoop() {
+  return {date:"2026-04-06",recovery:41,hrv:103,rhr:50,sleep_hours:4.1,
+    sleep_quality:53,strain:4.2,spo2:94.9,skin_temp:34.2,
+    protocol:"NORMAL",protocol_detail:"Recovery moderada. Entreno normal.",
+    trend_7d:{dates:["03-31","04-01","04-02","04-03","04-04","04-05","04-06"],
+      recovery:[75,40,51,19,55,33,41],hrv:[132,103,112,57,106,78,103]}};
+}
+
+function getFallbackHealth() {
+  return {
+    day_type:"pesas",
+    target:{kcal:2700,protein:200,carbs:305,fat:44},
+    all_targets:{
+      pesas:{kcal:2700,protein:200,carbs:305,fat:44},
+      futbol:{kcal:2900,protein:200,carbs:355,fat:44},
+      descanso:{kcal:2100,protein:200,carbs:195,fat:44},
+      "mini-cut":{kcal:2225,protein:200,carbs:257,fat:44}
+    },
+    consumed:{kcal:0,protein:0,carbs:0,fat:0},
+    today_meals:[],
+    meal_history:[],
+    body_comp:[
+      {week:0,weight_kg:70.4,fat_pct:16.5,muscle_kg:null},
+      {week:27,weight_kg:64.7,fat_pct:10.7,muscle_kg:35.3}
+    ],
+    body_current:{weight_kg:64.7,body_fat_pct:10.7,muscle_kg:35.3,waist_cm:72.5,week:27},
+    body_objetivo:{semana_objetivo:35,peso_objetivo_kg:63.7,grasa_objetivo_pct:10.0,musculo_objetivo_kg:35.7},
+    prs:{"Press Banca Barra":"58kg","Remo Barra Pendlay":"48kg","Press Militar Barra":"38kg","Curl Biceps Barra Z":"36kg"},
+    bilbo:{
+      current:{label:"W7 (23/03)",press_banca:{peso:36,reps:32},remo_pendlay:{peso:30,reps:30},press_militar:{peso:24,reps:30}},
+      next:{press_banca:"38kg x4 series",remo_pendlay:"32kg x4 series",press_militar:"26kg x4 series"}
+    },
+    recipes:[],
+    whoop_history:[]
+  };
+}
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════
+function loadMealsFromStorage() {
+  const today = new Date().toISOString().slice(0,10);
+  try {
+    const stored = JSON.parse(localStorage.getItem('bb_meals_today') || '{"date":"","meals":[]}');
+    if (stored.date === today) {
+      meals = stored.meals || [];
+    } else {
+      meals = [];
+      saveMeals();
+    }
+  } catch(e) {
+    meals = [];
+  }
+}
+
+function saveMeals() {
+  const today = new Date().toISOString().slice(0,10);
+  localStorage.setItem('bb_meals_today', JSON.stringify({date:today, meals}));
+}
+
+// ═══════════════════════════════════════════════════════════
+// COMPUTED TOTALS
+// ═══════════════════════════════════════════════════════════
+function getMealTotals() {
+  // Start from data/health.json consumed (food logged before app) + localStorage meals
+  const base = H.consumed || {kcal:0,protein:0,carbs:0,fat:0};
+  const fromStorage = meals.reduce((acc, m) => {
+    acc.kcal += (m.macros.kcal || 0);
+    acc.protein += (m.macros.protein || 0);
+    acc.carbs += (m.macros.carbs || 0);
+    acc.fat += (m.macros.fat || 0);
+    return acc;
+  }, {kcal:0, protein:0, carbs:0, fat:0});
+  return {
+    kcal: (base.kcal||0) + fromStorage.kcal,
+    protein: (base.protein||0) + fromStorage.protein,
+    carbs: (base.carbs||0) + fromStorage.carbs,
+    fat: (base.fat||0) + fromStorage.fat,
+  };
+}
+
+function getTarget() {
+  if (!H) return {kcal:2700,protein:200,carbs:305,fat:44};
+  // use all_targets by day_type
+  const dt = H.day_type || 'pesas';
+  return (H.all_targets && H.all_targets[dt]) ? H.all_targets[dt] : (H.target || {kcal:2700,protein:200,carbs:305,fat:44});
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════
+function renderAll() {
+  renderHeader();
+  renderHome();
+  renderComidas();
+  renderRecetas();
+  renderWhoop();
+}
+
+// ═══════════════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════════════
+function renderHeader() {
+  const dt = H ? (H.day_type || 'pesas') : 'pesas';
+  const badge = document.getElementById('hdayBadge');
+  const colors = {
+    pesas: 'badge-blue',
+    futbol: 'badge-green',
+    descanso: 'badge-purple',
+    'mini-cut': 'badge-orange'
+  };
+  const labels = {
+    pesas: 'Pesas',
+    futbol: 'Futbol',
+    descanso: 'Descanso',
+    'mini-cut': 'Mini-cut'
+  };
+  badge.className = 'day-type-badge badge ' + (colors[dt] || 'badge-blue');
+  badge.textContent = labels[dt] || dt.toUpperCase();
+}
+
+// ═══════════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════════
+function renderHome() {
+  renderProtoBanner();
+  renderHomeWhoop();
+  renderMacroBars('home');
+  renderHomeBodyStats();
+}
+
+function renderProtoBanner() {
+  const el = document.getElementById('protoBanner');
+  if (!W) { el.innerHTML = ''; return; }
+  const proto = W.protocol || 'NORMAL';
+  const detail = W.protocol_detail || '';
+  const colorMap = {
+    POWER: {bg:'rgba(63,185,80,.12)',border:'rgba(63,185,80,.35)',color:'var(--green)'},
+    NORMAL: {bg:'rgba(88,166,255,.1)',border:'rgba(88,166,255,.3)',color:'var(--blue)'},
+    RECUPERACION: {bg:'rgba(210,153,34,.1)',border:'rgba(210,153,34,.3)',color:'var(--yellow)'},
+  };
+  const c = colorMap[proto] || colorMap.NORMAL;
+  el.innerHTML = `<div class="proto-banner" style="background:${c.bg};border:1px solid ${c.border}">
+    <div style="flex:1">
+      <div class="proto-label" style="color:${c.color}">Protocolo del dia</div>
+      <div class="proto-name" style="color:${c.color}">${proto}</div>
+      <div class="proto-detail">${detail}</div>
+    </div>
+  </div>`;
+}
+
+function renderHomeWhoop() {
+  if (!W) return;
+  const pct = W.recovery || 0;
+  const color = recoveryColor(pct);
+
+  // Ring
+  setRing('homeRingFill', pct, color);
+  document.getElementById('homeRecPct').textContent = pct + '%';
+  document.getElementById('homeRecPct').style.color = color;
+
+  // Grid
+  const grid = document.getElementById('homeWhoopGrid');
+  grid.innerHTML = [
+    {v: W.hrv + ' ms', l: 'HRV'},
+    {v: W.rhr + ' bpm', l: 'RHR'},
+    {v: W.sleep_hours + 'h', l: 'Sueno'},
+    {v: (W.spo2 || '—') + '%', l: 'SpO2'},
+    {v: W.strain || '—', l: 'Strain'},
+    {v: (W.skin_temp || '—') + '°', l: 'T.Piel'},
+  ].map(m => `<div class="metric"><div class="metric-val" style="font-size:.95rem">${m.v}</div><div class="metric-lbl">${m.l}</div></div>`).join('');
+}
+
+function setRing(id, pct, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const circumference = 263.9;
+  const offset = circumference - (Math.min(pct,100)/100) * circumference;
+  el.style.strokeDashoffset = offset;
+  el.style.stroke = color;
+}
+
+function recoveryColor(pct) {
+  if (pct >= 67) return 'var(--green)';
+  if (pct >= 34) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function renderMacroBars(context) {
+  const totals = getMealTotals();
+  const target = getTarget();
+  const bars = [
+    {key:'kcal', label:'Kcal', consumed:totals.kcal, target:target.kcal, color:'var(--green)', unit:'kcal'},
+    {key:'protein', label:'Proteina', consumed:totals.protein, target:200, color:'var(--blue)', unit:'g', warn:totals.protein < 200},
+    {key:'carbs', label:'Hidratos', consumed:totals.carbs, target:target.carbs, color:'var(--yellow)', unit:'g'},
+    {key:'fat', label:'Grasa', consumed:totals.fat, target:45, color: totals.fat > 45 ? 'var(--red)' : 'var(--orange)', unit:'g', critical: totals.fat > 45},
+  ];
+
+  const alertsHtml = (() => {
+    let a = '';
+    if (totals.fat > 45) a += `<div class="alert-fat">ALERTA: Grasa ${totals.fat}g — Maximo 45g superado!</div>`;
+    if (totals.protein < 100 && totals.kcal > 0) a += `<div class="alert-protein">Proteina baja: ${totals.protein}g / 200g minimo</div>`;
+    return a;
+  })();
+
+  const barsHtml = bars.map(b => {
+    const pct = Math.min((b.consumed / b.target) * 100, 100);
+    return `<div class="macro-row">
+      <div class="macro-top">
+        <span class="macro-name" style="color:${b.color}">${b.label}</span>
+        <span class="macro-nums">${Math.round(b.consumed)} / ${b.target}${b.unit === 'kcal' ? '' : 'g'} ${b.unit === 'kcal' ? 'kcal' : ''}</span>
+      </div>
+      <div class="macro-track">
+        <div class="macro-fill" style="width:${pct}%;background:${b.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const kcalBadgeClass = totals.kcal > target.kcal * 1.05 ? 'badge badge-red' : 'badge badge-green';
+
+  if (context === 'home') {
+    document.getElementById('homeMacroAlerts').innerHTML = alertsHtml;
+    document.getElementById('homeMacroBars').innerHTML = barsHtml;
+    document.getElementById('homeKcalBadge').textContent = Math.round(totals.kcal) + ' kcal';
+    document.getElementById('homeKcalBadge').className = kcalBadgeClass;
+  } else if (context === 'comidas') {
+    document.getElementById('comidasAlerts').innerHTML = alertsHtml;
+    document.getElementById('comidasMacroBars').innerHTML = barsHtml;
+    document.getElementById('comidasKcalBadge').textContent = Math.round(totals.kcal) + ' kcal';
+    document.getElementById('comidasKcalBadge').className = kcalBadgeClass;
+  }
+}
+
+function renderHomeBodyStats() {
+  if (!H) return;
+  const bc = H.body_current || {};
+  const obj = H.body_objetivo || {};
+  const week = bc.week || 0;
+  const targetWeek = obj.semana_objetivo || 35;
+  const weeksLeft = Math.max(0, targetWeek - week);
+
+  document.getElementById('homeWeekBadge').textContent = 'S' + week;
+
+  const stats = [
+    {val: (bc.weight_kg||'—') + ' kg', lbl: 'Peso', target: obj.peso_objetivo_kg + ' kg', color: 'var(--blue)'},
+    {val: (bc.body_fat_pct||'—') + '%', lbl: 'Grasa', target: obj.grasa_objetivo_pct + '%', color: 'var(--orange)'},
+    {val: (bc.muscle_kg||'—') + ' kg', lbl: 'Musculo', target: obj.musculo_objetivo_kg + ' kg', color: 'var(--green)'},
+  ];
+
+  document.getElementById('homeBodyStats').innerHTML = stats.map(s =>
+    `<div class="body-stat">
+      <div class="body-stat-val" style="color:${s.color}">${s.val}</div>
+      <div class="body-stat-lbl">${s.lbl}</div>
+      <div class="body-stat-target" style="color:var(--text3)">obj: ${s.target}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('homeDaysUntil').innerHTML =
+    `<strong>${weeksLeft}</strong> semanas para objetivo (S${targetWeek})`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// COMIDAS
+// ═══════════════════════════════════════════════════════════
+function renderComidas() {
+  renderMacroBars('comidas');
+  renderMealsLog();
+  renderMealHistory();
+  renderQuickRecipes();
+}
+
+function renderMealsLog() {
+  const el = document.getElementById('mealsLog');
+  // Combined: health.json today_meals + localStorage meals
+  const allMeals = [
+    ...(H.today_meals || []).map(m => ({
+      name: m.name,
+      time: m.time || '',
+      macros: {kcal: m.macros.kcal||0, protein: m.macros.p||0, carbs: m.macros.hc||0, fat: m.macros.g||0},
+      fromJson: true
+    })),
+    ...meals
+  ];
+
+  if (allMeals.length === 0) {
+    el.innerHTML = '<div class="empty-meals">No hay comidas registradas hoy</div>';
+    return;
+  }
+
+  el.innerHTML = allMeals.map((m, i) => `
+    <div class="meal-item">
+      <div class="meal-info">
+        <div class="meal-name">${m.name}</div>
+        ${m.time ? `<div class="meal-time">${m.time}</div>` : ''}
+        <div class="meal-macros">
+          <span class="meal-macro">${Math.round(m.macros.kcal)} kcal</span>
+          <span class="meal-macro" style="color:var(--blue)">P: ${Math.round(m.macros.protein)}g</span>
+          <span class="meal-macro" style="color:var(--yellow)">HC: ${Math.round(m.macros.carbs)}g</span>
+          <span class="meal-macro" style="color:var(--orange)">G: ${Math.round(m.macros.fat)}g</span>
+        </div>
+      </div>
+      ${!m.fromJson ? `<button class="meal-del" onclick="deleteMeal(${i - (H.today_meals||[]).length})" aria-label="Eliminar">✕</button>` : ''}
+    </div>
+  `).join('');
+}
+
+function deleteMeal(storageIndex) {
+  if (storageIndex < 0) return;
+  meals.splice(storageIndex, 1);
+  saveMeals();
+  renderComidas();
+  renderMacroBars('home');
+  showToast('Comida eliminada');
+}
+
+function addCustomMeal() {
+  const name = document.getElementById('customName').value.trim();
+  const kcal = parseFloat(document.getElementById('customKcal').value) || 0;
+  const protein = parseFloat(document.getElementById('customProtein').value) || 0;
+  const carbs = parseFloat(document.getElementById('customCarbs').value) || 0;
+  const fat = parseFloat(document.getElementById('customFat').value) || 0;
+
+  if (!name) { showToast('Escribe un nombre'); return; }
+
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  meals.push({name, time, macros:{kcal, protein, carbs, fat}});
+  saveMeals();
+
+  document.getElementById('customName').value = '';
+  document.getElementById('customKcal').value = '';
+  document.getElementById('customProtein').value = '';
+  document.getElementById('customCarbs').value = '';
+  document.getElementById('customFat').value = '';
+
+  renderComidas();
+  renderMacroBars('home');
+  showToast('Comida registrada');
+}
+
+function addRecipeAsMeal(recipe) {
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  meals.push({
+    name: recipe.name,
+    time,
+    macros: {
+      kcal: recipe.macros.kcal || 0,
+      protein: recipe.macros.p || recipe.macros.protein || 0,
+      carbs: recipe.macros.hc || recipe.macros.carbs || 0,
+      fat: recipe.macros.g || recipe.macros.fat || 0
+    }
+  });
+  saveMeals();
+  renderComidas();
+  renderMacroBars('home');
+  showToast('Anadido: ' + recipe.name);
+}
+
+function renderQuickRecipes() {
+  const recipes = getFilteredRecipes(quickCat);
+  const cats = getCategories();
+
+  const filterEl = document.getElementById('quickCatFilter');
+  filterEl.innerHTML = ['todos', ...cats].map(c =>
+    `<button class="filter-btn ${quickCat===c?'active':''}" onclick="setQuickCat('${c}')">${catLabel(c)}</button>`
+  ).join('');
+
+  const grid = document.getElementById('quickRecipeGrid');
+  if (recipes.length === 0) {
+    grid.innerHTML = '<div style="color:var(--text3);font-size:.72rem;padding:8px 0">Sin recetas en esta categoria</div>';
+    return;
+  }
+  grid.innerHTML = recipes.slice(0,12).map(r =>
+    `<button class="recipe-btn" onclick='addRecipeAsMeal(${JSON.stringify(r)})'>
+      <div class="recipe-btn-name">${r.name}</div>
+      <div class="recipe-btn-macros">${r.macros.kcal}kcal · P:${r.macros.p||r.macros.protein||0}g</div>
+    </button>`
+  ).join('');
+}
+
+function setQuickCat(cat) {
+  quickCat = cat;
+  renderQuickRecipes();
+}
+
+function renderMealHistory() {
+  const el = document.getElementById('mealHistory');
+  const history = H.meal_history || [];
+  if (history.length === 0) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:.72rem;padding:8px 0">Sin historial disponible</div>';
+    return;
+  }
+  const last7 = history.slice(-7).reverse();
+  el.innerHTML = last7.map(d => {
+    const fatOk = d.totals.g <= 45 || d.totals.fat <= 45;
+    const fatVal = d.totals.g || d.totals.fat || 0;
+    const prot = d.totals.p || d.totals.protein || 0;
+    const kcal = d.totals.kcal || 0;
+    const badge = fatVal > 45
+      ? '<span class="badge badge-red">Grasa alta</span>'
+      : prot >= 200
+        ? '<span class="badge badge-green">OK</span>'
+        : '<span class="badge badge-yellow">P baja</span>';
+    return `<div class="hist-row">
+      <div>
+        <div class="hist-date">${d.date}</div>
+        <div class="hist-macros">${kcal}kcal · P:${prot}g · G:${fatVal}g · ${d.tipo_dia||''}</div>
+      </div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROGRESO
+// ═══════════════════════════════════════════════════════════
+function renderProgreso() {
+  if (!H) return;
+  const bc = H.body_current || {};
+  const obj = H.body_objetivo || {};
+  const week = bc.week || 0;
+  const targetWeek = obj.semana_objetivo || 35;
+  const weeksLeft = Math.max(0, targetWeek - week);
+
+  document.getElementById('progresoWeekBadge').textContent = 'S' + week;
+
+  const stats = [
+    {val: (bc.weight_kg||'—') + ' kg', lbl: 'Peso', target: obj.peso_objetivo_kg + ' kg', color: 'var(--blue)'},
+    {val: (bc.body_fat_pct||'—') + '%', lbl: 'Grasa', target: obj.grasa_objetivo_pct + '%', color: 'var(--orange)'},
+    {val: (bc.muscle_kg||'—') + ' kg', lbl: 'Musculo', target: obj.musculo_objetivo_kg + ' kg', color: 'var(--green)'},
+  ];
+  document.getElementById('progresoBodyStats').innerHTML = stats.map(s =>
+    `<div class="body-stat">
+      <div class="body-stat-val" style="color:${s.color}">${s.val}</div>
+      <div class="body-stat-lbl">${s.lbl}</div>
+      <div class="body-stat-target" style="color:var(--text3)">obj: ${s.target}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('progresoDaysUntil').innerHTML =
+    `<strong>${weeksLeft}</strong> semanas para objetivo (S${targetWeek})`;
+
+  renderProgressCharts();
+  renderPRs();
+  renderBilbo();
+}
+
+function renderProgressCharts() {
+  if (!H) return;
+  const bodyComp = H.body_comp || [];
+  const obj = H.body_objetivo || {};
+
+  // Normalize body_comp entries
+  const entries = bodyComp.map(e => ({
+    week: e.week,
+    weight: e.weight_kg || e.weight,
+    fat: e.fat_pct,
+    muscle: e.muscle_kg
+  })).filter(e => e.weight != null);
+
+  const labels = entries.map(e => 'S' + e.week);
+
+  const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {legend:{display:false}},
+    scales: {
+      x: {ticks:{color:'#8b949e',font:{size:10}},grid:{color:'#30363d'}},
+      y: {ticks:{color:'#8b949e',font:{size:10}},grid:{color:'#30363d'}}
+    }
+  };
+
+  // Peso
+  if (!chartsInitialized.peso) {
+    chartsInitialized.peso = true;
+    new Chart(document.getElementById('chartPeso'), {
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'Peso',data:entries.map(e=>e.weight),borderColor:'#58a6ff',backgroundColor:'rgba(88,166,255,.08)',tension:.3,pointRadius:3,fill:true},
+          {label:'Objetivo',data:Array(labels.length).fill(obj.peso_objetivo_kg),borderColor:'rgba(63,185,80,.5)',borderDash:[6,3],pointRadius:0,borderWidth:1.5}
+        ]
+      },
+      options:{...chartDefaults}
+    });
+  }
+
+  // Grasa
+  if (!chartsInitialized.grasa) {
+    chartsInitialized.grasa = true;
+    new Chart(document.getElementById('chartGrasa'), {
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'% Grasa',data:entries.map(e=>e.fat),borderColor:'#f0883e',backgroundColor:'rgba(240,136,62,.08)',tension:.3,pointRadius:3,fill:true},
+          {label:'Objetivo',data:Array(labels.length).fill(obj.grasa_objetivo_pct||10),borderColor:'rgba(63,185,80,.5)',borderDash:[6,3],pointRadius:0,borderWidth:1.5}
+        ]
+      },
+      options:{...chartDefaults}
+    });
+  }
+
+  // Musculo
+  const muscleData = entries.map(e => e.muscle);
+  if (!chartsInitialized.musculo && muscleData.some(v => v != null)) {
+    chartsInitialized.musculo = true;
+    new Chart(document.getElementById('chartMusculo'), {
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'Musculo',data:muscleData,borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.08)',tension:.3,pointRadius:3,fill:true,spanGaps:true},
+          {label:'Objetivo',data:Array(labels.length).fill(obj.musculo_objetivo_kg||35.7),borderColor:'rgba(88,166,255,.5)',borderDash:[6,3],pointRadius:0,borderWidth:1.5}
+        ]
+      },
+      options:{...chartDefaults}
+    });
+  }
+}
+
+function renderPRs() {
+  if (!H || !H.prs) return;
+  const el = document.getElementById('prList');
+  el.innerHTML = Object.entries(H.prs).map(([k,v]) =>
+    `<div class="pr-item">
+      <span class="pr-name">${k}</span>
+      <span class="pr-val">${v}</span>
+    </div>`
+  ).join('');
+}
+
+function renderBilbo() {
+  if (!H || !H.bilbo) return;
+  const el = document.getElementById('bilboContent');
+  const b = H.bilbo;
+  const cur = b.current || {};
+  const next = b.next || {};
+
+  const exercises = ['press_banca','remo_pendlay','press_militar'];
+  const exLabels = {press_banca:'Press Banca',remo_pendlay:'Remo Pendlay',press_militar:'Press Militar'};
+
+  const curHtml = exercises.map(ex => {
+    const d = cur[ex];
+    if (!d) return '';
+    return `<div class="bilbo-ex">
+      <div class="bilbo-ex-name">${exLabels[ex]}</div>
+      <div class="bilbo-ex-detail">${d.peso}kg · ${d.reps} reps totales</div>
+    </div>`;
+  }).join('');
+
+  const nextHtml = exercises.map(ex => {
+    const n = next[ex];
+    if (!n) return '';
+    return `<div class="bilbo-next-item">• ${exLabels[ex]}: <strong style="color:var(--text1)">${n}</strong></div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="font-size:.7rem;color:var(--text2);margin-bottom:8px">${cur.label || ''}</div>
+    ${curHtml}
+    ${nextHtml ? `<div class="bilbo-next">
+      <div class="bilbo-next-title">Proxima sesion</div>
+      ${nextHtml}
+    </div>` : ''}
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RECETAS
+// ═══════════════════════════════════════════════════════════
+const FORBIDDEN_INGREDIENTS = ['tomate fresco', 'pimiento', 'lechuga'];
+
+function isForbidden(recipe) {
+  const ingredients = (recipe.ingredients || []).join(' ').toLowerCase();
+  const name = recipe.name.toLowerCase();
+  const full = ingredients + ' ' + name;
+  return FORBIDDEN_INGREDIENTS.some(f => full.includes(f));
+}
+
+function getCategories() {
+  if (!H || !H.recipes) return [];
+  const cats = new Set();
+  H.recipes.filter(r => !isForbidden(r)).forEach(r => {
+    if (r.category) cats.add(r.category);
+  });
+  return [...cats];
+}
+
+function getFilteredRecipes(cat) {
+  if (!H || !H.recipes) return [];
+  let list = H.recipes.filter(r => !isForbidden(r));
+  if (cat !== 'todos') list = list.filter(r => r.category === cat);
+  list.sort((a,b) => {
+    const pa = a.macros.p || a.macros.protein || 0;
+    const pb = b.macros.p || b.macros.protein || 0;
+    return pb - pa;
+  });
+  return list;
+}
+
+function catLabel(cat) {
+  const m = {
+    todos:'Todos',
+    desayunos:'Desayunos',
+    almuerzos:'Almuerzos',
+    comidas_principales:'Principales',
+    pre_entreno:'Pre-Entreno',
+    post_entreno:'Post-Entreno'
+  };
+  return m[cat] || cat;
+}
+
+function renderRecetas() {
+  const cats = getCategories();
+  const filterEl = document.getElementById('recetasCatFilter');
+  filterEl.innerHTML = ['todos',...cats].map(c =>
+    `<button class="filter-btn ${recetasCat===c?'active':''}" onclick="setRecetasCat('${c}')">${catLabel(c)}</button>`
+  ).join('');
+
+  const recipes = getFilteredRecipes(recetasCat);
+  const el = document.getElementById('recetasList');
+  const totals = getMealTotals();
+  const target = getTarget();
+
+  if (recipes.length === 0) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:.78rem;padding:16px 0;text-align:center">No hay recetas en esta categoria</div>';
+    return;
+  }
+
+  el.innerHTML = recipes.map(r => {
+    const rProtein = r.macros.p || r.macros.protein || 0;
+    const rKcal = r.macros.kcal || 0;
+    const rFat = r.macros.g || r.macros.fat || 0;
+    const rCarbs = r.macros.hc || r.macros.carbs || 0;
+
+    // Macro fit check
+    const projFat = totals.fat + rFat;
+    const projKcal = totals.kcal + rKcal;
+    const encaja = projFat <= 45 && projKcal <= target.kcal * 1.05;
+    const fitBadge = encaja ? '<span class="badge badge-green">Encaja</span>' : '<span class="badge badge-red">Excede</span>';
+
+    const isExpanded = expandedRecipes[r.id || r.name];
+    const ingredients = (r.ingredients || []).join(', ');
+    const steps = r.recipe || '';
+
+    return `<div class="recipe-card" onclick="toggleRecipe('${(r.id||r.name).replace(/'/g,'\\\'')}')" role="button" aria-expanded="${isExpanded}">
+      <div class="recipe-card-header">
+        <div>
+          <div class="recipe-card-name">${r.name}</div>
+          ${r.time ? `<div style="font-size:.62rem;color:var(--text3);margin-top:2px">${r.time}</div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          ${fitBadge}
+          <div style="font-size:.62rem;color:var(--text2)">${rKcal} kcal</div>
+        </div>
+      </div>
+      <div class="recipe-card-macros">
+        <div class="recipe-card-macro">P: <span>${rProtein}g</span></div>
+        <div class="recipe-card-macro">HC: <span>${rCarbs}g</span></div>
+        <div class="recipe-card-macro">G: <span>${rFat}g</span></div>
+      </div>
+      <div class="recipe-expand ${isExpanded ? 'open' : ''}">
+        ${ingredients ? `<div class="recipe-ingredients"><strong style="color:var(--text1)">Ingredientes:</strong><br>${ingredients}</div>` : ''}
+        ${steps ? `<div class="recipe-steps"><strong style="color:var(--text1)">Preparacion:</strong><br>${steps}</div>` : ''}
+        <div style="margin-top:8px">
+          <button class="btn-secondary" style="width:auto;padding:6px 14px;font-size:.72rem;min-height:36px" onclick="event.stopPropagation();addRecipeAsMeal(${JSON.stringify(r).replace(/"/g,'&quot;')})">Registrar como comida</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleRecipe(id) {
+  expandedRecipes[id] = !expandedRecipes[id];
+  renderRecetas();
+}
+
+function setRecetasCat(cat) {
+  recetasCat = cat;
+  expandedRecipes = {};
+  renderRecetas();
+}
+
+// ═══════════════════════════════════════════════════════════
+// WHOOP
+// ═══════════════════════════════════════════════════════════
+function renderWhoop() {
+  if (!W) return;
+  const pct = W.recovery || 0;
+  const color = recoveryColor(pct);
+
+  setRing('whoopRingFill', pct, color);
+  document.getElementById('whoopRecPct').textContent = pct + '%';
+  document.getElementById('whoopRecPct').style.color = color;
+
+  // Protocol badge
+  const proto = W.protocol || 'NORMAL';
+  const colorMap = {
+    POWER: 'badge-green',
+    NORMAL: 'badge-blue',
+    RECUPERACION: 'badge-yellow'
+  };
+  document.getElementById('whoopProtoBadge').innerHTML =
+    `<span class="badge ${colorMap[proto]||'badge-blue'}" style="font-size:.82rem;padding:4px 14px">${proto}</span>`;
+  document.getElementById('whoopProtoDetail').textContent = W.protocol_detail || '';
+
+  // Metrics grid
+  const metrics = [
+    {v: W.hrv + ' ms', l:'HRV'},
+    {v: W.rhr + ' bpm', l:'RHR'},
+    {v: W.sleep_hours + ' h', l:'Sueno'},
+    {v: (W.spo2||'—') + ' %', l:'SpO2'},
+    {v: W.strain || '—', l:'Strain'},
+    {v: (W.skin_temp||'—') + '°C', l:'T.Piel'},
+  ];
+  document.getElementById('whoopMetrics').innerHTML = metrics.map(m =>
+    `<div class="metric"><div class="metric-val" style="font-size:1rem">${m.v}</div><div class="metric-lbl">${m.l}</div></div>`
+  ).join('');
+
+  renderWhoopCharts();
+}
+
+function renderWhoopCharts() {
+  // Use whoop_history from health.json (last 14) + trend_7d from whoop.json
+  let recoveryArr = [], hrvArr = [], sleepArr = [], dateLabels = [];
+
+  const hist = (H && H.whoop_history) || [];
+  if (hist.length > 0) {
+    const last14 = hist.slice(-14);
+    dateLabels = last14.map(d => d.date.slice(5));
+    recoveryArr = last14.map(d => d.recovery);
+    hrvArr = last14.map(d => d.hrv);
+    sleepArr = last14.map(d => Math.round((d.sleep_min||0) / 60 * 10) / 10);
+  } else if (W.trend_7d) {
+    dateLabels = W.trend_7d.dates || [];
+    recoveryArr = W.trend_7d.recovery || [];
+    hrvArr = W.trend_7d.hrv || [];
+    sleepArr = [];
+  }
+
+  const opts = {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:'#8b949e',font:{size:10}},grid:{color:'#30363d'}},
+      y:{ticks:{color:'#8b949e',font:{size:10}},grid:{color:'#30363d'}}
+    }
+  };
+
+  if (!chartsInitialized.whoopRec && recoveryArr.length > 0) {
+    chartsInitialized.whoopRec = true;
+    new Chart(document.getElementById('chartWhoopRecovery'), {
+      type:'line',
+      data:{labels:dateLabels,datasets:[{
+        data:recoveryArr,borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.08)',
+        tension:.3,pointRadius:3,fill:true
+      }]},
+      options:{...opts, scales:{...opts.scales, y:{...opts.scales.y, min:0, max:100}}}
+    });
+  }
+
+  if (!chartsInitialized.whoopHrv && hrvArr.length > 0) {
+    chartsInitialized.whoopHrv = true;
+    new Chart(document.getElementById('chartWhoopHrv'), {
+      type:'line',
+      data:{labels:dateLabels,datasets:[{
+        data:hrvArr,borderColor:'#bc8cff',backgroundColor:'rgba(188,140,255,.08)',
+        tension:.3,pointRadius:3,fill:true
+      }]},
+      options:{...opts}
+    });
+  }
+
+  if (!chartsInitialized.whoopSleep && (sleepArr.length > 0 || dateLabels.length > 0)) {
+    chartsInitialized.whoopSleep = true;
+    new Chart(document.getElementById('chartWhoopSleep'), {
+      type:'bar',
+      data:{labels:dateLabels,datasets:[{
+        data:sleepArr.length > 0 ? sleepArr : Array(dateLabels.length).fill(null),
+        backgroundColor:'rgba(88,166,255,.35)',borderColor:'#58a6ff',borderWidth:1,borderRadius:4
+      }]},
+      options:{...opts}
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function switchTab(tab) {
+  // Hide all panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('nav-' + tab).classList.add('active');
+  currentTab = tab;
+
+  // Scroll to top
+  document.getElementById('scrollArea').scrollTop = 0;
+
+  // Lazy render heavy tabs
+  if (tab === 'progreso') renderProgreso();
+  if (tab === 'recetas') renderRecetas();
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function toggleCollapse(id) {
+  const body = document.getElementById(id);
+  const arrow = document.getElementById(id + 'Arrow');
+  const isOpen = body.classList.toggle('open');
+  if (arrow) {
+    arrow.innerHTML = isOpen
+      ? '<path d="M4 10l4-4 4 4"/>'
+      : '<path d="M4 6l4 4 4-4"/>';
+  }
+}
+
+let toastTimeout;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>

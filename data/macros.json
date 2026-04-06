@@ -1,12 +1,33 @@
 {
-  "date": "2026-04-06",
-  "day_type": "descanso",
-  "target": {"kcal": 2000, "protein": 200, "carbs": 195, "fat": 42},
-  "consumed": {"kcal": 0, "protein": 0, "carbs": 0, "fat": 0},
-  "meals": [],
-  "weight_kg": 65.2,
-  "body_fat_pct": 11.0,
-  "muscle_kg": 35.2,
-  "weight_trend": [65.8, 65.5, 65.4, 65.3, 65.2, 65.1, 65.2],
-  "prs": {"bench": "58kg", "row": "48kg", "ohp": "38kg", "curl": "36kg"}
+  "day_type": "mini-cut",
+  "target": {
+    "kcal": 2225,
+    "protein": 200,
+    "carbs": 257,
+    "fat": 44
+  },
+  "consumed": {
+    "kcal": 0,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 0
+  },
+  "weight_kg": 64.7,
+  "body_fat_pct": 10.7,
+  "muscle_kg": 35.3,
+  "weight_trend": [
+    65.0,
+    65.2,
+    65.1,
+    66.0,
+    64.9,
+    64.9,
+    64.7
+  ],
+  "prs": {
+    "Press Banca Barra": "58kg",
+    "Remo Barra Pendlay": "48kg",
+    "Press Militar Barra": "38kg",
+    "Curl Bíceps Barra Z": "36kg"
+  }
 }

@@ -1,0 +1,1030 @@
+{
+  "last_updated": "2026-04-06T20:31:12",
+  "day_type": "mini-cut",
+  "target": {
+    "kcal": 2225,
+    "protein": 200,
+    "carbs": 257,
+    "fat": 44
+  },
+  "all_targets": {
+    "pesas": {
+      "kcal": 2450,
+      "protein": 200,
+      "carbs": 305,
+      "fat": 47
+    },
+    "futbol": {
+      "kcal": 2650,
+      "protein": 200,
+      "carbs": 355,
+      "fat": 50
+    },
+    "descanso": {
+      "kcal": 2000,
+      "protein": 200,
+      "carbs": 195,
+      "fat": 42
+    },
+    "mini-cut": {
+      "kcal": 2225,
+      "protein": 200,
+      "carbs": 257,
+      "fat": 44
+    }
+  },
+  "consumed": {
+    "kcal": 0,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 0
+  },
+  "today_meals": [],
+  "meal_history": [
+    {
+      "date": "2026-04-04",
+      "tipo_dia": "descanso",
+      "meals_count": 2,
+      "totals": {
+        "kcal": 1155,
+        "p": 91,
+        "hc": 136,
+        "g": 27
+      }
+    },
+    {
+      "date": "2026-04-03",
+      "tipo_dia": "pesas",
+      "meals_count": 4,
+      "totals": {
+        "kcal": 2126,
+        "p": 167,
+        "hc": 228,
+        "g": 59
+      }
+    },
+    {
+      "date": "2026-04-02",
+      "tipo_dia": "pesas",
+      "meals_count": 4,
+      "totals": {
+        "kcal": 4164,
+        "p": 236,
+        "hc": 361,
+        "g": 194
+      }
+    },
+    {
+      "date": "2026-04-01",
+      "tipo_dia": "pesas",
+      "meals_count": 3,
+      "totals": {
+        "kcal": 2065,
+        "p": 203,
+        "hc": 251,
+        "g": 25
+      }
+    },
+    {
+      "date": "2026-03-31",
+      "tipo_dia": "pesas",
+      "meals_count": 1,
+      "totals": {
+        "kcal": 1064,
+        "p": 77,
+        "hc": 133,
+        "g": 19
+      }
+    }
+  ],
+  "body_comp": [
+    {
+      "week": 0.0,
+      "weight": 70.4,
+      "fat_pct": 16.5,
+      "fat_kg": 11.62,
+      "muscle_kg": null,
+      "waist_cm": 80.3,
+      "chest_cm": 97.0,
+      "biceps_cm": 33.7
+    },
+    {
+      "week": 1.0,
+      "weight": 68.9,
+      "fat_pct": 16.2,
+      "fat_kg": 11.16,
+      "muscle_kg": null,
+      "waist_cm": 79.4,
+      "chest_cm": 97.0,
+      "biceps_cm": 33.7
+    },
+    {
+      "week": 2.0,
+      "weight": 68.3,
+      "fat_pct": 16.0,
+      "fat_kg": 10.93,
+      "muscle_kg": null,
+      "waist_cm": 79.3,
+      "chest_cm": 97.9,
+      "biceps_cm": 33.8
+    },
+    {
+      "week": 3.0,
+      "weight": 69.3,
+      "fat_pct": 16.5,
+      "fat_kg": 11.43,
+      "muscle_kg": null,
+      "waist_cm": 79.0,
+      "chest_cm": 99.0,
+      "biceps_cm": 33.9
+    },
+    {
+      "week": 4.0,
+      "weight": 67.5,
+      "fat_pct": 15.7,
+      "fat_kg": 10.6,
+      "muscle_kg": null,
+      "waist_cm": 78.2,
+      "chest_cm": 99.6,
+      "biceps_cm": 34.0
+    },
+    {
+      "week": 5.0,
+      "weight": 67.6,
+      "fat_pct": 14.6,
+      "fat_kg": 9.87,
+      "muscle_kg": null,
+      "waist_cm": 78.2,
+      "chest_cm": 99.6,
+      "biceps_cm": 34.0
+    },
+    {
+      "week": 6.0,
+      "weight": 67.4,
+      "fat_pct": 14.2,
+      "fat_kg": 9.57,
+      "muscle_kg": null,
+      "waist_cm": 77.3,
+      "chest_cm": 98.6,
+      "biceps_cm": 34.1
+    },
+    {
+      "week": 7.0,
+      "weight": 67.5,
+      "fat_pct": 12.5,
+      "fat_kg": 8.44,
+      "muscle_kg": null,
+      "waist_cm": 75.5,
+      "chest_cm": 98.4,
+      "biceps_cm": 33.2
+    },
+    {
+      "week": 8.0,
+      "weight": 65.5,
+      "fat_pct": 13.1,
+      "fat_kg": 8.58,
+      "muscle_kg": null,
+      "waist_cm": 75.0,
+      "chest_cm": 99.3,
+      "biceps_cm": 33.5
+    },
+    {
+      "week": 9.0,
+      "weight": 64.6,
+      "fat_pct": 13.0,
+      "fat_kg": 8.4,
+      "muscle_kg": null,
+      "waist_cm": 74.5,
+      "chest_cm": 98.5,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 10.0,
+      "weight": 64.6,
+      "fat_pct": 12.2,
+      "fat_kg": 7.88,
+      "muscle_kg": 34.7,
+      "waist_cm": 74.5,
+      "chest_cm": 99.4,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 11.0,
+      "weight": 64.9,
+      "fat_pct": 9.7,
+      "fat_kg": 6.3,
+      "muscle_kg": 34.17634,
+      "waist_cm": 73.5,
+      "chest_cm": 99.5,
+      "biceps_cm": 33.1
+    },
+    {
+      "week": 12.0,
+      "weight": 64.4,
+      "fat_pct": 11.2,
+      "fat_kg": 7.21,
+      "muscle_kg": 33.82288,
+      "waist_cm": 74.0,
+      "chest_cm": 99.8,
+      "biceps_cm": 33.3
+    },
+    {
+      "week": 13.0,
+      "weight": 63.7,
+      "fat_pct": 10.7,
+      "fat_kg": 6.82,
+      "muscle_kg": 34.3,
+      "waist_cm": 73.3,
+      "chest_cm": 98.4,
+      "biceps_cm": 32.5
+    },
+    {
+      "week": 14.0,
+      "weight": 64.4,
+      "fat_pct": 11.3,
+      "fat_kg": 7.28,
+      "muscle_kg": 35.3,
+      "waist_cm": 73.0,
+      "chest_cm": 100.2,
+      "biceps_cm": 32.6
+    },
+    {
+      "week": 15.0,
+      "weight": 64.4,
+      "fat_pct": 9.4,
+      "fat_kg": 6.05,
+      "muscle_kg": 35.1,
+      "waist_cm": 73.7,
+      "chest_cm": 99.7,
+      "biceps_cm": 32.8
+    },
+    {
+      "week": 16.0,
+      "weight": 64.3,
+      "fat_pct": 9.1,
+      "fat_kg": 5.85,
+      "muscle_kg": 34.8,
+      "waist_cm": 72.6,
+      "chest_cm": 100.0,
+      "biceps_cm": 32.8
+    },
+    {
+      "week": 17.0,
+      "weight": 65.3,
+      "fat_pct": 9.4,
+      "fat_kg": 6.14,
+      "muscle_kg": null,
+      "waist_cm": 73.3,
+      "chest_cm": 100.0,
+      "biceps_cm": 32.8
+    },
+    {
+      "week": 18.0,
+      "weight": 64.7,
+      "fat_pct": 9.6,
+      "fat_kg": 6.21,
+      "muscle_kg": 34.6,
+      "waist_cm": 72.6,
+      "chest_cm": 99.7,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 19.0,
+      "weight": 64.5,
+      "fat_pct": 9.3,
+      "fat_kg": 6.0,
+      "muscle_kg": 34.9,
+      "waist_cm": 73.3,
+      "chest_cm": 98.0,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 20.0,
+      "weight": 64.4,
+      "fat_pct": 11.4,
+      "fat_kg": 7.34,
+      "muscle_kg": 35.7,
+      "waist_cm": 72.7,
+      "chest_cm": 99.4,
+      "biceps_cm": 32.7
+    },
+    {
+      "week": 21.0,
+      "weight": 65.0,
+      "fat_pct": 11.2,
+      "fat_kg": 7.28,
+      "muscle_kg": 33.7,
+      "waist_cm": 72.0,
+      "chest_cm": 94.5,
+      "biceps_cm": 32.8
+    },
+    {
+      "week": 22.0,
+      "weight": 65.2,
+      "fat_pct": 11.4,
+      "fat_kg": 7.43,
+      "muscle_kg": 35.0,
+      "waist_cm": 72.9,
+      "chest_cm": 94.6,
+      "biceps_cm": 33.1
+    },
+    {
+      "week": 23.0,
+      "weight": 65.1,
+      "fat_pct": 12.1,
+      "fat_kg": 7.88,
+      "muscle_kg": 35.1,
+      "waist_cm": 72.5,
+      "chest_cm": 97.0,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 24.0,
+      "weight": 66.0,
+      "fat_pct": 7.7,
+      "fat_kg": 5.08,
+      "muscle_kg": 35.8,
+      "waist_cm": 74.0,
+      "chest_cm": 99.0,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 25.0,
+      "weight": 64.9,
+      "fat_pct": 10.5,
+      "fat_kg": 6.81,
+      "muscle_kg": 35.2,
+      "waist_cm": 72.8,
+      "chest_cm": 97.1,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 26.0,
+      "weight": 64.9,
+      "fat_pct": 10.7,
+      "fat_kg": 6.94,
+      "muscle_kg": 34.5,
+      "waist_cm": 72.8,
+      "chest_cm": 98.2,
+      "biceps_cm": 33.0
+    },
+    {
+      "week": 27.0,
+      "weight": 64.7,
+      "fat_pct": 10.7,
+      "fat_kg": 6.92,
+      "muscle_kg": 35.3,
+      "waist_cm": 72.5,
+      "chest_cm": 97.6,
+      "biceps_cm": 32.5
+    }
+  ],
+  "body_current": {
+    "weight_kg": 64.7,
+    "body_fat_pct": 10.7,
+    "muscle_kg": 35.3,
+    "waist_cm": 72.5,
+    "week": 27.0
+  },
+  "body_objetivo": {
+    "semana_objetivo": 35,
+    "peso_objetivo_kg": 63.7,
+    "grasa_objetivo_pct": 10.0,
+    "musculo_objetivo_kg": 35.7
+  },
+  "prs": {
+    "Press Banca Barra": "58kg",
+    "Remo Barra Pendlay": "48kg",
+    "Press Militar Barra": "38kg",
+    "Curl Bíceps Barra Z": "36kg"
+  },
+  "bilbo": {
+    "current": {
+      "label": "W7 (23/03)",
+      "press_banca": {
+        "peso": 36.0,
+        "reps": 32
+      },
+      "remo_pendlay": {
+        "peso": 30.0,
+        "reps": 30
+      },
+      "press_militar": {
+        "peso": 24.0,
+        "reps": 30
+      }
+    },
+    "next": {
+      "press_banca": "+2r → 34r @ 36.0kg",
+      "remo_pendlay": "+2r → 32r @ 30.0kg",
+      "press_militar": "+2r → 32r @ 24.0kg"
+    },
+    "updated": "2026-03-29T21:30:16.609965+02:00"
+  },
+  "recipes": [
+    {
+      "id": "avena_proteica",
+      "name": "Bowl Avena Proteica + Arándanos + Crema Cacahuete",
+      "category": "desayunos",
+      "macros": {
+        "kcal": 595,
+        "p": 53,
+        "hc": 65,
+        "g": 11
+      },
+      "ingredients": "80g avena | 1 scoop proteína (30g) | 300ml leche almendras | 50g arándanos | 15g crema cacahuete | canela",
+      "recipe": "Cuece avena con leche de almendras 4 min. Fuera del fuego añade proteína, mezcla. Sirve con arándanos encima y un hilo de crema de cacahuete. Canela al gusto.",
+      "time": "5 min",
+      "tags": []
+    },
+    {
+      "id": "tortitas_prozis_stack",
+      "name": "Stack de Tortitas Prozis + Sirope + Fresas",
+      "category": "desayunos",
+      "macros": {
+        "kcal": 570,
+        "p": 57,
+        "hc": 60,
+        "g": 9
+      },
+      "ingredients": "3 tortitas Prozis | 1 scoop proteína batido | 250ml leche almendras | sirope arándanos Prozis | 50g fresas",
+      "recipe": "Calienta las tortitas en sartén 1 min por lado. Prepara el batido. Monta en stack: tortita + sirope + tortita + fresas + tortita + sirope. Se come con el batido.",
+      "time": "5 min",
+      "tags": []
+    },
+    {
+      "id": "tostadas_lacón",
+      "name": "Tostadas con Claras Revueltas + Lacón + Queso Eatlean",
+      "category": "desayunos",
+      "macros": {
+        "kcal": 585,
+        "p": 59,
+        "hc": 62,
+        "g": 10
+      },
+      "ingredients": "3 rebanadas pan integral (150g) | 200ml claras huevo | 50g lacón ahumado | 30g queso Eatlean | pimentón + pimienta",
+      "recipe": "Revuelve las claras con pimentón y pimienta. Tuesta el pan. Saltea las claras en sartén antiadherente hasta que cuajen cremosas (no secas). Monta: tostada + claras + lacón + queso Eatlean por encima.",
+      "time": "8 min",
+      "tags": []
+    },
+    {
+      "id": "gofres_nutella_fit",
+      "name": "Gofres Prozis con Crema Proteica + Plátano Caramelizado",
+      "category": "desayunos",
+      "macros": {
+        "kcal": 590,
+        "p": 55,
+        "hc": 68,
+        "g": 10
+      },
+      "ingredients": "2 gofres Prozis | 1 scoop proteína batido | 300ml leche almendras | 1 plátano | canela",
+      "recipe": "Calienta los gofres. Corta el plátano en rodajas y ponlas en sartén con canela 2 min hasta caramelizarse. Monta los gofres con el plátano encima. El batido va aparte.",
+      "time": "7 min",
+      "tags": []
+    },
+    {
+      "id": "cottage_sirope",
+      "name": "Queso Cottage + Sirope + Arándanos",
+      "category": "almuerzos",
+      "macros": {
+        "kcal": 195,
+        "p": 28,
+        "hc": 14,
+        "g": 3
+      },
+      "ingredients": "200g queso cottage | sirope arándanos Prozis | 50g arándanos",
+      "recipe": "Sirve el cottage en bol, pon los arándanos encima y un chorrito de sirope. El cottage frío con el sirope parece un postre.",
+      "time": "1 min",
+      "tags": []
+    },
+    {
+      "id": "pavo_tortitas",
+      "name": "Rollitos de Pavo con Queso Eatlean",
+      "category": "almuerzos",
+      "macros": {
+        "kcal": 240,
+        "p": 32,
+        "hc": 22,
+        "g": 5
+      },
+      "ingredients": "100g pechuga pavo | 30g queso Eatlean | 3 tortitas de arroz | mostaza",
+      "recipe": "Pon la tortita, mostaza, pavo y queso Eatlean. Enrolla. No necesita microondas, está buenísimo frío.",
+      "time": "2 min",
+      "tags": []
+    },
+    {
+      "id": "yogur_granola",
+      "name": "Yogur Griego + Granola Fit + Frutos Rojos",
+      "category": "almuerzos",
+      "macros": {
+        "kcal": 255,
+        "p": 27,
+        "hc": 18,
+        "g": 8
+      },
+      "ingredients": "180g yogur griego 0% | 20g crema proteica | 50g arándanos | 10g almendras fileteadas",
+      "recipe": "Mezcla yogur con crema proteica. Pon los arándanos encima y las almendras. Textura cremosa con crujiente.",
+      "time": "1 min",
+      "tags": []
+    },
+    {
+      "id": "batido_express",
+      "name": "Batido Proteico Mercadona + Almendras",
+      "category": "almuerzos",
+      "macros": {
+        "kcal": 230,
+        "p": 27,
+        "hc": 20,
+        "g": 7
+      },
+      "ingredients": "1 batido proteico Mercadona | 15g almendras",
+      "recipe": "Listo para consumir. El batido Mercadona está decente y es práctico.",
+      "time": "0 min",
+      "tags": []
+    },
+    {
+      "id": "hamburguesa_guay",
+      "name": "Hamburguesa Guay con Lacón, Huevo y Patatas AirFryer",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 760,
+        "p": 70,
+        "hc": 78,
+        "g": 18
+      },
+      "ingredients": "180g carne picada 95% | 1 pan integral | 30g queso Eatlean | 50g lacón ahumado | 1 huevo | 50g cebolla morada | 200g patatas | salsa Valentina + mostaza",
+      "recipe": "1) Patatas en gajos sin aceite al AirFryer 200°C 22min. 2) Forma la hamburguesa con sal y pimienta, plancha 3min por lado. 3) Huevo plancha. 4) Lacón 1min plancha. 5) Monta: pan tostado + hamburguesa + queso Eatlean (se derrite con el calor) + lacón + huevo + cebolla morada cruda + mostaza + Valentina.",
+      "time": "25 min",
+      "tags": [
+        "airfryer",
+        "top_rated",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "nuggets_miel_mostaza",
+      "name": "Nuggets Crispy de Pollo con Salsa Honey Mustard",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 740,
+        "p": 73,
+        "hc": 72,
+        "g": 14
+      },
+      "ingredients": "220g pechuga pollo | 25g pan rallado integral | 1 huevo clara | especias (ajo, pimentón, orégano) | 200g patatas | salsa: yogur 80g + mostaza 15g + miel 5g",
+      "recipe": "1) Corta el pollo en dados. 2) Pasa por clara de huevo, luego por pan rallado + especias bien mezcladas. 3) AirFryer 200°C 14min (dales vuelta a mitad). Quedan CRUJIENTES de verdad. 4) Patatas AirFryer sin aceite 200°C 20min. 5) Salsa: mezcla yogur + mostaza + un toque de miel. Dipea los nuggets.",
+      "time": "25 min",
+      "tags": [
+        "airfryer",
+        "top_rated",
+        "pollo",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "poke_atun_aguacate",
+      "name": "Poke Bowl de Atún con Aguacate, Sésamo y Salsa Teriyaki Fit",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 755,
+        "p": 64,
+        "hc": 75,
+        "g": 20
+      },
+      "ingredients": "200g lomo atún congelado | 90g quinoa seca | 60g aguacate | 100g zanahoria rallada | edamame 50g | soja baja en sal | sésamo | salsa: yogur 60g + limón + wasabi",
+      "recipe": "1) Cuece quinoa (15min). 2) Descongela el atún en agua fría 15min, sécalo y córtalo en dados, marínalo 5min en soja + sésamo. 3) Monta: quinoa de base → atún marinado → zanahoria rallada → aguacate en láminas → edamame. 4) Salsa encima: yogur + limón + wasabi. Instagram worthy.",
+      "time": "20 min",
+      "tags": [
+        "bowl",
+        "gourmet",
+        "pescado",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "burrito_cargado",
+      "name": "Burrito Cargado de Pollo con Patatas Bravas Fit",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 735,
+        "p": 74,
+        "hc": 72,
+        "g": 14
+      },
+      "ingredients": "220g pechuga pollo | 1 tortilla avena 51% | 150g patatas | 50g cebolla | salsa chipotle Prozis | yogur 60g + pimentón ahumado (salsa brava) | queso Eatlean 30g",
+      "recipe": "1) Patatas en cubitos al AirFryer 200°C 18min sin aceite. 2) Pollo en tiras con cebolla, especias tex-mex. 3) Salsa brava casera: yogur + pimentón ahumado + ajo en polvo + sal. 4) Calienta tortilla 30s en sartén. 5) Monta: pollo + patatas dentro de la tortilla + chipotle + salsa brava + queso Eatlean + enrolla fuerte.",
+      "time": "22 min",
+      "tags": [
+        "airfryer",
+        "pollo",
+        "mexicano",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "salmon_cheddar_campesinas",
+      "name": "Salmón Crujiente con Salsa Cheddar HSN + Patatas Campesinas",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 745,
+        "p": 56,
+        "hc": 52,
+        "g": 29
+      },
+      "ingredients": "200g lomo salmón | 250g patatas | 50g cebolla | especias campesinas (romero, tomillo, ajo) | 3g AOVE | salsa cheddar HSN 20g",
+      "recipe": "1) Patatas + cebolla en gajos con especias campesinas y AOVE → AirFryer 200°C 22min. 2) Salmón a la plancha muy caliente 3min por lado (que quede sellado por fuera, jugoso por dentro). 3) Sirve el salmón sobre las patatas campesinas. 4) Pon la salsa cheddar HSN por encima del salmón. El queso sobre el salmón es un nivel diferente.",
+      "time": "25 min",
+      "tags": [
+        "salmon",
+        "airfryer",
+        "pescado",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "pizza_italiana_fit",
+      "name": "Pizza Italiana Fit (Barbacoa + Pollo + Cebolla Morada)",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 720,
+        "p": 68,
+        "hc": 77,
+        "g": 13
+      },
+      "ingredients": "1 base pizza extrafina | 200g pechuga pollo cocinada | tomate triturado | queso Eatlean 60g | salsa barbacoa HSN 20g | 50g cebolla morada | orégano + albahaca",
+      "recipe": "1) Extiende tomate sobre la base. 2) Mezcla salsa barbacoa con el tomate (la clave). 3) Pollo desmigado encima. 4) Queso Eatlean (se derrite bien). 5) Cebolla morada cruda. 6) Horno 220°C 12min. 7) Al sacar: orégano + albahaca fresca si tienes. No sabe a fitness, sabe a pizza de restaurante.",
+      "time": "15 min",
+      "tags": [
+        "pizza",
+        "pollo",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "pasta_carbonara_fit",
+      "name": "Pasta Carbonara Fit (sin nata, con parmesano real)",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 730,
+        "p": 66,
+        "hc": 78,
+        "g": 18
+      },
+      "ingredients": "100g pasta integral | 150g pechuga pavo | 2 yemas huevo | 30g parmesano | 100g champiñones | pimienta negra abundante | 3g AOVE",
+      "recipe": "1) Cuece la pasta al dente. 2) Saltea pavo en tiras + champiñones con AOVE. 3) Mezcla en bol: 2 yemas + parmesano rallado + mucha pimienta. 4) CLAVE: mezcla la pasta caliente FUERA del fuego con el pavo, luego añade la mezcla de yemas rápido. El calor residual cuaja las yemas sin convertirlas en tortilla. Queda cremosa de verdad.",
+      "time": "20 min",
+      "tags": [
+        "pasta",
+        "pavo",
+        "sabroso",
+        "clasico"
+      ]
+    },
+    {
+      "id": "bowl_ternera_tex_mex",
+      "name": "Bowl Tex-Mex de Ternera con Arroz y Cebolla Caramelizada",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 755,
+        "p": 69,
+        "hc": 82,
+        "g": 15
+      },
+      "ingredients": "220g ternera picada 95% | 90g arroz integral seco | 200g calabacín | 50g cebolla | 30g cebolla morada cruda | yogur 60g + comino (guacamole fit) | especias tex-mex",
+      "recipe": "1) Cuece arroz. 2) Carameliza la cebolla a fuego lento 15min con pizca de sal (paciencia, vale la pena). 3) Saltea ternera con calabacín y especias tex-mex. 4) Guacamole fit: yogur + comino + ajo + limón + sal. 5) Monta: arroz + ternera + cebolla caramelizada encima + guacamole fit + cebolla morada cruda. La cebolla caramelizada lo hace diferente.",
+      "time": "30 min",
+      "tags": [
+        "ternera",
+        "bowl",
+        "mexicano",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "atun_arroz_brocoli",
+      "name": "Atún a la Plancha con Arroz y Brócoli al Ajo",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 740,
+        "p": 68,
+        "hc": 78,
+        "g": 17
+      },
+      "ingredients": "220g lomo atún congelado | 90g arroz integral seco | 250g brócoli | 3 dientes ajo | 3g AOVE | guindilla | soja",
+      "recipe": "1) Cuece arroz. 2) Brócoli al vapor 8min. 3) En sartén: ajo laminado con AOVE + guindilla hasta dorar. 4) Echa el brócoli y saltea 2min con soja. 5) Atún a la plancha muy fuerte 2min por lado (sellado, crudo por dentro). El brócoli al ajillo con soja no es el mismo aburrido de siempre.",
+      "time": "35 min",
+      "tags": [
+        "pescado",
+        "saludable",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "huevos_rotos_gambas_gulas",
+      "name": "Huevos Rotos con Gambas, Gulas y Patatas Crujientes",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 680,
+        "p": 58,
+        "hc": 48,
+        "g": 24
+      },
+      "ingredients": "3 huevos | 150g gambas peladas | 100g gulas | 250g patatas | 3 dientes ajo | 3g AOVE | guindilla | sal",
+      "recipe": "1) Patatas en rodajas finas → AirFryer 200°C 20min sin aceite (quedan tipo chip gruesa). 2) Sartén con ajo + guindilla + AOVE, añade gambas 1min, luego gulas 30seg. 3) Huevo frito. 4) Monta: patatas de base, gambas+gulas encima, huevo encima. Rompes el huevo y la yema baja por todo. Es comfort food pero fitness.",
+      "time": "25 min",
+      "tags": [
+        "airfryer",
+        "gambas",
+        "huevos",
+        "top_rated",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "cuscus_pollo_marroqui",
+      "name": "Cuscús de Pollo Estilo Marroquí con Especias",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 695,
+        "p": 67,
+        "hc": 83,
+        "g": 12
+      },
+      "ingredients": "200g pechuga pollo | 100g cuscús seco | 200g calabacín | 50g cebolla | ras el hanout (o: comino+cúrcuma+canela+jengibre) | 3g AOVE | menta fresca | yogur 60g",
+      "recipe": "1) Hidrata cuscús con agua hirviendo + ras el hanout 5min. 2) Pollo en tiras con cebolla y especias marroquíes. 3) Calabacín en dados. 4) Salsa: yogur + menta picada + limón. 5) Mezcla cuscús con el pollo y el calabacín. Salsa por encima. El ras el hanout cambia totalmente el plato.",
+      "time": "15 min",
+      "tags": [
+        "pollo",
+        "rapido",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "quinoa_pavo_salteado",
+      "name": "Quinoa con Pavo Salteado y Salsa de Soja + Jengibre",
+      "category": "comidas_principales",
+      "macros": {
+        "kcal": 740,
+        "p": 75,
+        "hc": 77,
+        "g": 12
+      },
+      "ingredients": "220g pavo picado | 90g quinoa seca | 200g calabacín | 50g cebolla | soja + jengibre en polvo + ajo | sésamo",
+      "recipe": "1) Cuece quinoa. 2) Saltea cebolla hasta transparente. 3) Añade pavo, dora bien. 4) Calabacín en daditos, 3min. 5) Salsa: soja + jengibre + ajo en polvo (no soja sola — la mezcla es diferente). 6) Mezcla con quinoa + sésamo encima. No es quinoa sosa con pavo, es un wok fit.",
+      "time": "20 min",
+      "tags": [
+        "pavo",
+        "alto_proteina",
+        "sabroso"
+      ]
+    },
+    {
+      "id": "pre_avena_platano",
+      "name": "Avena + Plátano + Crema Cacahuete (Pre-Pesas)",
+      "category": "pre_entreno",
+      "macros": {
+        "kcal": 315,
+        "p": 11,
+        "hc": 57,
+        "g": 6
+      },
+      "ingredients": "60g avena | 1 plátano | 10g crema cacahuete | canela | agua",
+      "recipe": "Cuece avena express 3min. Plátano en rodajas encima + crema cacahuete. Tomar 60-90min antes de entrenar. Carga de carbos óptima.",
+      "time": "5 min",
+      "tags": []
+    },
+    {
+      "id": "pre_tortitas_batido",
+      "name": "Tortitas Prozis + Batido Ligero (Pre-Pesas)",
+      "category": "pre_entreno",
+      "macros": {
+        "kcal": 300,
+        "p": 26,
+        "hc": 40,
+        "g": 5
+      },
+      "ingredients": "2 tortitas Prozis | 20g proteína (medio scoop) | 200ml leche almendras | sirope",
+      "recipe": "Tortitas calentadas + batido ligero. Carbos + proteína moderada. No te llenes demasiado.",
+      "time": "3 min",
+      "tags": []
+    },
+    {
+      "id": "pre_futbol_arroz",
+      "name": "Arroz con Pechuga Ligera (Pre-Fútbol)",
+      "category": "pre_entreno",
+      "macros": {
+        "kcal": 385,
+        "p": 30,
+        "hc": 62,
+        "g": 4
+      },
+      "ingredients": "80g arroz integral seco | 100g pechuga pollo | soja",
+      "recipe": "Arroz + pollo simple. Mucho hidrato antes del partido. Tomar 90min antes.",
+      "time": "30 min (prep antes)",
+      "tags": []
+    },
+    {
+      "id": "post_batido_platano",
+      "name": "Batido de Proteína + Plátano (Post inmediato)",
+      "category": "post_entreno",
+      "macros": {
+        "kcal": 280,
+        "p": 30,
+        "hc": 32,
+        "g": 4
+      },
+      "ingredients": "1 scoop proteína (30g) | 300ml leche almendras | 1 plátano",
+      "recipe": "Tritura en batidora o shaker. Tomar en los primeros 20-30min post-entreno. Esta ES tu comida 5 si entrenas tarde.",
+      "time": "2 min",
+      "tags": []
+    },
+    {
+      "id": "post_batido_avena",
+      "name": "Batido Proteína + Avena (Post si entrenas a las 18-19h)",
+      "category": "post_entreno",
+      "macros": {
+        "kcal": 375,
+        "p": 35,
+        "hc": 42,
+        "g": 6
+      },
+      "ingredients": "1 scoop proteína | 40g avena en polvo (o triturada) | 300ml leche almendras",
+      "recipe": "Tritura avena hasta polvo fino, mezcla con proteína y leche. Más consistente que el batido solo. Vale si aún tienes tiempo para digerir antes de dormir.",
+      "time": "3 min",
+      "tags": []
+    },
+    {
+      "id": "post_huevos_aguacate",
+      "name": "Huevos Revueltos con Aguacate (Post si entrenas a las 17-18h)",
+      "category": "post_entreno",
+      "macros": {
+        "kcal": 300,
+        "p": 28,
+        "hc": 16,
+        "g": 14
+      },
+      "ingredients": "4 claras + 1 huevo entero | 50g aguacate | pan integral 1 rebanada | sal + pimienta",
+      "recipe": "Claras revueltas cremosas (fuego suave, que no queden secas). Pan tostado con aguacate aplastado. Encima los huevos. Si entrenas temprano y tienes hambre real post-entreno.",
+      "time": "8 min",
+      "tags": []
+    },
+    {
+      "id": "post_futbol_batido",
+      "name": "Batido de Recuperación Post-Fútbol",
+      "category": "post_entreno",
+      "macros": {
+        "kcal": 390,
+        "p": 40,
+        "hc": 38,
+        "g": 8
+      },
+      "ingredients": "1.5 scoops proteína | 300ml leche almendras | 1 plátano | 10g crema cacahuete",
+      "recipe": "Post-fútbol necesitas más proteína y carbos que post-pesas (más desgaste). Bate todo junto. Prioridad 1 al salir del campo.",
+      "time": "2 min",
+      "tags": []
+    },
+    {
+      "id": "pavo_tikka_masala",
+      "name": "Pavo Tikka Masala Fit",
+      "category": "comidas",
+      "macros": {
+        "kcal": 553,
+        "p": 83,
+        "hc": 35,
+        "g": 6
+      },
+      "ingredients": "300g solomillo pavo (Mercadona) | 200g garbanzos cocidos (Hacendado) | 90g yogur griego ligero (Mercadona) | 100g cebolla morada | Especias: cúrcuma, curry, canela, comino",
+      "recipe": "Saltea el pavo cortado en trozos con las especias (cúrcuma, curry, canela, comino) hasta dorar. Añade la cebolla morada picada, cocina 3-4 min. Agrega los garbanzos escurridos y cocina 2 min más. Fuera del fuego, mezcla el yogur griego para crear la salsa cremosa.",
+      "time": "15-20 min",
+      "tags": []
+    }
+  ],
+  "whoop_history": [
+    {
+      "date": "2026-03-19",
+      "recovery": 91.0,
+      "hrv": 155.7,
+      "rhr": 48.0,
+      "sleep_min": 0,
+      "sleep_perf": 0,
+      "spo2": 92.1
+    },
+    {
+      "date": "2026-03-20",
+      "recovery": 55.0,
+      "hrv": 125.4,
+      "rhr": 53.0,
+      "sleep_min": 0,
+      "sleep_perf": 0,
+      "spo2": 85.8
+    },
+    {
+      "date": "2026-03-21",
+      "recovery": 53.0,
+      "hrv": 111.2,
+      "rhr": 52.0,
+      "sleep_min": 124,
+      "sleep_perf": 31.0,
+      "spo2": 93.1
+    },
+    {
+      "date": "2026-03-22",
+      "recovery": 77.0,
+      "hrv": 137.3,
+      "rhr": 47.0,
+      "sleep_min": 342,
+      "sleep_perf": 74.0,
+      "spo2": 91.1
+    },
+    {
+      "date": "2026-03-23",
+      "recovery": 51.0,
+      "hrv": 115.6,
+      "rhr": 49.0,
+      "sleep_min": 397,
+      "sleep_perf": 76.0,
+      "spo2": 94.4
+    },
+    {
+      "date": "2026-03-24",
+      "recovery": 26.0,
+      "hrv": 81.7,
+      "rhr": 51.0,
+      "sleep_min": 350,
+      "sleep_perf": 72.0,
+      "spo2": 91.6
+    },
+    {
+      "date": "2026-03-25",
+      "recovery": 57.0,
+      "hrv": 111.9,
+      "rhr": 49.0,
+      "sleep_min": 459,
+      "sleep_perf": 79.0,
+      "spo2": 94.7
+    },
+    {
+      "date": "2026-03-26",
+      "recovery": 63.0,
+      "hrv": 116.9,
+      "rhr": 47.0,
+      "sleep_min": 436,
+      "sleep_perf": 82.0,
+      "spo2": 93.1
+    },
+    {
+      "date": "2026-03-27",
+      "recovery": 76.0,
+      "hrv": 132.5,
+      "rhr": 46.0,
+      "sleep_min": 423,
+      "sleep_perf": 83.0,
+      "spo2": 93.7
+    },
+    {
+      "date": "2026-03-28",
+      "recovery": 44.0,
+      "hrv": 104.2,
+      "rhr": 51.0,
+      "sleep_min": 347,
+      "sleep_perf": 77.0,
+      "spo2": 93.7
+    },
+    {
+      "date": "2026-03-29",
+      "recovery": 78.0,
+      "hrv": 128.4,
+      "rhr": 45.0,
+      "sleep_min": 555,
+      "sleep_perf": 78.0,
+      "spo2": 92.1
+    },
+    {
+      "date": "2026-03-30",
+      "recovery": 74.0,
+      "hrv": 128.7,
+      "rhr": 42.0,
+      "sleep_min": 412,
+      "sleep_perf": 82.0,
+      "spo2": 94.9
+    },
+    {
+      "date": "2026-03-31",
+      "recovery": 75.0,
+      "hrv": 132.1,
+      "rhr": 46.0,
+      "sleep_min": 464,
+      "sleep_perf": 86.0,
+      "spo2": 95.8
+    },
+    {
+      "date": "2026-04-01",
+      "recovery": 40.0,
+      "hrv": 103.3,
+      "rhr": 54.0,
+      "sleep_min": 483,
+      "sleep_perf": 79.0,
+      "spo2": 93.1
+    }
+  ]
+}
