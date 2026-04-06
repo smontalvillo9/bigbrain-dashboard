@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="English C1">
+<link rel="manifest" href="manifest.json">
+<title>English C1 — BigBrain</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg1:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --text1:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --green:#3fb950;--yellow:#d29922;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#f0883e;
+  --border:#30363d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg1);color:var(--text1);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:13px;line-height:1.5;min-height:100vh;
+  padding-bottom:72px;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:56px;background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;align-items:stretch;z-index:200;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;color:var(--text3);transition:.15s;
+  font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;
+  border:none;background:none;padding:4px 0;
+  user-select:none;
+}
+.nav-item .nav-icon{font-size:1.1rem;line-height:1}
+.nav-item.active{color:var(--blue)}
+.nav-item:active{background:var(--bg3)}
+
+/* ===== SECTIONS ===== */
+.section{display:none;padding:14px 16px;min-height:calc(100vh - 56px)}
+.section.active{display:block}
+
+/* ===== HEADER ===== */
+.page-header{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.page-header h1{font-size:.92rem;font-weight:700}
+.page-header .subtitle{color:var(--text2);font-size:.72rem}
+
+/* ===== CARDS ===== */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.card-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card-sm{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:8px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+.metric{background:var(--bg3);border-radius:8px;padding:10px;text-align:center}
+.metric-val{font-size:1.2rem;font-weight:700}
+.metric-lbl{font-size:.6rem;color:var(--text2);margin-top:2px;line-height:1.3}
+
+.progress-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px;transition:width 1s}
+
+.badge{padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600;display:inline-block}
+.badge-green{background:rgba(63,185,80,.18);color:var(--green)}
+.badge-yellow{background:rgba(210,153,34,.18);color:var(--yellow)}
+.badge-red{background:rgba(248,81,73,.18);color:var(--red)}
+.badge-blue{background:rgba(88,166,255,.18);color:var(--blue)}
+.badge-purple{background:rgba(188,140,255,.18);color:var(--purple)}
+.badge-orange{background:rgba(240,136,62,.18);color:var(--orange)}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 18px;border-radius:8px;border:none;cursor:pointer;
+  font-size:.82rem;font-weight:600;font-family:inherit;
+  transition:.15s;min-height:44px;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#79b8ff}
+.btn-primary:active{transform:scale(.97)}
+.btn-green{background:rgba(63,185,80,.2);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+.btn-green:hover{background:rgba(63,185,80,.3)}
+.btn-red{background:rgba(248,81,73,.2);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+.btn-red:hover{background:rgba(248,81,73,.3)}
+.btn-orange{background:rgba(240,136,62,.2);color:var(--orange);border:1px solid rgba(240,136,62,.3)}
+.btn-orange:hover{background:rgba(240,136,62,.3)}
+.btn-blue{background:rgba(88,166,255,.2);color:var(--blue);border:1px solid rgba(88,166,255,.3)}
+.btn-blue:hover{background:rgba(88,166,255,.3)}
+.btn-ghost{background:var(--bg3);color:var(--text1);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg4)}
+.btn-sm{padding:7px 12px;font-size:.75rem;min-height:36px}
+.btn-lg{padding:14px 24px;font-size:.95rem;min-height:52px;width:100%}
+.btn:active{transform:scale(.97)}
+
+/* ===== LOADING / ERROR ===== */
+.state-loading,.state-error,.state-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px;text-align:center;gap:12px;color:var(--text2);
+}
+.state-error{color:var(--red)}
+.spinner{
+  width:28px;height:28px;border:2px solid var(--border);
+  border-top-color:var(--blue);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ===== HOME ===== */
+.welcome-hero{
+  background:linear-gradient(135deg,rgba(88,166,255,.08) 0%,rgba(188,140,255,.06) 100%);
+  border:1px solid rgba(88,166,255,.2);
+  border-radius:12px;padding:18px;margin-bottom:12px;
+}
+.welcome-hero h2{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.welcome-hero .date-lbl{font-size:.72rem;color:var(--text2)}
+.due-big{
+  font-size:2.8rem;font-weight:700;color:var(--blue);
+  line-height:1;margin:10px 0 4px;
+}
+.due-lbl{font-size:.78rem;color:var(--text2);margin-bottom:14px}
+.rec-item{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:7px 0;border-bottom:1px solid var(--border);
+  font-size:.78rem;color:var(--text2);
+}
+.rec-item:last-child{border-bottom:none}
+.rec-dot{width:5px;height:5px;border-radius:50%;background:var(--yellow);margin-top:6px;flex-shrink:0}
+
+/* ===== FLASHCARDS ===== */
+.srs-start{text-align:center;padding:24px 0}
+.srs-start h2{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.srs-start p{color:var(--text2);margin-bottom:20px;font-size:.82rem}
+
+.flashcard-area{perspective:1000px;margin:20px auto;max-width:440px}
+.flashcard{
+  width:100%;min-height:220px;
+  position:relative;transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;border-radius:14px;
+}
+.flashcard.flipped{transform:rotateY(180deg)}
+.card-face{
+  position:absolute;top:0;left:0;width:100%;min-height:220px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+}
+.card-face.back{transform:rotateY(180deg)}
+.card-word{font-size:2rem;font-weight:700;color:var(--text1);margin-bottom:8px}
+.card-ipa{font-size:.82rem;color:var(--text3);margin-bottom:6px}
+.card-translation{font-size:1.1rem;font-weight:600;color:var(--blue);margin-bottom:10px}
+.card-example{font-size:.78rem;color:var(--text2);font-style:italic;margin-bottom:8px;line-height:1.5}
+.card-source{font-size:.65rem;color:var(--text3)}
+.card-hint{font-size:.72rem;color:var(--text3);margin-top:12px}
+.srs-progress{font-size:.72rem;color:var(--text2);text-align:center;margin-bottom:10px}
+.srs-buttons{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:8px;margin-top:16px;max-width:440px;margin-left:auto;margin-right:auto;
+}
+.srs-summary{text-align:center;padding:20px}
+.srs-summary h2{font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.srs-summary p{color:var(--text2);margin-bottom:20px}
+.srs-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+
+/* ===== THEORY ===== */
+.lesson-list-item{
+  background:var(--bg3);border-radius:8px;padding:12px;margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  border:1px solid transparent;transition:.15s;
+}
+.lesson-list-item:hover{border-color:var(--border);background:var(--bg4)}
+.lesson-list-item:active{transform:scale(.99)}
+.lesson-num{
+  background:var(--bg4);color:var(--blue);border-radius:6px;
+  padding:4px 8px;font-weight:700;font-size:.78rem;flex-shrink:0;min-width:40px;text-align:center;
+}
+.lesson-info{flex:1;min-width:0}
+.lesson-topic{font-weight:600;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-date{font-size:.68rem;color:var(--text2);margin-top:2px}
+.lesson-arrow{color:var(--text3);font-size:.9rem}
+
+/* Theory detail view */
+.detail-view{display:none}
+.detail-view.active{display:block}
+.detail-back{
+  display:flex;align-items:center;gap:8px;padding:10px 0;
+  color:var(--blue);cursor:pointer;font-size:.82rem;font-weight:600;margin-bottom:12px;
+}
+.detail-back:hover{color:#79b8ff}
+
+/* Markdown styling */
+.md-content{line-height:1.65;color:var(--text1)}
+.md-content h1,.md-content h2,.md-content h3,.md-content h4{
+  color:var(--blue);margin:16px 0 8px;font-size:.92rem;
+}
+.md-content h1{font-size:1rem}
+.md-content h2{font-size:.95rem}
+.md-content p{margin-bottom:10px;font-size:.82rem}
+.md-content ul,.md-content ol{margin:8px 0 10px 18px;font-size:.82rem}
+.md-content li{margin-bottom:4px}
+.md-content strong{color:var(--text1);font-weight:700}
+.md-content em{color:var(--yellow)}
+.md-content code{
+  background:var(--bg3);color:var(--green);padding:1px 5px;border-radius:4px;
+  font-family:'SF Mono',Consolas,monospace;font-size:.78rem;
+}
+.md-content pre{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px;overflow-x:auto;margin:10px 0;
+}
+.md-content pre code{background:none;padding:0;color:var(--green)}
+.md-content table{
+  width:100%;border-collapse:collapse;margin:10px 0;
+  background:var(--bg3);border-radius:8px;overflow:hidden;font-size:.78rem;
+}
+.md-content th{
+  background:var(--bg4);padding:7px 10px;text-align:left;
+  color:var(--text2);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;
+}
+.md-content td{padding:7px 10px;border-top:1px solid var(--border)}
+.md-content blockquote{
+  border-left:3px solid var(--blue);padding:8px 12px;margin:10px 0;
+  background:rgba(88,166,255,.06);border-radius:0 6px 6px 0;
+  color:var(--text2);font-size:.8rem;
+}
+.md-content hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.section-divider{
+  border-top:1px solid var(--border);margin:16px 0;padding-top:14px;
+}
+.section-label{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin-bottom:10px;
+}
+.vocab-row{
+  display:flex;align-items:center;gap:10px;padding:7px 0;
+  border-bottom:1px solid var(--bg4);
+}
+.vocab-row:last-child{border-bottom:none}
+.vocab-word{font-weight:600;font-size:.82rem;color:var(--text1);flex:1}
+.vocab-ipa{font-size:.7rem;color:var(--text3)}
+.vocab-trans{font-size:.78rem;color:var(--blue);text-align:right}
+
+/* ===== QUIZ ===== */
+.quiz-type-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.quiz-type-btn{
+  background:var(--bg3);border:2px solid var(--border);border-radius:10px;
+  padding:14px 10px;text-align:center;cursor:pointer;transition:.15s;
+}
+.quiz-type-btn.selected{border-color:var(--blue);background:rgba(88,166,255,.08)}
+.quiz-type-btn .qt-icon{font-size:1.4rem;display:block;margin-bottom:4px}
+.quiz-type-btn .qt-name{font-weight:700;font-size:.82rem}
+.quiz-type-btn .qt-desc{font-size:.68rem;color:var(--text2);margin-top:2px}
+.quiz-question-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:20px;margin-bottom:12px;text-align:center;
+}
+.quiz-q-num{font-size:.68rem;color:var(--text3);margin-bottom:8px}
+.quiz-q-text{font-size:1rem;font-weight:600;margin-bottom:6px;color:var(--text1)}
+.quiz-q-sub{font-size:.78rem;color:var(--text2)}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.quiz-option{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;cursor:pointer;text-align:left;
+  font-size:.85rem;font-weight:500;transition:.15s;
+  border:none;color:var(--text1);font-family:inherit;width:100%;min-height:44px;
+}
+.quiz-option:hover{background:var(--bg4)}
+.quiz-option.correct{background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);color:var(--green)}
+.quiz-option.wrong{background:rgba(248,81,73,.15);border:1px solid rgba(248,81,73,.4);color:var(--red)}
+.quiz-option:disabled{cursor:default}
+.quiz-feedback{
+  padding:10px 14px;border-radius:8px;margin-bottom:12px;
+  font-size:.82rem;font-weight:600;text-align:center;
+}
+.quiz-feedback.correct{background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.25)}
+.quiz-feedback.wrong{background:rgba(248,81,73,.12);color:var(--red);border:1px solid rgba(248,81,73,.25)}
+
+.fill-input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;color:var(--text1);font-size:.9rem;font-family:inherit;
+  outline:none;transition:.15s;margin-bottom:10px;
+}
+.fill-input:focus{border-color:var(--blue)}
+.fill-input.correct{border-color:var(--green);background:rgba(63,185,80,.06)}
+.fill-input.wrong{border-color:var(--red);background:rgba(248,81,73,.06)}
+
+.quiz-score-card{text-align:center;padding:20px 0}
+.quiz-score-big{font-size:3rem;font-weight:700;color:var(--blue);margin:10px 0}
+.quiz-score-pct{font-size:1.1rem;color:var(--text2);margin-bottom:20px}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+
+/* ===== PROFESOR (CHAT) ===== */
+.chat-setup{padding:24px 0;text-align:center}
+.chat-setup h2{font-size:1rem;font-weight:700;margin-bottom:6px}
+.chat-setup p{color:var(--text2);font-size:.82rem;margin-bottom:20px;line-height:1.6}
+.api-input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;color:var(--text1);font-size:.82rem;font-family:inherit;
+  outline:none;transition:.15s;margin-bottom:10px;
+}
+.api-input:focus{border-color:var(--blue)}
+.api-hint{font-size:.68rem;color:var(--text3);margin-top:4px;margin-bottom:14px}
+
+.chat-wrap{
+  display:flex;flex-direction:column;
+  height:calc(100vh - 56px - 56px);
+  margin:-14px -16px 0;
+}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:14px 16px;
+  display:flex;flex-direction:column;gap:12px;
+  scroll-behavior:smooth;
+}
+.msg{display:flex;flex-direction:column;max-width:85%}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.assistant{align-self:flex-start;align-items:flex-start}
+.msg-bubble{
+  padding:10px 14px;border-radius:12px;font-size:.82rem;line-height:1.55;
+  word-break:break-word;
+}
+.msg.user .msg-bubble{background:var(--blue);color:#fff;border-radius:12px 12px 2px 12px}
+.msg.assistant .msg-bubble{background:var(--bg3);color:var(--text1);border:1px solid var(--border);border-radius:12px 12px 12px 2px}
+.msg.assistant .msg-bubble .md-content p{margin-bottom:6px;font-size:.82rem}
+.msg.assistant .msg-bubble .md-content p:last-child{margin-bottom:0}
+.msg-time{font-size:.6rem;color:var(--text3);margin-top:3px;padding:0 2px}
+
+.typing-indicator{display:flex;gap:4px;padding:8px 4px}
+.typing-dot{width:7px;height:7px;background:var(--text3);border-radius:50%;animation:typing 1.2s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+
+.chat-input-bar{
+  padding:10px 16px;border-top:1px solid var(--border);background:var(--bg2);
+  display:flex;gap:8px;align-items:flex-end;
+}
+.chat-textarea{
+  flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;color:var(--text1);font-size:.82rem;font-family:inherit;
+  outline:none;resize:none;max-height:120px;min-height:40px;
+  transition:.15s;line-height:1.45;
+}
+.chat-textarea:focus{border-color:var(--blue)}
+.chat-send{
+  background:var(--blue);color:#fff;border:none;border-radius:8px;
+  width:40px;height:40px;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  transition:.15s;
+}
+.chat-send:hover{background:#79b8ff}
+.chat-send:disabled{background:var(--bg4);cursor:default}
+.chat-key-hint{font-size:.65rem;color:var(--text3);padding:2px 16px 6px;background:var(--bg2)}
+.chat-clear-btn{
+  background:none;border:none;color:var(--text3);cursor:pointer;font-size:.7rem;
+  padding:4px 16px;text-align:right;display:block;margin-left:auto;
+}
+.chat-clear-btn:hover{color:var(--red)}
+
+/* ===== UTILS ===== */
+.divider{height:1px;background:var(--border);margin:12px 0}
+.text-sm{font-size:.72rem;color:var(--text2)}
+.text-xs{font-size:.65rem;color:var(--text3)}
+.fw600{font-weight:600}
+.mt8{margin-top:8px}
+.mt12{margin-top:12px}
+.mb8{margin-bottom:8px}
+.mb12{margin-bottom:12px}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.gap8{gap:8px}
+
+@media(max-width:380px){
+  .srs-buttons{grid-template-columns:1fr 1fr}
+  .quiz-type-selector{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+  <h1>English C1</h1>
+  <div class="subtitle">BigBrain Academy</div>
+</div>
+
+<!-- ===== SECTIONS ===== -->
+
+<!-- HOME -->
+<div id="sec-home" class="section active">
+  <div id="home-loading" class="state-loading"><div class="spinner"></div><span>Cargando datos...</span></div>
+  <div id="home-content" style="display:none"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="sec-cards" class="section">
+  <div id="cards-inner"></div>
+</div>
+
+<!-- THEORY -->
+<div id="sec-theory" class="section">
+  <div id="theory-list-view">
+    <div id="theory-loading" class="state-loading"><div class="spinner"></div><span>Cargando lecciones...</span></div>
+    <div id="theory-list" style="display:none"></div>
+  </div>
+  <div id="theory-detail-view" class="detail-view"></div>
+</div>
+
+<!-- QUIZ -->
+<div id="sec-quiz" class="section">
+  <div id="quiz-inner"></div>
+</div>
+
+<!-- PROFESOR -->
+<div id="sec-prof" class="section" style="padding:0">
+  <div id="prof-inner"></div>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" role="navigation" aria-label="Navegacion principal">
+  <button class="nav-item active" id="nav-home" onclick="switchSection('home')" aria-label="Inicio">
+    <span class="nav-icon">⊞</span>Inicio
+  </button>
+  <button class="nav-item" id="nav-cards" onclick="switchSection('cards')" aria-label="Flashcards">
+    <span class="nav-icon">◈</span>Tarjetas
+  </button>
+  <button class="nav-item" id="nav-theory" onclick="switchSection('theory')" aria-label="Teoria">
+    <span class="nav-icon">≡</span>Teoria
+  </button>
+  <button class="nav-item" id="nav-quiz" onclick="switchSection('quiz')" aria-label="Quiz">
+    <span class="nav-icon">◎</span>Quiz
+  </button>
+  <button class="nav-item" id="nav-prof" onclick="switchSection('prof')" aria-label="Profesor">
+    <span class="nav-icon">✦</span>Profesor
+  </button>
+</nav>
+
+<script>
+// ============================================================
+// GLOBALS & STATE
+// ============================================================
+let inglesData = null;
+let theoryData = null;
+let allVocab = [];   // [{word, translation, ipa, lesson, class}]
+let currentSection = 'home';
+
+// SRS session state
+let srsSession = {
+  queue: [],
+  current: 0,
+  results: [],   // {word, quality}
+  started: false,
+  complete: false
+};
+
+// Quiz state
+let quizState = {
+  type: 'vocab',   // 'vocab' | 'fill'
+  questions: [],
+  current: 0,
+  score: 0,
+  answered: false,
+  complete: false
+};
+
+// Chat
+let chatHistory = [];
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function switchSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  currentSection = name;
+
+  if (name === 'cards' && !srsSession.started) renderCardsStart();
+  if (name === 'theory' && theoryData) renderTheoryList();
+  if (name === 'quiz' && !quizState.questions.length) renderQuizStart();
+  if (name === 'prof') renderProf();
+}
+
+// ============================================================
+// DATA LOADING
+// ============================================================
+async function loadData() {
+  try {
+    const [inglesRes, theoryRes] = await Promise.all([
+      fetch('data/ingles.json'),
+      fetch('data/theory.json')
+    ]);
+    inglesData = await inglesRes.json();
+    theoryData = theoryRes.ok ? await theoryRes.json() : null;
+  } catch(e) {
+    // ingles.json failed is critical
+    document.getElementById('home-loading').innerHTML =
+      '<div class="state-error"><span style="font-size:1.5rem">✕</span><span>Error cargando datos. Recarga la app.</span></div>';
+    return;
+  }
+
+  // Build vocab list from theory lessons
+  if (theoryData && theoryData.lessons) {
+    theoryData.lessons.forEach(lesson => {
+      (lesson.vocabulary || []).forEach(v => {
+        allVocab.push({
+          word: v.word,
+          translation: v.translation,
+          ipa: v.ipa || '',
+          lesson: lesson.topic || `Clase ${lesson.class}`,
+          classNum: lesson.class
+        });
+      });
+    });
+  }
+
+  renderHome();
+  // Pre-render cards state
+  renderCardsStart();
+}
+
+// ============================================================
+// SRS HELPERS
+// ============================================================
+const SRS_KEY = 'bb_srs_state';
+
+function getSRSState(word) {
+  const all = JSON.parse(localStorage.getItem(SRS_KEY) || '{}');
+  return all[word] || null;
+}
+function saveSRSState(word, state) {
+  const all = JSON.parse(localStorage.getItem(SRS_KEY) || '{}');
+  all[word] = state;
+  localStorage.setItem(SRS_KEY, JSON.stringify(all));
+}
+function getAllSRSState() {
+  return JSON.parse(localStorage.getItem(SRS_KEY) || '{}');
+}
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function updateSRS(word, quality) { // quality: 0=again, 1=hard, 3=good, 5=easy
+  let state = getSRSState(word) || {interval: 1, ease: 2.5, reps: 0};
+  if (quality >= 3) {
+    state.reps++;
+    if (state.reps === 1) state.interval = 1;
+    else if (state.reps === 2) state.interval = 3;
+    else state.interval = Math.round(state.interval * state.ease);
+  } else {
+    state.reps = 0;
+    state.interval = 1;
+  }
+  state.ease = Math.max(1.3, state.ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+  state.next_review = addDays(new Date(), state.interval).toISOString().slice(0, 10);
+  state.last_reviewed = todayStr();
+  saveSRSState(word, state);
+  return state;
+}
+
+function getDueWords() {
+  const today = todayStr();
+  const allState = getAllSRSState();
+  return allVocab.filter(v => {
+    const state = allState[v.word];
+    if (!state) return true; // never reviewed
+    return state.next_review <= today;
+  });
+}
+
+function getDueCount() {
+  if (!allVocab.length) {
+    // fall back to inglesData count
+    return inglesData ? (inglesData.srs?.due_today || inglesData.vocab_to_review || 0) : 0;
+  }
+  return getDueWords().length;
+}
+
+// ============================================================
+// HOME TAB
+// ============================================================
+function renderHome() {
+  const d = inglesData;
+  const due = getDueCount();
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'});
+  const progressPct = d.progress_pct || 0;
+
+  const recs = (d.recommendations || []).map(r =>
+    `<div class="rec-item"><div class="rec-dot"></div><span>${escHtml(r)}</span></div>`
+  ).join('');
+
+  const grammarDone = (d.grammar?.topics || []).filter(t => t.done).length;
+  const grammarTotal = (d.grammar?.topics || []).length;
+
+  document.getElementById('home-loading').style.display = 'none';
+  document.getElementById('home-content').style.display = 'block';
+  document.getElementById('home-content').innerHTML = `
+    <div class="welcome-hero">
+      <div class="date-lbl">${capitalize(dateStr)}</div>
+      <h2>Hola Sergio, listo para practicar?</h2>
+      <div class="due-big">${due}</div>
+      <div class="due-lbl">palabras pendientes de repaso</div>
+      <button class="btn btn-primary btn-lg" onclick="switchSection('cards')">Empezar Repaso</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Progreso C1</div>
+      <div class="grid4" style="margin-bottom:12px">
+        <div class="metric">
+          <div class="metric-val" style="color:var(--blue)">${escHtml(d.level_estimate||'B2+')}</div>
+          <div class="metric-lbl">Nivel actual</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">${d.class_number||0}/${d.total_classes||40}</div>
+          <div class="metric-lbl">Clases</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">${d.hours_total||0}h</div>
+          <div class="metric-lbl">Horas</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">${d.week||0}/8</div>
+          <div class="metric-lbl">Semana</div>
+        </div>
+      </div>
+      <div class="flex-between mb8">
+        <span class="text-sm">Progreso hacia C1</span>
+        <span class="text-sm fw600" style="color:var(--blue)">${progressPct}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${progressPct}%;background:var(--blue)"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Vocabulario</div>
+        <div class="metric-val" style="font-size:1.4rem;color:var(--purple)">${d.vocabulary?.total_unique||0}</div>
+        <div class="text-sm" style="margin-top:4px">palabras totales</div>
+        <div class="divider"></div>
+        <div class="text-sm flex-between"><span>En proceso</span><span class="fw600" style="color:var(--yellow)">${d.vocabulary?.by_status?.learning||0}</span></div>
+        <div class="text-sm flex-between mt8"><span>Maduras</span><span class="fw600" style="color:var(--green)">${d.vocabulary?.by_status?.mature||0}</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Gramatica</div>
+        <div class="metric-val" style="font-size:1.4rem;color:var(--green)">${grammarDone}/${grammarTotal}</div>
+        <div class="text-sm" style="margin-top:4px">temas completados</div>
+        <div class="divider"></div>
+        <div class="text-sm flex-between"><span>Errores activos</span><span class="fw600" style="color:var(--red)">${d.errors?.active||0}</span></div>
+        <div class="text-sm flex-between mt8"><span>Score medio</span><span class="fw600" style="color:var(--yellow)">${d.exercises?.average_score_pct||0}%</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recomendaciones</div>
+      ${recs || '<div class="text-sm">Sin recomendaciones pendientes.</div>'}
+    </div>
+  `;
+}
+
+// ============================================================
+// FLASHCARDS TAB
+// ============================================================
+function renderCardsStart() {
+  const due = getDueCount();
+  const container = document.getElementById('cards-inner');
+  container.innerHTML = `
+    <div class="srs-start">
+      <div style="font-size:3rem;margin-bottom:12px">◈</div>
+      <h2>Repaso SRS</h2>
+      <p>${due > 0
+        ? `Tienes <strong style="color:var(--blue)">${due} palabras</strong> pendientes hoy.`
+        : 'No hay palabras pendientes por ahora.'
+      }</p>
+      ${due > 0
+        ? `<button class="btn btn-primary" style="font-size:.95rem;padding:13px 32px" onclick="startSRSSession()">Empezar (${due} palabras)</button>`
+        : `<button class="btn btn-ghost" style="font-size:.85rem;padding:11px 24px" onclick="startSRSSession(true)">Repasar todo de todas formas</button>`
+      }
+    </div>
+    ${renderSRSStats()}
+  `;
+  srsSession.started = false;
+  srsSession.complete = false;
+}
+
+function renderSRSStats() {
+  const allState = getAllSRSState();
+  const stateVals = Object.values(allState);
+  const mature = stateVals.filter(s => s.interval >= 21).length;
+  const learning = stateVals.filter(s => s.interval < 21 && s.reps > 0).length;
+  const total = allVocab.length || (inglesData?.vocabulary?.total_unique || 0);
+  return `
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Estado SRS</div>
+      <div class="grid4">
+        <div class="metric"><div class="metric-val" style="color:var(--blue)">${getDueCount()}</div><div class="metric-lbl">Hoy</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--yellow)">${learning}</div><div class="metric-lbl">Aprendiendo</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--green)">${mature}</div><div class="metric-lbl">Maduras</div></div>
+        <div class="metric"><div class="metric-val">${total}</div><div class="metric-lbl">Total</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function startSRSSession(forceAll = false) {
+  let words = forceAll ? [...allVocab] : getDueWords();
+  if (!words.length) { renderCardsStart(); return; }
+  // Shuffle
+  words = words.sort(() => Math.random() - .5).slice(0, Math.min(words.length, 50));
+  srsSession = {queue: words, current: 0, results: [], started: true, complete: false};
+  renderCardView();
+}
+
+function renderCardView() {
+  const container = document.getElementById('cards-inner');
+  if (srsSession.current >= srsSession.queue.length) {
+    renderCardComplete();
+    return;
+  }
+  const card = srsSession.queue[srsSession.current];
+  const total = srsSession.queue.length;
+  const idx = srsSession.current;
+  const pct = Math.round((idx / total) * 100);
+
+  container.innerHTML = `
+    <div class="srs-progress">
+      <div class="flex-between mb8">
+        <span>${idx + 1} / ${total}</span>
+        <span style="color:var(--blue)">${pct}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${pct}%;background:var(--blue)"></div>
+      </div>
+    </div>
+
+    <div class="flashcard-area">
+      <div class="flashcard" id="the-flashcard" onclick="flipCard()">
+        <div class="card-face front">
+          <div class="card-word">${escHtml(card.word)}</div>
+          ${card.ipa ? `<div class="card-ipa">${escHtml(card.ipa)}</div>` : ''}
+          <div class="card-hint">Toca para ver la respuesta</div>
+        </div>
+        <div class="card-face back">
+          <div class="card-translation">${escHtml(card.translation || '')}</div>
+          ${card.ipa ? `<div class="card-ipa">${escHtml(card.ipa)}</div>` : ''}
+          <div class="card-source">Clase ${escHtml(String(card.classNum || ''))}: ${escHtml(card.lesson || '')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="srs-answer-row" style="display:none">
+      <p class="text-sm" style="text-align:center;margin-bottom:10px">Como ha ido?</p>
+      <div class="srs-buttons">
+        <button class="btn btn-red" onclick="rateSRS(0)">Otra vez</button>
+        <button class="btn btn-orange" onclick="rateSRS(1)">Dificil</button>
+        <button class="btn btn-green" onclick="rateSRS(3)">Bien</button>
+        <button class="btn btn-blue" onclick="rateSRS(5)">Facil</button>
+      </div>
+      <p class="text-xs" style="text-align:center;margin-top:8px">Otra vez=1d | Dificil=x1.2 | Bien=x2.5 | Facil=x3.3</p>
+    </div>
+  `;
+}
+
+function flipCard() {
+  const fc = document.getElementById('the-flashcard');
+  if (!fc) return;
+  fc.classList.toggle('flipped');
+  if (fc.classList.contains('flipped')) {
+    document.getElementById('srs-answer-row').style.display = 'block';
+    fc.onclick = null; // prevent re-flip
+  }
+}
+
+function rateSRS(quality) {
+  const card = srsSession.queue[srsSession.current];
+  updateSRS(card.word, quality);
+  srsSession.results.push({word: card.word, quality});
+  srsSession.current++;
+  renderCardView();
+}
+
+function renderCardComplete() {
+  srsSession.complete = true;
+  const results = srsSession.results;
+  const total = results.length;
+  const good = results.filter(r => r.quality >= 3).length;
+  const again = results.filter(r => r.quality === 0).length;
+  const pct = total > 0 ? Math.round((good / total) * 100) : 0;
+
+  document.getElementById('cards-inner').innerHTML = `
+    <div class="srs-summary">
+      <div style="font-size:2.5rem;margin-bottom:8px">✓</div>
+      <h2>Sesion completada</h2>
+      <p class="text-sm" style="margin-bottom:16px">Has repasado ${total} palabras hoy.</p>
+      <div class="srs-stats">
+        <div class="metric"><div class="metric-val" style="color:var(--blue)">${total}</div><div class="metric-lbl">Repasadas</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--green)">${pct}%</div><div class="metric-lbl">Precision</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--red)">${again}</div><div class="metric-lbl">A repetir</div></div>
+      </div>
+      <button class="btn btn-primary" style="margin-right:8px" onclick="startSRSSession()">Nueva sesion</button>
+      <button class="btn btn-ghost" onclick="renderCardsStart()">Volver</button>
+    </div>
+    ${renderSRSStats()}
+  `;
+}
+
+// ============================================================
+// THEORY TAB
+// ============================================================
+function renderTheoryList() {
+  if (!theoryData || !theoryData.lessons) {
+    document.getElementById('theory-loading').innerHTML =
+      '<div class="state-empty"><span style="font-size:1.5rem">≡</span><span>No hay lecciones disponibles (theory.json no encontrado).</span></div>';
+    return;
+  }
+  document.getElementById('theory-loading').style.display = 'none';
+  document.getElementById('theory-list').style.display = 'block';
+
+  const lessons = [...(theoryData.lessons || [])].sort((a, b) => (b.class || 0) - (a.class || 0));
+  document.getElementById('theory-list').innerHTML = lessons.map((l, i) => `
+    <div class="lesson-list-item" onclick="openLesson(${i})" tabindex="0"
+         onkeydown="if(event.key==='Enter')openLesson(${i})"
+         role="button" aria-label="Abrir clase ${l.class}: ${escHtml(l.topic||'')}">
+      <div class="lesson-num">C${l.class || '?'}</div>
+      <div class="lesson-info">
+        <div class="lesson-topic">${escHtml(l.topic || 'Sin titulo')}</div>
+        <div class="lesson-date">${escHtml(l.date || '')}</div>
+      </div>
+      <div class="lesson-arrow">›</div>
+    </div>
+  `).join('');
+
+  // Store sorted lessons for lookup
+  window._sortedLessons = lessons;
+}
+
+function openLesson(idx) {
+  const lesson = window._sortedLessons[idx];
+  if (!lesson) return;
+
+  document.getElementById('theory-list-view').style.display = 'none';
+  const detailEl = document.getElementById('theory-detail-view');
+  detailEl.classList.add('active');
+
+  const vocabRows = (lesson.vocabulary || []).map(v => `
+    <div class="vocab-row">
+      <span class="vocab-word">${escHtml(v.word)}</span>
+      <span class="vocab-ipa">${escHtml(v.ipa || '')}</span>
+      <span class="vocab-trans">${escHtml(v.translation || '')}</span>
+    </div>
+  `).join('');
+
+  const contentHtml = lesson.content_md
+    ? `<div class="md-content">${marked.parse(lesson.content_md)}</div>`
+    : '<div class="text-sm" style="color:var(--text3)">Sin contenido teorico.</div>';
+
+  const errorsHtml = lesson.errors_md
+    ? `<div class="md-content">${marked.parse(lesson.errors_md)}</div>`
+    : '<div class="text-sm" style="color:var(--text3)">Sin errores registrados.</div>';
+
+  detailEl.innerHTML = `
+    <div class="detail-back" onclick="closeLesson()" tabindex="0" onkeydown="if(event.key==='Enter')closeLesson()" role="button">
+      ‹ Todas las lecciones
+    </div>
+
+    <div class="card">
+      <div class="flex-between mb8">
+        <div>
+          <div style="font-size:.68rem;color:var(--text3);margin-bottom:3px">CLASE ${lesson.class || '?'} — ${escHtml(lesson.date || '')}</div>
+          <div style="font-size:1rem;font-weight:700">${escHtml(lesson.topic || 'Sin titulo')}</div>
+        </div>
+        <div class="badge badge-blue">${(lesson.vocabulary || []).length} palabras</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Teoria</div>
+      ${contentHtml}
+    </div>
+
+    <div class="card">
+      <div class="card-title">Errores de esta clase</div>
+      ${errorsHtml}
+    </div>
+
+    ${vocabRows ? `
+    <div class="card">
+      <div class="card-title">Vocabulario</div>
+      ${vocabRows}
+    </div>` : ''}
+  `;
+
+  detailEl.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function closeLesson() {
+  document.getElementById('theory-list-view').style.display = 'block';
+  const detailEl = document.getElementById('theory-detail-view');
+  detailEl.classList.remove('active');
+  detailEl.innerHTML = '';
+}
+
+// ============================================================
+// QUIZ TAB
+// ============================================================
+const COLLOCATIONS = [
+  {prompt: "The team needs to take immediate ___", answer: "action", verb: "take"},
+  {prompt: "We managed to reach our OTIF ___ of 95%", answer: "target", verb: "reach"},
+  {prompt: "The development team failed to meet the ___", answer: "deadline", verb: "meet"},
+  {prompt: "The new policy will come into ___ next month", answer: "effect", verb: "come into"},
+  {prompt: "We need to make a ___ regarding the supplier", answer: "decision", verb: "make"},
+  {prompt: "The company will carry out a detailed ___", answer: "analysis", verb: "carry out"},
+  {prompt: "She agreed to take ___ for the project", answer: "responsibility", verb: "take"},
+  {prompt: "Let's pay close ___ to the delivery schedule", answer: "attention", verb: "pay"},
+  {prompt: "The new strategy will have a significant ___ on costs", answer: "impact", verb: "have"},
+  {prompt: "We must find a way to reduce operational ___", answer: "costs", verb: "reduce"},
+  {prompt: "The logistics team needs to improve supply chain ___", answer: "efficiency", verb: "improve"},
+  {prompt: "He made a strong ___ for increasing the budget", answer: "case", verb: "make"},
+  {prompt: "They reached a mutual ___ on the contract terms", answer: "agreement", verb: "reach"},
+  {prompt: "We should raise ___ about the new regulation", answer: "awareness", verb: "raise"},
+  {prompt: "The manager set clear ___ for the quarter", answer: "objectives", verb: "set"},
+  {prompt: "They had to deal with serious ___ in the supply chain", answer: "disruptions", verb: "deal with"},
+  {prompt: "The report gives a comprehensive ___ of the situation", answer: "overview", verb: "give"},
+  {prompt: "We need to establish a clear ___ for this process", answer: "framework", verb: "establish"},
+  {prompt: "The team managed to overcome significant ___", answer: "challenges", verb: "overcome"},
+  {prompt: "The new software will streamline our internal ___", answer: "processes", verb: "streamline"},
+  {prompt: "We should take into ___ all relevant factors", answer: "account", verb: "take into"},
+  {prompt: "The audit revealed several areas for ___", answer: "improvement", verb: "reveal"},
+  {prompt: "Leadership must demonstrate a firm ___ to quality", answer: "commitment", verb: "demonstrate"},
+];
+
+function renderQuizStart() {
+  document.getElementById('quiz-inner').innerHTML = `
+    <div class="card-title" style="margin-bottom:14px;padding-top:2px">Selecciona tipo de quiz</div>
+    <div class="quiz-type-selector">
+      <div class="quiz-type-btn selected" id="qt-vocab" onclick="selectQuizType('vocab')" tabindex="0" role="button">
+        <span class="qt-icon">◈</span>
+        <div class="qt-name">Vocabulario</div>
+        <div class="qt-desc">Palabra → Traduccion</div>
+      </div>
+      <div class="quiz-type-btn" id="qt-fill" onclick="selectQuizType('fill')" tabindex="0" role="button">
+        <span class="qt-icon">✎</span>
+        <div class="qt-name">Collocations</div>
+        <div class="qt-desc">Completa el hueco</div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-lg" onclick="startQuiz()" style="margin-top:4px">Empezar Quiz</button>
+  `;
+  quizState = {type: 'vocab', questions: [], current: 0, score: 0, answered: false, complete: false};
+}
+
+function selectQuizType(type) {
+  quizState.type = type;
+  document.querySelectorAll('.quiz-type-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('qt-' + type).classList.add('selected');
+}
+
+function startQuiz() {
+  quizState.current = 0;
+  quizState.score = 0;
+  quizState.answered = false;
+  quizState.complete = false;
+
+  if (quizState.type === 'vocab') {
+    buildVocabQuiz();
+  } else {
+    buildFillQuiz();
+  }
+  renderQuizQuestion();
+}
+
+function buildVocabQuiz() {
+  // Use allVocab; fallback to built-in if empty
+  const pool = allVocab.length >= 4 ? allVocab : getBuiltinVocab();
+  const shuffled = [...pool].sort(() => Math.random() - .5).slice(0, 20);
+
+  quizState.questions = shuffled.map(item => {
+    // Pick 3 wrong answers
+    const others = pool.filter(p => p.word !== item.word);
+    const wrongs = others.sort(() => Math.random() - .5).slice(0, 3).map(o => o.translation);
+    const options = [item.translation, ...wrongs].sort(() => Math.random() - .5);
+    return {
+      type: 'vocab',
+      question: item.word,
+      ipa: item.ipa,
+      correct: item.translation,
+      options,
+      lesson: item.lesson
+    };
+  });
+}
+
+function buildFillQuiz() {
+  const shuffled = [...COLLOCATIONS].sort(() => Math.random() - .5).slice(0, 15);
+  quizState.questions = shuffled.map(c => ({
+    type: 'fill',
+    question: c.prompt,
+    correct: c.answer,
+    verb: c.verb
+  }));
+}
+
+function getBuiltinVocab() {
+  return [
+    {word:"OTIF",translation:"On Time In Full",ipa:"/oʊ-tiː-aɪ-ɛf/",lesson:"Clase 1"},
+    {word:"disruption",translation:"interrupcion / trastorno",ipa:"/dɪsˈrʌp.ʃən/",lesson:"Clase 1"},
+    {word:"resilience",translation:"resiliencia",ipa:"/rɪˈzɪl.i.əns/",lesson:"Clase 2"},
+    {word:"procurement",translation:"aprovisionamiento",ipa:"/prəˈkjʊər.mənt/",lesson:"Clase 2"},
+    {word:"throughput",translation:"rendimiento / capacidad",ipa:"/ˈθruː.pʊt/",lesson:"Clase 3"},
+    {word:"leverage",translation:"apalancamiento / influencia",ipa:"/ˈlev.ər.ɪdʒ/",lesson:"Clase 3"},
+    {word:"benchmark",translation:"referencia / punto de comparacion",ipa:"/ˈbentʃ.mɑːk/",lesson:"Clase 4"},
+    {word:"streamline",translation:"optimizar / simplificar",ipa:"/ˈstriːm.laɪn/",lesson:"Clase 4"},
+    {word:"stakeholder",translation:"parte interesada",ipa:"/ˈsteɪk.hoʊl.dər/",lesson:"Clase 5"},
+    {word:"mitigation",translation:"mitigacion",ipa:"/ˌmɪt.ɪˈɡeɪ.ʃən/",lesson:"Clase 5"},
+    {word:"forecasting",translation:"prevision / pronostico",ipa:"/ˈfɔːr.kæst.ɪŋ/",lesson:"Clase 6"},
+    {word:"obsolescence",translation:"obsolescencia",ipa:"/ˌɒb.səˈles.əns/",lesson:"Clase 6"},
+    {word:"compliance",translation:"cumplimiento normativo",ipa:"/kəmˈplaɪ.əns/",lesson:"Clase 7"},
+    {word:"inventory",translation:"inventario",ipa:"/ˈɪn.vən.tɔːr.i/",lesson:"Clase 7"},
+    {word:"contingency",translation:"contingencia / plan B",ipa:"/kənˈtɪn.dʒən.si/",lesson:"Clase 8"},
+  ];
+}
+
+function renderQuizQuestion() {
+  if (quizState.current >= quizState.questions.length) {
+    renderQuizComplete();
+    return;
+  }
+  const q = quizState.questions[quizState.current];
+  const total = quizState.questions.length;
+  const idx = quizState.current;
+  const pct = Math.round((idx / total) * 100);
+
+  let questionHtml = '';
+  if (q.type === 'vocab') {
+    const options = q.options.map(opt => `
+      <button class="quiz-option" onclick="answerVocab('${escAttr(opt)}')" disabled>
+        ${escHtml(opt)}
+      </button>
+    `).join('');
+    questionHtml = `
+      <div class="quiz-question-card">
+        <div class="quiz-q-num">Pregunta ${idx + 1} de ${total}</div>
+        <div class="quiz-q-text">${escHtml(q.question)}</div>
+        ${q.ipa ? `<div class="quiz-q-sub">${escHtml(q.ipa)}</div>` : ''}
+        ${q.lesson ? `<div class="text-xs" style="margin-top:4px">${escHtml(q.lesson)}</div>` : ''}
+      </div>
+      <div class="quiz-options" id="quiz-opts">${options}</div>
+      <div id="quiz-feedback" style="display:none" class="quiz-feedback"></div>
+      <button id="quiz-next" class="btn btn-primary" style="display:none;width:100%" onclick="nextQuestion()">
+        ${idx + 1 < total ? 'Siguiente' : 'Ver resultado'}
+      </button>
+    `;
+  } else {
+    questionHtml = `
+      <div class="quiz-question-card">
+        <div class="quiz-q-num">Pregunta ${idx + 1} de ${total}</div>
+        <div class="quiz-q-text">${escHtml(q.question)}</div>
+        ${q.verb ? `<div class="quiz-q-sub">verbo: <em>${escHtml(q.verb)}</em></div>` : ''}
+      </div>
+      <input type="text" class="fill-input" id="fill-ans" placeholder="Escribe tu respuesta..."
+             onkeydown="if(event.key==='Enter')checkFill()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="checkFill()">Comprobar</button>
+      <div id="quiz-feedback" style="display:none" class="quiz-feedback"></div>
+      <button id="quiz-next" class="btn btn-ghost" style="display:none;width:100%;margin-top:6px" onclick="nextQuestion()">
+        ${idx + 1 < total ? 'Siguiente' : 'Ver resultado'}
+      </button>
+    `;
+  }
+
+  document.getElementById('quiz-inner').innerHTML = `
+    <div class="flex-between mb8">
+      <span class="text-sm">${quizState.type === 'vocab' ? 'Vocabulario' : 'Collocations'}</span>
+      <span class="text-sm fw600" style="color:var(--blue)">${pct}%</span>
+    </div>
+    <div class="progress-bar mb12">
+      <div class="progress-fill" style="width:${pct}%;background:var(--blue)"></div>
+    </div>
+    ${questionHtml}
+  `;
+
+  // Enable options after small delay (prevent misclick)
+  if (q.type === 'vocab') {
+    setTimeout(() => {
+      document.querySelectorAll('.quiz-option').forEach(b => b.disabled = false);
+    }, 150);
+  } else {
+    setTimeout(() => document.getElementById('fill-ans')?.focus(), 100);
+  }
+}
+
+function answerVocab(selected) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  const q = quizState.questions[quizState.current];
+  const correct = q.correct;
+  const isCorrect = selected === correct;
+  if (isCorrect) quizState.score++;
+
+  // Disable all options, color them
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.disabled = true;
+    const btnText = btn.textContent.trim();
+    if (btnText === correct) btn.classList.add('correct');
+    else if (btnText === selected && !isCorrect) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('quiz-feedback');
+  fb.style.display = 'block';
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? 'Correcto!' : `Incorrecto. La respuesta es: "${correct}"`;
+  document.getElementById('quiz-next').style.display = 'block';
+}
+
+function checkFill() {
+  if (quizState.answered) return;
+  const input = document.getElementById('fill-ans');
+  if (!input) return;
+  const val = input.value.trim().toLowerCase();
+  if (!val) return;
+  quizState.answered = true;
+  const q = quizState.questions[quizState.current];
+  const isCorrect = val === q.correct.toLowerCase();
+  if (isCorrect) quizState.score++;
+
+  input.disabled = true;
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  const fb = document.getElementById('quiz-feedback');
+  fb.style.display = 'block';
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? 'Correcto!' : `Incorrecto. La respuesta es: "${q.correct}"`;
+  document.getElementById('quiz-next').style.display = 'block';
+}
+
+function nextQuestion() {
+  quizState.current++;
+  quizState.answered = false;
+  renderQuizQuestion();
+}
+
+function renderQuizComplete() {
+  quizState.complete = true;
+  const total = quizState.questions.length;
+  const score = quizState.score;
+  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+  const wrong = total - score;
+  const colorClass = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--yellow)' : 'var(--red)';
+  const msg = pct >= 80 ? 'Excelente trabajo!' : pct >= 60 ? 'Buen progreso.' : 'Sigue practicando.';
+
+  // Save to history
+  const history = JSON.parse(localStorage.getItem('bb_quiz_history') || '[]');
+  history.push({date: todayStr(), type: quizState.type, score, total, pct});
+  localStorage.setItem('bb_quiz_history', JSON.stringify(history.slice(-50)));
+
+  document.getElementById('quiz-inner').innerHTML = `
+    <div class="quiz-score-card">
+      <div style="font-size:2.2rem;margin-bottom:8px">◎</div>
+      <div class="quiz-score-big" style="color:${colorClass}">${score}/${total}</div>
+      <div class="quiz-score-pct">${pct}% — ${msg}</div>
+      <div class="score-breakdown" style="margin-bottom:20px">
+        <div class="metric"><div class="metric-val" style="color:var(--green)">${score}</div><div class="metric-lbl">Correctas</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--red)">${wrong}</div><div class="metric-lbl">Incorrectas</div></div>
+        <div class="metric"><div class="metric-val" style="color:var(--blue)">${pct}%</div><div class="metric-lbl">Precision</div></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startQuiz()">Repetir quiz</button>
+        <button class="btn btn-ghost" onclick="renderQuizStart()">Cambiar tipo</button>
+      </div>
+    </div>
+    ${renderQuizHistory()}
+  `;
+}
+
+function renderQuizHistory() {
+  const history = JSON.parse(localStorage.getItem('bb_quiz_history') || '[]');
+  if (!history.length) return '';
+  const rows = history.slice(-5).reverse().map(h => `
+    <div class="card-sm flex-between">
+      <span class="text-sm">${escHtml(h.date)} — ${h.type === 'vocab' ? 'Vocabulario' : 'Collocations'}</span>
+      <span class="badge ${h.pct >= 80 ? 'badge-green' : h.pct >= 60 ? 'badge-yellow' : 'badge-red'}">${h.score}/${h.total}</span>
+    </div>
+  `).join('');
+  return `<div class="card" style="margin-top:16px"><div class="card-title">Historial reciente</div>${rows}</div>`;
+}
+
+// ============================================================
+// PROFESOR TAB
+// ============================================================
+const SYSTEM_PROMPT = `You are BigBrain (BB), Sergio's English C1 professor. You teach English grammar, vocabulary, and communication skills.
+
+Rules:
+- Explain grammar rules in SPANISH (castellano), give examples in ENGLISH
+- Be direct, no fluff, data-driven
+- Correct errors with explanation of WHY
+- Focus on C1 level: formal register, advanced grammar, business English
+- Sergio works in supply chain/logistics at Clarel (Grupo DIA) in Madrid
+- His weaknesses: speaking confidence, present continuous confusion, Spanish interference patterns
+- His strengths: reading comprehension, technical vocabulary, discipline`;
+
+function renderProf() {
+  const apiKey = localStorage.getItem('bb_api_key');
+  const container = document.getElementById('prof-inner');
+
+  if (!apiKey) {
+    container.innerHTML = `
+      <div style="padding:14px 16px">
+        <div class="chat-setup">
+          <div style="font-size:2rem;margin-bottom:12px">✦</div>
+          <h2>Configura tu Profesor IA</h2>
+          <p>Para usar el chat con Claude necesitas una API key de Anthropic. Puedes obtenerla en <strong>console.anthropic.com</strong>.</p>
+          <input type="password" class="api-input" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+          <div class="api-hint">Tu key se guarda solo en este dispositivo (localStorage). Nunca se envia a ningun servidor externo.</div>
+          <button class="btn btn-primary btn-lg" onclick="saveApiKey()">Guardar y conectar</button>
+        </div>
+      </div>
+    `;
+    setTimeout(() => document.getElementById('api-key-input')?.focus(), 100);
+    return;
+  }
+
+  // Render chat UI
+  container.innerHTML = `
+    <div class="chat-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--bg2)">
+        <div style="font-size:.78rem;font-weight:600;color:var(--text2)">BigBrain Profesor — claude-sonnet-4-20250514</div>
+        <button class="chat-clear-btn" onclick="clearChat()" title="Borrar chat">Borrar chat</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg assistant">
+          <div class="msg-bubble">
+            <div class="md-content"><p>Hola Sergio. Soy tu profesor de ingles C1. Preguntame sobre gramatica, vocabulario, errores especificos, o pide que corrija un texto. En que trabajamos hoy?</p></div>
+          </div>
+          <div class="msg-time">${getTimeStr()}</div>
+        </div>
+      </div>
+      <div id="typing-indicator" style="display:none;padding:8px 16px 0">
+        <div class="msg assistant" style="max-width:80px">
+          <div class="msg-bubble" style="padding:10px 16px">
+            <div class="typing-indicator">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <textarea class="chat-textarea" id="chat-input" placeholder="Escribe tu pregunta..."
+          rows="1" onkeydown="chatKeydown(event)" oninput="autoResizeTextarea(this)"></textarea>
+        <button class="chat-send" id="chat-send-btn" onclick="sendMessage()" aria-label="Enviar mensaje">›</button>
+      </div>
+      <div class="chat-key-hint">Enter envia · Shift+Enter nueva linea · <span style="cursor:pointer;color:var(--red)" onclick="clearApiKey()">Cambiar API key</span></div>
+    </div>
+  `;
+
+  setTimeout(() => document.getElementById('chat-input')?.focus(), 100);
+}
+
+function saveApiKey() {
+  const val = document.getElementById('api-key-input')?.value?.trim();
+  if (!val || !val.startsWith('sk-')) {
+    showToast('API key invalida. Debe empezar por "sk-"', 'error');
+    return;
+  }
+  localStorage.setItem('bb_api_key', val);
+  renderProf();
+}
+
+function clearApiKey() {
+  localStorage.removeItem('bb_api_key');
+  chatHistory = [];
+  renderProf();
+}
+
+function clearChat() {
+  chatHistory = [];
+  renderProf();
+}
+
+function autoResizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send-btn');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const apiKey = localStorage.getItem('bb_api_key');
+  if (!apiKey) { renderProf(); return; }
+
+  input.value = '';
+  input.style.height = 'auto';
+  input.disabled = true;
+  sendBtn.disabled = true;
+
+  // Append user message
+  chatHistory.push({role: 'user', content: text});
+  appendMessage('user', text);
+
+  // Show typing
+  const typingEl = document.getElementById('typing-indicator');
+  if (typingEl) typingEl.style.display = 'block';
+  scrollChatToBottom();
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
+
+    if (typingEl) typingEl.style.display = 'none';
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      const msg = err.error?.message || `Error ${resp.status}`;
+      appendMessage('assistant', `**Error:** ${msg}`, true);
+      chatHistory.pop(); // remove failed user msg
+    } else {
+      const data = await resp.json();
+      const assistantText = data.content?.[0]?.text || '(respuesta vacia)';
+      chatHistory.push({role: 'assistant', content: assistantText});
+      appendMessage('assistant', assistantText, true);
+    }
+  } catch(e) {
+    if (typingEl) typingEl.style.display = 'none';
+    appendMessage('assistant', `**Error de red:** ${e.message}. Verifica tu conexion.`, true);
+    chatHistory.pop();
+  }
+
+  input.disabled = false;
+  sendBtn.disabled = false;
+  input.focus();
+  scrollChatToBottom();
+}
+
+function appendMessage(role, text, isMarkdown = false) {
+  const messagesEl = document.getElementById('chat-messages');
+  if (!messagesEl) return;
+  const msgEl = document.createElement('div');
+  msgEl.className = `msg ${role}`;
+  const content = isMarkdown
+    ? `<div class="md-content">${marked.parse(text)}</div>`
+    : escHtml(text);
+  msgEl.innerHTML = `
+    <div class="msg-bubble">${content}</div>
+    <div class="msg-time">${getTimeStr()}</div>
+  `;
+  messagesEl.appendChild(msgEl);
+  scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+  const el = document.getElementById('chat-messages');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+function escAttr(str) {
+  return String(str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+function capitalize(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+function getTimeStr() {
+  return new Date().toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+}
+
+let toastTimeout;
+function showToast(msg, type = 'info') {
+  let el = document.getElementById('bb-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'bb-toast';
+    el.style.cssText = `
+      position:fixed;bottom:70px;left:50%;transform:translateX(-50%);
+      padding:10px 18px;border-radius:8px;font-size:.8rem;font-weight:600;
+      z-index:999;transition:.3s;white-space:nowrap;max-width:90vw;text-align:center;
+    `;
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = type === 'error' ? 'var(--red)' : type === 'success' ? 'var(--green)' : 'var(--bg4)';
+  el.style.color = (type === 'error' || type === 'success') ? '#fff' : 'var(--text1)';
+  el.style.opacity = '1';
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => { el.style.opacity = '0'; }, 2500);
+}
+
+// ============================================================
+// MARKED.JS CONFIG
+// ============================================================
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  renderCardsStart();
+  renderQuizStart();
+  renderProf();
+
+  // Theory tab needs data — renders on tab switch once loaded
+  document.getElementById('theory-loading').style.display = 'flex';
+});
+</script>
+</body>
+</html>
