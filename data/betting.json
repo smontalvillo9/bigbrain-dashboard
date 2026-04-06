@@ -1,11 +1,44 @@
 {
   "date": "2026-04-06",
   "picks_count": 10,
-  "paper_track": {"total": 27, "resolved": 0, "wr": 0, "roi": 0},
+  "paper_track": {
+    "total": 37,
+    "resolved": 0,
+    "wr": 0,
+    "roi": 0
+  },
   "top3": [
-    {"event": "FC St. Pauli vs 1. FC Koln", "pick": "Draw", "odds": 3.4, "bookmaker": "1xBet", "ev": 15.1, "confidence": 10, "sport": "soccer"},
-    {"event": "Union Berlin vs VfL Wolfsburg", "pick": "VfL Wolfsburg", "odds": 3.25, "bookmaker": "Coolbet", "ev": 25.9, "confidence": 10, "sport": "soccer"},
-    {"event": "Como vs Inter Milan", "pick": "Como", "odds": 3.27, "bookmaker": "1xBet", "ev": 24.2, "confidence": 10, "sport": "soccer"}
+    {
+      "event": "FC St. Pauli vs 1. FC Köln",
+      "pick": "Draw",
+      "odds": 3.4,
+      "bookmaker": "1xBet",
+      "ev": 15.1,
+      "confidence": 10,
+      "sport": "soccer_germany_bundesliga"
+    },
+    {
+      "event": "Union Berlin vs VfL Wolfsburg",
+      "pick": "VfL Wolfsburg",
+      "odds": 3.25,
+      "bookmaker": "Coolbet",
+      "ev": 25.95,
+      "confidence": 10,
+      "sport": "soccer_germany_bundesliga"
+    },
+    {
+      "event": "Como vs Inter Milan",
+      "pick": "Como",
+      "odds": 3.27,
+      "bookmaker": "1xBet",
+      "ev": 24.22,
+      "confidence": 10,
+      "sport": "soccer_italy_serie_a"
+    }
   ],
-  "combinada": {"odds": 36.14, "ev": 52.3, "legs": 3}
+  "combinada": {
+    "odds": 36.13,
+    "ev": 80.6,
+    "legs": 3
+  }
 }
