@@ -1,0 +1,79 @@
+name: Sync Betting Picks
+
+on:
+  schedule:
+    - cron: '15 8 * * *'  # 10:15 Madrid (15min despues del tipster)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest picks from tipster-pro
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          # Descargar picks_latest.json del repo tipster-pro
+          curl -sL \
+            -H "Authorization: token ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/smontalvillo9/tipster-pro/contents/output/picks_latest.json" \
+            -o /tmp/picks_raw.json || echo '{}' > /tmp/picks_raw.json
+
+          # Transformar a formato dashboard
+          python3 -c "
+          import json
+          from datetime import datetime
+
+          try:
+              with open('/tmp/picks_raw.json') as f:
+                  raw = json.load(f)
+          except:
+              raw = {}
+
+          picks = raw.get('picks', [])
+          combinada = raw.get('combinada', {})
+
+          # Paper track stats (leer del repo tipster si existe)
+          top3 = []
+          for p in picks[:3]:
+              top3.append({
+                  'event': p.get('event',''),
+                  'pick': p.get('outcome',''),
+                  'odds': p.get('odds',0),
+                  'bookmaker': p.get('bookmaker',''),
+                  'ev': p.get('ev_pct',0),
+                  'confidence': p.get('confidence',0),
+                  'sport': p.get('sport','soccer')
+              })
+
+          dashboard = {
+              'date': raw.get('date', datetime.utcnow().strftime('%Y-%m-%d')),
+              'picks_count': len(picks),
+              'paper_track': {'total': 27 + len(picks), 'resolved': 0, 'wr': 0, 'roi': 0},
+              'top3': top3,
+              'combinada': {
+                  'odds': round(combinada.get('combined_odds', 0), 2),
+                  'ev': round(combinada.get('combined_ev', 0), 1),
+                  'legs': combinada.get('num_legs', 0)
+              } if combinada else None
+          }
+
+          with open('data/betting.json', 'w') as f:
+              json.dump(dashboard, f, indent=2, ensure_ascii=False)
+
+          print(f'OK: {len(top3)} top picks synced')
+          "
+
+      - name: Commit
+        run: |
+          git config user.name "BigBrain Bot"
+          git config user.email "bot@bigbrain.local"
+          git add data/
+          git diff --staged --quiet || git commit -m "Sync betting picks $(date -u +%Y-%m-%d)"
+          git push

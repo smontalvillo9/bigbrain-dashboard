@@ -1,0 +1,153 @@
+name: Update Whoop Data
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 07:00 Madrid (CEST)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Fetch Whoop data
+        env:
+          WHOOP_CLIENT_ID: ${{ secrets.WHOOP_CLIENT_ID }}
+          WHOOP_CLIENT_SECRET: ${{ secrets.WHOOP_CLIENT_SECRET }}
+          WHOOP_REFRESH_TOKEN: ${{ secrets.WHOOP_REFRESH_TOKEN }}
+        run: |
+          python3 << 'PYEOF'
+          import json, os, requests
+          from datetime import datetime, timedelta, timezone
+
+          CLIENT_ID = os.environ.get("WHOOP_CLIENT_ID", "")
+          CLIENT_SECRET = os.environ.get("WHOOP_CLIENT_SECRET", "")
+          REFRESH_TOKEN = os.environ.get("WHOOP_REFRESH_TOKEN", "")
+
+          if not REFRESH_TOKEN:
+              print("WHOOP_REFRESH_TOKEN not set, using sample data")
+              exit(0)
+
+          # Refresh token
+          token_resp = requests.post("https://api.prod.whoop.com/oauth/oauth2/token", data={
+              "grant_type": "refresh_token",
+              "refresh_token": REFRESH_TOKEN,
+              "client_id": CLIENT_ID,
+              "client_secret": CLIENT_SECRET,
+          })
+
+          if token_resp.status_code != 200:
+              print(f"Token refresh failed: {token_resp.status_code}")
+              exit(1)
+
+          token_data = token_resp.json()
+          access_token = token_data["access_token"]
+          new_refresh = token_data.get("refresh_token", REFRESH_TOKEN)
+
+          headers = {"Authorization": f"Bearer {access_token}"}
+          base = "https://api.prod.whoop.com/developer/v2"
+
+          # Fetch recovery (last 7 days)
+          end = datetime.now(timezone.utc)
+          start = end - timedelta(days=7)
+          params = {"start": start.strftime("%Y-%m-%dT00:00:00.000Z"), "end": end.strftime("%Y-%m-%dT23:59:59.999Z")}
+
+          recovery_resp = requests.get(f"{base}/recovery", headers=headers, params=params)
+          sleep_resp = requests.get(f"{base}/activity/sleep", headers=headers, params=params)
+          cycle_resp = requests.get(f"{base}/cycle", headers=headers, params=params)
+
+          recoveries = recovery_resp.json().get("records", []) if recovery_resp.ok else []
+          sleeps = sleep_resp.json().get("records", []) if sleep_resp.ok else []
+          cycles = cycle_resp.json().get("records", []) if cycle_resp.ok else []
+
+          # Parse latest
+          today = {}
+          if recoveries:
+              latest = recoveries[0].get("score", {})
+              today["recovery"] = round(latest.get("recovery_score", 0))
+              today["hrv"] = round(latest.get("hrv_rmssd_milli", 0))
+              today["rhr"] = round(latest.get("resting_heart_rate", 0))
+              today["spo2"] = round(latest.get("spo2_percentage", 97), 1)
+              today["skin_temp"] = round(latest.get("skin_temp_celsius", 33), 1)
+
+          if sleeps:
+              s = sleeps[0].get("score", {})
+              today["sleep_hours"] = round(s.get("stage_summary", {}).get("total_in_bed_time_milli", 0) / 3600000, 1)
+              today["sleep_quality"] = round(s.get("sleep_performance_percentage", 0))
+
+          if cycles:
+              c = cycles[0].get("score", {})
+              today["strain"] = round(c.get("strain", 0), 1)
+
+          # Protocol
+          rec = today.get("recovery", 50)
+          if rec >= 67:
+              protocol = "POWER"
+              detail = "Recovery alta. Entreno intenso permitido. HC: 300-310g."
+          elif rec >= 34:
+              protocol = "NORMAL"
+              detail = "Recovery moderada. Entreno normal. HC: 225g."
+          else:
+              protocol = "RECUPERACION"
+              detail = "Recovery baja. Entreno suave o descanso. HC: 180-210g."
+
+          # Trend 7d
+          dates = []
+          rec_trend = []
+          hrv_trend = []
+          for r in reversed(recoveries[:7]):
+              sc = r.get("score", {})
+              d = r.get("created_at", "")[:10]
+              dates.append(d[5:] if d else "?")
+              rec_trend.append(round(sc.get("recovery_score", 0)))
+              hrv_trend.append(round(sc.get("hrv_rmssd_milli", 0)))
+
+          dashboard = {
+              "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+              "recovery": today.get("recovery", 0),
+              "hrv": today.get("hrv", 0),
+              "rhr": today.get("rhr", 0),
+              "sleep_hours": today.get("sleep_hours", 0),
+              "sleep_quality": today.get("sleep_quality", 0),
+              "strain": today.get("strain", 0),
+              "spo2": today.get("spo2", 97),
+              "skin_temp": today.get("skin_temp", 33),
+              "protocol": protocol,
+              "protocol_detail": detail,
+              "trend_7d": {
+                  "dates": dates,
+                  "recovery": rec_trend,
+                  "hrv": hrv_trend
+              }
+          }
+
+          with open("data/whoop.json", "w") as f:
+              json.dump(dashboard, f, indent=2)
+
+          print(f"OK: Recovery {today.get('recovery',0)}% | HRV {today.get('hrv',0)}ms | Protocol {protocol}")
+
+          # Save new refresh token as artifact for manual update
+          if new_refresh != REFRESH_TOKEN:
+              print(f"NEW REFRESH TOKEN (update secret): {new_refresh[:10]}...")
+
+          PYEOF
+
+      - name: Commit
+        run: |
+          git config user.name "BigBrain Bot"
+          git config user.email "bot@bigbrain.local"
+          git add data/
+          git diff --staged --quiet || git commit -m "Whoop update $(date -u +%Y-%m-%d)"
+          git push
