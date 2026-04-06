@@ -482,7 +482,12 @@ body{
           <option value="pre_entreno">Pre-Entreno</option>
           <option value="post_entreno">Post-Entreno</option>
         </select>
-        <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-weight:600">Ingredientes (macros por ingrediente):</div>
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-weight:600">Ingredientes:</div>
+        <div style="overflow-x:auto;margin-bottom:4px">
+          <div style="display:grid;grid-template-columns:2fr 60px 55px 55px 55px 55px 28px;gap:3px;font-size:.6rem;color:var(--text3);font-weight:600;padding:0 2px">
+            <span>Ingrediente</span><span>Cantidad</span><span>Kcal</span><span>P(g)</span><span>HC(g)</span><span>G(g)</span><span></span>
+          </div>
+        </div>
         <div id="newRecipeIngredients"></div>
         <button class="btn-secondary" style="width:auto;padding:6px 12px;font-size:.7rem;margin-bottom:10px" onclick="addIngredientRow()">+ Ingrediente</button>
         <div style="background:var(--bg3);border-radius:6px;padding:8px;margin-bottom:10px">
@@ -540,6 +545,43 @@ body{
       <div class="chart-wrap"><canvas id="chartWhoopSleep"></canvas></div>
     </div>
 
+  </div>
+</div>
+
+<!-- EDIT RECIPE MODAL -->
+<div id="editRecipeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;overflow-y:auto;padding:16px">
+  <div style="max-width:500px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:.82rem;font-weight:700;color:var(--text1)">Editar receta</div>
+      <button onclick="closeEditRecipe()" style="background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer">✕</button>
+    </div>
+    <input id="editRecipeName" type="text" placeholder="Nombre" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:8px">
+    <select id="editRecipeCat" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:10px">
+      <option value="desayunos">Desayuno</option>
+      <option value="almuerzos">Almuerzo</option>
+      <option value="comidas_principales">Comida principal</option>
+      <option value="pre_entreno">Pre-Entreno</option>
+      <option value="post_entreno">Post-Entreno</option>
+    </select>
+    <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-weight:600">Ingredientes:</div>
+    <div style="overflow-x:auto;margin-bottom:4px">
+      <div style="display:grid;grid-template-columns:2fr 60px 55px 55px 55px 55px 28px;gap:3px;font-size:.6rem;color:var(--text3);font-weight:600;padding:0 2px">
+        <span>Ingrediente</span><span>Cantidad</span><span>Kcal</span><span>P(g)</span><span>HC(g)</span><span>G(g)</span><span></span>
+      </div>
+    </div>
+    <div id="editRecipeIngredients"></div>
+    <button class="btn-secondary" style="width:auto;padding:5px 10px;font-size:.68rem;margin-bottom:10px" onclick="addEditIngRow()">+ Ingrediente</button>
+    <div style="background:var(--bg3);border-radius:6px;padding:8px;margin-bottom:10px">
+      <div style="font-size:.68rem;font-weight:600;color:var(--text2);margin-bottom:4px">Total receta:</div>
+      <div id="editRecipeTotals" style="display:flex;gap:10px;font-size:.78rem;font-weight:700">
+        <span style="color:var(--green)">0 kcal</span>
+        <span style="color:var(--blue)">P: 0g</span>
+        <span style="color:var(--yellow)">HC: 0g</span>
+        <span style="color:var(--orange)">G: 0g</span>
+      </div>
+    </div>
+    <textarea id="editRecipeSteps" placeholder="Pasos de preparacion" rows="4" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:10px;resize:vertical"></textarea>
+    <button class="btn-primary" style="width:100%" onclick="saveEditRecipe()">Guardar cambios</button>
   </div>
 </div>
 
@@ -1006,23 +1048,29 @@ function toggleCreateRecipe() {
   }
 }
 
-function addIngredientRow() {
-  const container = document.getElementById('newRecipeIngredients');
+function makeIngRow(containerId, updateFn, name='', qty='', kcal='', p='', hc='', g='') {
+  const container = document.getElementById(containerId);
   const row = document.createElement('div');
-  row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:4px;margin-bottom:4px;align-items:center';
+  const iStyle = 'background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:5px;color:var(--text1);font-size:.68rem';
+  row.style.cssText = 'display:grid;grid-template-columns:2fr 60px 55px 55px 55px 55px 28px;gap:3px;margin-bottom:3px;align-items:center';
   row.innerHTML = `
-    <input type="text" placeholder="Ingrediente" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--text1);font-size:.7rem">
-    <input type="number" placeholder="kcal" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--text1);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
-    <input type="number" placeholder="P(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--blue);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
-    <input type="number" placeholder="HC(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--yellow);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
-    <input type="number" placeholder="G(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--orange);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
-    <button onclick="this.parentElement.remove();updateRecipeTotals()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:1rem;padding:2px 6px">×</button>
+    <input type="text" placeholder="Ingrediente" value="${name}" style="${iStyle}">
+    <input type="text" placeholder="100g" value="${qty}" style="${iStyle};text-align:center">
+    <input type="number" placeholder="kcal" min="0" value="${kcal}" style="${iStyle};text-align:center" oninput="${updateFn}()">
+    <input type="number" placeholder="P" min="0" value="${p}" style="${iStyle};color:var(--blue);text-align:center" oninput="${updateFn}()">
+    <input type="number" placeholder="HC" min="0" value="${hc}" style="${iStyle};color:var(--yellow);text-align:center" oninput="${updateFn}()">
+    <input type="number" placeholder="G" min="0" value="${g}" style="${iStyle};color:var(--orange);text-align:center" oninput="${updateFn}()">
+    <button onclick="this.parentElement.remove();${updateFn}()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:1rem;padding:0 4px">×</button>
   `;
   container.appendChild(row);
 }
 
-function updateRecipeTotals() {
-  const rows = document.getElementById('newRecipeIngredients').children;
+function addIngredientRow() {
+  makeIngRow('newRecipeIngredients', 'updateRecipeTotals');
+}
+
+function sumIngRows(containerId) {
+  const rows = document.getElementById(containerId).children;
   let kcal=0, p=0, hc=0, g=0;
   for (const row of rows) {
     const inputs = row.querySelectorAll('input[type=number]');
@@ -1031,13 +1079,39 @@ function updateRecipeTotals() {
     hc += parseInt(inputs[2]?.value||0);
     g += parseInt(inputs[3]?.value||0);
   }
-  const el = document.getElementById('newRecipeTotals');
-  el.innerHTML = `
-    <span style="color:var(--green)">${kcal} kcal</span>
-    <span style="color:var(--blue)">P: ${p}g</span>
-    <span style="color:var(--yellow)">HC: ${hc}g</span>
-    <span style="color:var(--orange)">G: ${g}g</span>
-  `;
+  return {kcal,p,hc,g};
+}
+
+function renderTotals(elId, t) {
+  document.getElementById(elId).innerHTML = `
+    <span style="color:var(--green)">${t.kcal} kcal</span>
+    <span style="color:var(--blue)">P: ${t.p}g</span>
+    <span style="color:var(--yellow)">HC: ${t.hc}g</span>
+    <span style="color:var(--orange)">G: ${t.g}g</span>`;
+}
+
+function updateRecipeTotals() { renderTotals('newRecipeTotals', sumIngRows('newRecipeIngredients')); }
+function updateEditTotals() { renderTotals('editRecipeTotals', sumIngRows('editRecipeIngredients')); }
+
+function collectIngredients(containerId) {
+  const rows = document.getElementById(containerId).children;
+  let kcal=0, p=0, hc=0, g=0;
+  const parts = [];
+  for (const row of rows) {
+    const inputs = row.querySelectorAll('input');
+    const name = inputs[0]?.value?.trim();
+    const qty = inputs[1]?.value?.trim() || '';
+    const iKcal = parseInt(inputs[2]?.value||0);
+    const iP = parseInt(inputs[3]?.value||0);
+    const iHc = parseInt(inputs[4]?.value||0);
+    const iG = parseInt(inputs[5]?.value||0);
+    if (name) {
+      const qtyStr = qty ? ` ${qty}` : '';
+      parts.push(`${name}${qtyStr} (${iKcal}kcal | P:${iP}g | HC:${iHc}g | G:${iG}g)`);
+      kcal += iKcal; p += iP; hc += iHc; g += iG;
+    }
+  }
+  return { parts, macros: {kcal,p,hc,g} };
 }
 
 function saveCustomRecipe() {
@@ -1046,54 +1120,140 @@ function saveCustomRecipe() {
 
   const cat = document.getElementById('newRecipeCat').value;
   const steps = document.getElementById('newRecipeSteps').value.trim();
-  const rows = document.getElementById('newRecipeIngredients').children;
+  const {parts, macros} = collectIngredients('newRecipeIngredients');
 
-  let kcal=0, p=0, hc=0, g=0;
-  const ingredients = [];
-  for (const row of rows) {
-    const inputs = row.querySelectorAll('input');
-    const ingName = inputs[0]?.value?.trim();
-    const ingKcal = parseInt(inputs[1]?.value||0);
-    const ingP = parseInt(inputs[2]?.value||0);
-    const ingHc = parseInt(inputs[3]?.value||0);
-    const ingG = parseInt(inputs[4]?.value||0);
-    if (ingName) {
-      ingredients.push(`${ingName} (${ingKcal}kcal | P:${ingP}g | HC:${ingHc}g | G:${ingG}g)`);
-      kcal += ingKcal; p += ingP; hc += ingHc; g += ingG;
-    }
-  }
-
-  if (ingredients.length === 0) { showToast('Anade al menos 1 ingrediente', 'error'); return; }
+  if (parts.length === 0) { showToast('Anade al menos 1 ingrediente', 'error'); return; }
 
   const recipe = {
     id: 'custom_' + Date.now(),
-    name,
-    category: cat,
-    macros: { kcal, p, hc, g },
-    ingredients: ingredients.join(' | '),
+    name, category: cat,
+    macros,
+    ingredients: parts.join(' | '),
     recipe: steps || '',
-    time: '',
-    tags: ['custom'],
-    custom: true
+    time: '', tags: ['custom'], custom: true
   };
 
-  // Save to localStorage
   const customs = getCustomRecipes();
   customs.push(recipe);
   saveCustomRecipes(customs);
-
-  // Also add to H.recipes so it renders immediately
   if (H && H.recipes) H.recipes.push(recipe);
 
-  // Reset form
   document.getElementById('newRecipeName').value = '';
   document.getElementById('newRecipeSteps').value = '';
   document.getElementById('newRecipeIngredients').innerHTML = '';
   addIngredientRow();
   updateRecipeTotals();
-
   renderRecetas();
   showToast('Receta guardada: ' + name, 'success');
+}
+
+// ═══ EDIT RECIPE ═══
+let editingRecipeId = null;
+
+function openEditRecipe(id) {
+  const recipe = (H?.recipes || []).find(r => (r.id || r.name) === id);
+  if (!recipe) return;
+  editingRecipeId = id;
+
+  document.getElementById('editRecipeName').value = recipe.name || '';
+  document.getElementById('editRecipeCat').value = recipe.category || 'comidas_principales';
+  document.getElementById('editRecipeSteps').value = recipe.recipe || '';
+
+  // Parse ingredients string into rows
+  const container = document.getElementById('editRecipeIngredients');
+  container.innerHTML = '';
+  const ingStr = Array.isArray(recipe.ingredients) ? recipe.ingredients.join(' | ') : String(recipe.ingredients || '');
+  const ingParts = ingStr.split('|').map(s => s.trim()).filter(Boolean);
+
+  if (ingParts.length > 0) {
+    for (const part of ingParts) {
+      // Try to parse "name qty (Xkcal | P:Xg | HC:Xg | G:Xg)" format
+      const macroMatch = part.match(/^(.+?)\s*\((\d+)\s*kcal\s*\|\s*P:(\d+)g\s*\|\s*HC:(\d+)g\s*\|\s*G:(\d+)g\)/i);
+      if (macroMatch) {
+        const nameQty = macroMatch[1].trim();
+        // Try to split name and quantity (e.g., "Pechuga 200g" or "200g pechuga")
+        const qtyInName = nameQty.match(/^(.+?)\s+(\d+\s*(?:g|ml|kg|ud|unidad|rebanada|scoop|cucharada)s?)$/i)
+          || nameQty.match(/^(\d+\s*(?:g|ml|kg))\s+(.+)$/i);
+        let ingName = nameQty, ingQty = '';
+        if (qtyInName) {
+          ingName = qtyInName[1].trim();
+          ingQty = qtyInName[2].trim();
+        }
+        makeIngRow('editRecipeIngredients','updateEditTotals', ingName, ingQty, macroMatch[2], macroMatch[3], macroMatch[4], macroMatch[5]);
+      } else {
+        // No macro data — just the ingredient name/qty
+        const qtyMatch = part.match(/^(\d+\s*(?:g|ml|kg))\s+(.+)$/i) || part.match(/^(.+?)\s+(\d+\s*(?:g|ml|kg|ud|unidad|scoop)s?)$/i);
+        if (qtyMatch) {
+          makeIngRow('editRecipeIngredients','updateEditTotals', qtyMatch[2]||qtyMatch[1], qtyMatch[1]||qtyMatch[2]);
+        } else {
+          makeIngRow('editRecipeIngredients','updateEditTotals', part);
+        }
+      }
+    }
+  } else {
+    makeIngRow('editRecipeIngredients','updateEditTotals');
+  }
+
+  updateEditTotals();
+  document.getElementById('editRecipeModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function addEditIngRow() {
+  makeIngRow('editRecipeIngredients','updateEditTotals');
+}
+
+function closeEditRecipe() {
+  document.getElementById('editRecipeModal').style.display = 'none';
+  document.body.style.overflow = '';
+  editingRecipeId = null;
+}
+
+function saveEditRecipe() {
+  const name = document.getElementById('editRecipeName').value.trim();
+  if (!name) { showToast('Nombre requerido', 'error'); return; }
+
+  const cat = document.getElementById('editRecipeCat').value;
+  const steps = document.getElementById('editRecipeSteps').value.trim();
+  const {parts, macros} = collectIngredients('editRecipeIngredients');
+
+  if (parts.length === 0) { showToast('Anade al menos 1 ingrediente', 'error'); return; }
+
+  const updatedRecipe = {
+    id: editingRecipeId,
+    name, category: cat,
+    macros,
+    ingredients: parts.join(' | '),
+    recipe: steps,
+    time: '', custom: true, tags: ['edited']
+  };
+
+  // Update in H.recipes
+  if (H && H.recipes) {
+    const idx = H.recipes.findIndex(r => (r.id || r.name) === editingRecipeId);
+    if (idx >= 0) H.recipes[idx] = updatedRecipe;
+    else H.recipes.push(updatedRecipe);
+  }
+
+  // Save/update in localStorage custom recipes
+  let customs = getCustomRecipes();
+  const cIdx = customs.findIndex(r => (r.id || r.name) === editingRecipeId);
+  if (cIdx >= 0) customs[cIdx] = updatedRecipe;
+  else customs.push(updatedRecipe);
+  saveCustomRecipes(customs);
+
+  closeEditRecipe();
+  renderRecetas();
+  showToast('Receta actualizada: ' + name, 'success');
+}
+
+function deleteCustomRecipe(id) {
+  let customs = getCustomRecipes();
+  customs = customs.filter(r => (r.id || r.name) !== id);
+  saveCustomRecipes(customs);
+  if (H && H.recipes) H.recipes = H.recipes.filter(r => (r.id || r.name) !== id);
+  renderRecetas();
+  showToast('Receta eliminada', 'success');
 }
 
 function renderQuickRecipes() {
@@ -1407,10 +1567,12 @@ function renderRecetas() {
         <div class="recipe-card-macro">G: <span>${rFat}g</span></div>
       </div>
       <div class="recipe-expand ${isExpanded ? 'open' : ''}">
-        ${ingredients ? `<div class="recipe-ingredients"><strong style="color:var(--text1)">Ingredientes:</strong><br>${ingredients}</div>` : ''}
+        ${ingredients ? `<div class="recipe-ingredients"><strong style="color:var(--text1)">Ingredientes:</strong><br>${ingredients.replace(/\|/g, '<br>')}</div>` : ''}
         ${steps ? `<div class="recipe-steps"><strong style="color:var(--text1)">Preparacion:</strong><br>${steps}</div>` : ''}
-        <div style="margin-top:8px">
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn-secondary" style="width:auto;padding:6px 14px;font-size:.72rem;min-height:36px" onclick="event.stopPropagation();addRecipeAsMeal(${JSON.stringify(r).replace(/"/g,'&quot;')})">Registrar como comida</button>
+          <button class="btn-secondary" style="width:auto;padding:6px 14px;font-size:.72rem;min-height:36px;border-color:var(--yellow);color:var(--yellow)" onclick="event.stopPropagation();openEditRecipe('${(r.id||r.name).replace(/'/g,"\\'")}')">✏️ Editar</button>
+          ${r.custom ? `<button class="btn-secondary" style="width:auto;padding:6px 14px;font-size:.72rem;min-height:36px;border-color:var(--red);color:var(--red)" onclick="event.stopPropagation();deleteCustomRecipe('${(r.id||r.name).replace(/'/g,"\\'")}')">🗑 Borrar</button>` : ''}
         </div>
       </div>
     </div>`;
