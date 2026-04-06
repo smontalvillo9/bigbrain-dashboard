@@ -470,6 +470,35 @@ body{
     <div style="font-size:.65rem;color:var(--text3);margin-bottom:8px" id="recetasSortInfo">Ordenado por proteina</div>
     <div id="recetasList"></div>
 
+    <!-- Create recipe -->
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" style="cursor:pointer" onclick="toggleCreateRecipe()">➕ Crear receta propia <span id="createRecipeToggle" style="float:right;font-size:.8rem">▼</span></div>
+      <div id="createRecipeForm" style="display:none">
+        <input id="newRecipeName" type="text" placeholder="Nombre de la receta" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:8px">
+        <select id="newRecipeCat" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:8px">
+          <option value="desayunos">Desayuno</option>
+          <option value="almuerzos">Almuerzo</option>
+          <option value="comidas_principales" selected>Comida principal</option>
+          <option value="pre_entreno">Pre-Entreno</option>
+          <option value="post_entreno">Post-Entreno</option>
+        </select>
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-weight:600">Ingredientes (macros por ingrediente):</div>
+        <div id="newRecipeIngredients"></div>
+        <button class="btn-secondary" style="width:auto;padding:6px 12px;font-size:.7rem;margin-bottom:10px" onclick="addIngredientRow()">+ Ingrediente</button>
+        <div style="background:var(--bg3);border-radius:6px;padding:8px;margin-bottom:10px">
+          <div style="font-size:.7rem;font-weight:600;color:var(--text2);margin-bottom:4px">Total receta:</div>
+          <div id="newRecipeTotals" style="display:flex;gap:12px;font-size:.78rem;font-weight:700">
+            <span style="color:var(--green)">0 kcal</span>
+            <span style="color:var(--blue)">P: 0g</span>
+            <span style="color:var(--yellow)">HC: 0g</span>
+            <span style="color:var(--orange)">G: 0g</span>
+          </div>
+        </div>
+        <textarea id="newRecipeSteps" placeholder="Pasos de preparacion (opcional)" rows="3" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text1);font-size:.78rem;margin-bottom:8px;resize:vertical"></textarea>
+        <button class="btn-primary" style="width:100%" onclick="saveCustomRecipe()">Guardar receta</button>
+      </div>
+    </div>
+
   </div>
 
   <!-- WHOOP -->
@@ -582,6 +611,13 @@ async function init() {
   } catch(e) {
     console.warn('Health fetch failed:', e);
     H = getFallbackHealth();
+  }
+
+  // Merge custom recipes from localStorage
+  const customs = getCustomRecipes();
+  if (customs.length > 0 && H && H.recipes) {
+    H.recipes.push(...customs);
+    console.log('Custom recipes loaded:', customs.length);
   }
 
   renderAll();
@@ -946,6 +982,120 @@ function addRecipeAsMeal(recipe) {
   showToast('Anadido: ' + recipe.name);
 }
 
+// ═══ CUSTOM RECIPES ═══
+function getCustomRecipes() {
+  try { return JSON.parse(localStorage.getItem('bb_custom_recipes') || '[]'); }
+  catch(e) { return []; }
+}
+function saveCustomRecipes(list) {
+  localStorage.setItem('bb_custom_recipes', JSON.stringify(list));
+}
+
+function toggleCreateRecipe() {
+  const form = document.getElementById('createRecipeForm');
+  const toggle = document.getElementById('createRecipeToggle');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    toggle.textContent = '▲';
+    if (document.getElementById('newRecipeIngredients').children.length === 0) {
+      addIngredientRow();
+    }
+  } else {
+    form.style.display = 'none';
+    toggle.textContent = '▼';
+  }
+}
+
+function addIngredientRow() {
+  const container = document.getElementById('newRecipeIngredients');
+  const row = document.createElement('div');
+  row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:4px;margin-bottom:4px;align-items:center';
+  row.innerHTML = `
+    <input type="text" placeholder="Ingrediente" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--text1);font-size:.7rem">
+    <input type="number" placeholder="kcal" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--text1);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
+    <input type="number" placeholder="P(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--blue);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
+    <input type="number" placeholder="HC(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--yellow);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
+    <input type="number" placeholder="G(g)" min="0" style="background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:6px;color:var(--orange);font-size:.7rem;text-align:center" oninput="updateRecipeTotals()">
+    <button onclick="this.parentElement.remove();updateRecipeTotals()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:1rem;padding:2px 6px">×</button>
+  `;
+  container.appendChild(row);
+}
+
+function updateRecipeTotals() {
+  const rows = document.getElementById('newRecipeIngredients').children;
+  let kcal=0, p=0, hc=0, g=0;
+  for (const row of rows) {
+    const inputs = row.querySelectorAll('input[type=number]');
+    kcal += parseInt(inputs[0]?.value||0);
+    p += parseInt(inputs[1]?.value||0);
+    hc += parseInt(inputs[2]?.value||0);
+    g += parseInt(inputs[3]?.value||0);
+  }
+  const el = document.getElementById('newRecipeTotals');
+  el.innerHTML = `
+    <span style="color:var(--green)">${kcal} kcal</span>
+    <span style="color:var(--blue)">P: ${p}g</span>
+    <span style="color:var(--yellow)">HC: ${hc}g</span>
+    <span style="color:var(--orange)">G: ${g}g</span>
+  `;
+}
+
+function saveCustomRecipe() {
+  const name = document.getElementById('newRecipeName').value.trim();
+  if (!name) { showToast('Nombre requerido', 'error'); return; }
+
+  const cat = document.getElementById('newRecipeCat').value;
+  const steps = document.getElementById('newRecipeSteps').value.trim();
+  const rows = document.getElementById('newRecipeIngredients').children;
+
+  let kcal=0, p=0, hc=0, g=0;
+  const ingredients = [];
+  for (const row of rows) {
+    const inputs = row.querySelectorAll('input');
+    const ingName = inputs[0]?.value?.trim();
+    const ingKcal = parseInt(inputs[1]?.value||0);
+    const ingP = parseInt(inputs[2]?.value||0);
+    const ingHc = parseInt(inputs[3]?.value||0);
+    const ingG = parseInt(inputs[4]?.value||0);
+    if (ingName) {
+      ingredients.push(`${ingName} (${ingKcal}kcal | P:${ingP}g | HC:${ingHc}g | G:${ingG}g)`);
+      kcal += ingKcal; p += ingP; hc += ingHc; g += ingG;
+    }
+  }
+
+  if (ingredients.length === 0) { showToast('Anade al menos 1 ingrediente', 'error'); return; }
+
+  const recipe = {
+    id: 'custom_' + Date.now(),
+    name,
+    category: cat,
+    macros: { kcal, p, hc, g },
+    ingredients: ingredients.join(' | '),
+    recipe: steps || '',
+    time: '',
+    tags: ['custom'],
+    custom: true
+  };
+
+  // Save to localStorage
+  const customs = getCustomRecipes();
+  customs.push(recipe);
+  saveCustomRecipes(customs);
+
+  // Also add to H.recipes so it renders immediately
+  if (H && H.recipes) H.recipes.push(recipe);
+
+  // Reset form
+  document.getElementById('newRecipeName').value = '';
+  document.getElementById('newRecipeSteps').value = '';
+  document.getElementById('newRecipeIngredients').innerHTML = '';
+  addIngredientRow();
+  updateRecipeTotals();
+
+  renderRecetas();
+  showToast('Receta guardada: ' + name, 'success');
+}
+
 function renderQuickRecipes() {
   const recipes = getFilteredRecipes(quickCat);
   const cats = getCategories();
@@ -1236,7 +1386,8 @@ function renderRecetas() {
     const fitBadge = encaja ? '<span class="badge badge-green">Encaja</span>' : '<span class="badge badge-red">Excede</span>';
 
     const isExpanded = expandedRecipes[r.id || r.name];
-    const ingredients = (r.ingredients || []).join(', ');
+    const ingRaw = r.ingredients || '';
+    const ingredients = Array.isArray(ingRaw) ? ingRaw.join(', ') : String(ingRaw);
     const steps = r.recipe || '';
 
     return `<div class="recipe-card" onclick="toggleRecipe('${(r.id||r.name).replace(/'/g,'\\\'')}')" role="button" aria-expanded="${isExpanded}">
