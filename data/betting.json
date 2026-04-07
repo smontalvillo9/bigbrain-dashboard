@@ -1,5 +1,5 @@
 {
-  "date": "2026-04-06",
+  "date": "2026-04-07",
   "picks_count": 10,
   "paper_track": {
     "total": 37,
@@ -9,36 +9,36 @@
   },
   "top3": [
     {
-      "event": "FC Barcelona Bàsquet vs Panathinaikos",
-      "pick": "FC Barcelona Bàsquet",
-      "odds": 2.23,
-      "bookmaker": "Unibet (SE)",
-      "ev": 7.33,
-      "confidence": 9,
-      "sport": "basketball_euroleague"
+      "event": "Brest vs Strasbourg",
+      "pick": "Draw",
+      "odds": 3.5,
+      "bookmaker": "FanDuel",
+      "ev": 15.8,
+      "confidence": 10,
+      "sport": "soccer_france_ligue_one"
     },
     {
       "event": "Crystal Palace vs West Ham United",
       "pick": "Draw",
       "odds": 3.5,
-      "bookmaker": "Unibet (NL)",
-      "ev": 5.65,
+      "bookmaker": "FanDuel",
+      "ev": 5.29,
       "confidence": 8,
       "sport": "soccer_epl"
     },
     {
-      "event": "FSV Mainz 05 vs SC Freiburg",
-      "pick": "Draw",
-      "odds": 3.4,
-      "bookmaker": "FanDuel",
-      "ev": 4.35,
+      "event": "1. FC Heidenheim vs Union Berlin",
+      "pick": "1. FC Heidenheim",
+      "odds": 3.45,
+      "bookmaker": "Unibet (SE)",
+      "ev": 3.06,
       "confidence": 8,
       "sport": "soccer_germany_bundesliga"
     }
   ],
   "combinada": {
-    "odds": 26.54,
-    "ev": 18.3,
+    "odds": 42.26,
+    "ev": 25.9,
     "legs": 3
   }
 }
