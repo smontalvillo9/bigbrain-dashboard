@@ -1,42 +1,42 @@
 {
-  "date": "2026-04-07",
-  "recovery": 52,
-  "hrv": 105,
-  "rhr": 54,
-  "sleep_hours": 6.1,
-  "sleep_quality": 65,
-  "strain": 2.4,
-  "spo2": 94.8,
-  "skin_temp": 33.1,
+  "date": "2026-04-08",
+  "recovery": 62,
+  "hrv": 123,
+  "rhr": 52,
+  "sleep_hours": 6.0,
+  "sleep_quality": 67,
+  "strain": 4.0,
+  "spo2": 95.3,
+  "skin_temp": 32.9,
   "protocol": "NORMAL",
   "protocol_detail": "Recovery moderada. Entreno normal. HC: 225g.",
   "trend_7d": {
     "dates": [
-      "04-01",
       "04-02",
       "04-03",
       "04-04",
       "04-05",
       "04-06",
-      "04-07"
+      "04-07",
+      "04-08"
     ],
     "recovery": [
-      40,
       51,
       19,
       55,
       33,
       41,
-      52
+      52,
+      62
     ],
     "hrv": [
-      103,
       112,
       57,
       106,
       78,
       103,
-      105
+      105,
+      123
     ]
   }
 }
