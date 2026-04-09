@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-08T07:05:36",
+  "last_updated": "2026-04-09T07:09:36",
   "day_type": "mini-cut",
   "target": {
     "kcal": 2225,
@@ -61,17 +61,6 @@
         "p": 167,
         "hc": 228,
         "g": 59
-      }
-    },
-    {
-      "date": "2026-04-02",
-      "tipo_dia": "pesas",
-      "meals_count": 4,
-      "totals": {
-        "kcal": 4164,
-        "p": 236,
-        "hc": 361,
-        "g": 194
       }
     }
   ],
