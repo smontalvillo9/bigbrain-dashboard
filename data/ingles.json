@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-09T07:09:36",
+  "last_updated": "2026-04-10T07:14:33",
   "progress_pct": 72,
   "class_number": 29,
   "total_classes": 40,
@@ -17,8 +17,8 @@
     "total_unique": 497,
     "by_status": {
       "new": 0,
-      "learning": 308,
-      "mature": 189,
+      "learning": 290,
+      "mature": 207,
       "mastered": 0
     },
     "due_today": 497,
@@ -165,7 +165,7 @@
       {
         "topic": "Word Formation",
         "done": true,
-        "class": 15
+        "class": 20
       },
       {
         "topic": "Formal vs Informal Register",
