@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "settled_at": "2026-04-10T12:03:37.865663+00:00",
+  "settled_at": "2026-04-10T13:49:06.945150+00:00",
   "simples": [
     {
       "home_team": "FC Porto",
@@ -70,19 +70,19 @@
           "away_team": "Lina Gjorcheska",
           "pick_value": "1",
           "odds": 1.25,
-          "result": "void"
+          "result": "win"
         }
       ],
       "combined_odds": 2.08,
       "stake": 6,
-      "result": "void",
-      "profit": 0.0
+      "result": "win",
+      "profit": 6.48
     }
   ],
   "summary": {
-    "wins": 2,
+    "wins": 3,
     "losses": 2,
-    "total": 4,
-    "profit_units": -6.0
+    "total": 5,
+    "profit_units": 0.48
   }
 }
