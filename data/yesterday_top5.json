@@ -1,6 +1,6 @@
 {
   "date": "2026-04-09",
-  "settled_at": "2026-04-10T11:56:39.468694+00:00",
+  "settled_at": "2026-04-10T12:03:37.865663+00:00",
   "simples": [
     {
       "home_team": "FC Porto",
@@ -37,9 +37,9 @@
       "odds": 1.8,
       "stake": 7,
       "confidence": 7,
-      "result": "void",
-      "profit": 0.0,
-      "final_score": ""
+      "result": "win",
+      "profit": 5.6,
+      "final_score": "5-0"
     },
     {
       "home_team": "Houston Rockets",
@@ -63,7 +63,7 @@
           "away_team": "Samsunspor",
           "pick_value": "btts_yes",
           "odds": 1.667,
-          "result": "void"
+          "result": "win"
         },
         {
           "home_team": "Alina Korneeva",
@@ -80,9 +80,9 @@
     }
   ],
   "summary": {
-    "wins": 1,
+    "wins": 2,
     "losses": 2,
-    "total": 3,
-    "profit_units": -11.6
+    "total": 4,
+    "profit_units": -6.0
   }
 }
