@@ -1,10 +1,10 @@
 {
-  "day_type": "mini-cut",
+  "day_type": "descanso",
   "target": {
-    "kcal": 2225,
+    "kcal": 2000,
     "protein": 200,
-    "carbs": 257,
-    "fat": 44
+    "carbs": 195,
+    "fat": 42
   },
   "consumed": {
     "kcal": 0,

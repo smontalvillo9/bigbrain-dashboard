@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-04-10T07:14:33",
-  "day_type": "mini-cut",
+  "last_updated": "2026-04-11T06:47:56",
+  "day_type": "descanso",
   "target": {
-    "kcal": 2225,
+    "kcal": 2000,
     "protein": 200,
-    "carbs": 257,
-    "fat": 44
+    "carbs": 195,
+    "fat": 42
   },
   "all_targets": {
     "pesas": {
@@ -40,19 +40,7 @@
     "fat": 0
   },
   "today_meals": [],
-  "meal_history": [
-    {
-      "date": "2026-04-04",
-      "tipo_dia": "descanso",
-      "meals_count": 2,
-      "totals": {
-        "kcal": 1155,
-        "p": 91,
-        "hc": 136,
-        "g": 27
-      }
-    }
-  ],
+  "meal_history": [],
   "body_comp": [
     {
       "week": 0.0,
