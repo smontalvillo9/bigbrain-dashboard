@@ -1,11 +1,11 @@
 {
-  "date": "2026-04-10",
+  "date": "2026-04-11",
   "recovery": 48,
   "hrv": 104,
   "rhr": 58,
   "sleep_hours": 6.5,
   "sleep_quality": 77,
-  "strain": 4.0,
+  "strain": 11.8,
   "spo2": 93.5,
   "skin_temp": 33.8,
   "protocol": "NORMAL",
