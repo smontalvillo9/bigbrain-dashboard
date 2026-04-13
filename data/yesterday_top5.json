@@ -1,88 +1,88 @@
 {
-  "date": "2026-04-11",
-  "settled_at": "2026-04-12T04:12:19.578816+00:00",
+  "date": "2026-04-12",
+  "settled_at": "2026-04-13T04:21:40.359403+00:00",
   "simples": [
     {
-      "home_team": "Sint-Truidense",
-      "away_team": "Club Brugge",
+      "home_team": "Osasuna",
+      "away_team": "Real Betis",
       "sport": "football",
       "market": "1X2",
       "pick_value": "1",
-      "odds": 3.6,
+      "odds": 2.2,
+      "stake": 9,
+      "confidence": 9,
+      "result": "loss",
+      "profit": -9,
+      "final_score": "1-1"
+    },
+    {
+      "home_team": "Fortuna Sittard",
+      "away_team": "NAC Breda",
+      "sport": "football",
+      "market": "1X2",
+      "pick_value": "2",
+      "odds": 2.55,
       "stake": 8,
       "confidence": 8,
       "result": "loss",
       "profit": -8,
-      "final_score": "1-2"
+      "final_score": "1-1"
     },
     {
-      "home_team": "Charlotte Hornets",
-      "away_team": "Detroit Pistons",
+      "home_team": "Oklahoma City Thunder",
+      "away_team": "Phoenix Suns",
       "sport": "basketball",
       "market": "1X2",
-      "pick_value": "2",
-      "odds": 2.75,
-      "stake": 7,
-      "confidence": 7,
-      "result": "win",
-      "profit": 12.25,
-      "final_score": "100-118"
-    },
-    {
-      "home_team": "Burgos",
-      "away_team": "Sporting Gijón",
-      "sport": "football",
-      "market": "1X2",
-      "pick_value": "2",
-      "odds": 3.5,
-      "stake": 7,
-      "confidence": 7,
+      "pick_value": "1",
+      "odds": 1.44,
+      "stake": 9,
+      "confidence": 9,
       "result": "loss",
-      "profit": -7,
-      "final_score": "1-0"
+      "profit": -9,
+      "final_score": "103-135"
     },
     {
-      "home_team": "Maccabi",
-      "away_team": "Hapoel Tel Aviv",
+      "home_team": "Minnesota Timberwolves",
+      "away_team": "New Orleans Pelicans",
       "sport": "basketball",
       "market": "1X2",
-      "pick_value": "home",
-      "odds": 2.15,
-      "stake": 7,
-      "confidence": 7,
-      "result": "void",
-      "profit": 0.0,
-      "final_score": ""
+      "pick_value": "1",
+      "odds": 1.31,
+      "stake": 8,
+      "confidence": 8,
+      "result": "win",
+      "profit": 2.48,
+      "final_score": "132-126"
     }
   ],
   "combos": [
     {
       "legs": [
         {
-          "home_team": "Kilmarnock",
-          "away_team": "Dundee",
-          "pick_value": "btts_no",
-          "odds": 2.2,
-          "result": "loss"
+          "home_team": "Goztepe",
+          "away_team": "Kasimpasa",
+          "pick_value": "btts_yes",
+          "odds": 1.909,
+          "result": "win"
         },
         {
-          "home_team": "San Antonio Spurs",
-          "away_team": "Dallas Mavericks",
-          "pick_value": "1",
-          "odds": 1.04,
+          "home_team": "Indiana Pacers",
+          "away_team": "Detroit Pistons",
+          "pick_value": "2",
+          "odds": 1.15,
           "result": "win"
         }
       ],
-      "combined_odds": 2.29,
+      "combined_odds": 2.2,
       "stake": 6,
-      "result": "loss",
-      "profit": -6
+      "result": "win",
+      "profit": 7.2
     }
   ],
   "summary": {
-    "wins": 1,
+    "wins": 2,
     "losses": 3,
-    "total": 4,
-    "profit_units": -8.75
+    "total": 5,
+    "profit_units": -16.32
   }
 }
