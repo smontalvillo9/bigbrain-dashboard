@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-17T07:18:20",
+  "last_updated": "2026-04-18T06:55:31",
   "progress_pct": 72,
   "class_number": 29,
   "total_classes": 40,
@@ -17,8 +17,8 @@
     "total_unique": 497,
     "by_status": {
       "new": 0,
-      "learning": 241,
-      "mature": 256,
+      "learning": 207,
+      "mature": 290,
       "mastered": 0
     },
     "due_today": 497,
