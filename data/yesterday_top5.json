@@ -1,52 +1,88 @@
 {
-  "date": "2026-04-17",
-  "settled_at": "2026-04-18T03:49:13.898629+00:00",
+  "date": "2026-04-18",
+  "settled_at": "2026-04-19T04:15:54.882943+00:00",
   "simples": [
     {
-      "home_team": "Antalyaspor",
-      "away_team": "Konyaspor",
+      "home_team": "Chelsea",
+      "away_team": "Manchester United",
       "sport": "football",
       "market": "1X2",
-      "pick_value": "2",
-      "odds": 2.25,
+      "pick_value": "1",
+      "odds": 2.1,
       "stake": 8,
       "confidence": 8,
-      "result": "win",
-      "profit": 10.0,
-      "final_score": "0-2"
+      "result": "loss",
+      "profit": -8,
+      "final_score": "0-1"
     },
     {
-      "home_team": "Fenerbahce",
-      "away_team": "Caykur Rizespor",
+      "home_team": "Udinese",
+      "away_team": "Parma",
       "sport": "football",
       "market": "btts",
       "pick_value": "btts_yes",
-      "odds": 1.8,
+      "odds": 1.95,
       "stake": 8,
       "confidence": 8,
-      "result": "win",
-      "profit": 6.4,
-      "final_score": "2-2"
+      "result": "loss",
+      "profit": -8,
+      "final_score": "0-1"
     },
     {
-      "home_team": "Phoenix Suns",
-      "away_team": "Golden State Warriors",
-      "sport": "basketball",
+      "home_team": "Carolina Hurricanes",
+      "away_team": "Ottawa Senators",
+      "sport": "hockey",
       "market": "1X2",
       "pick_value": "1",
-      "odds": 1.65,
+      "odds": 1.67,
       "stake": 7,
       "confidence": 7,
-      "result": "void",
-      "profit": 0.0,
-      "final_score": ""
+      "result": "win",
+      "profit": 4.69,
+      "final_score": "2-0"
+    },
+    {
+      "home_team": "Tatjana Maria",
+      "away_team": "Marta Kostyuk",
+      "sport": "tennis",
+      "market": "1X2",
+      "pick_value": "2",
+      "odds": 1.07,
+      "stake": 10,
+      "confidence": 10,
+      "result": "win",
+      "profit": 0.7,
+      "final_score": "0-1"
     }
   ],
-  "combos": [],
+  "combos": [
+    {
+      "legs": [
+        {
+          "home_team": "Lille",
+          "away_team": "Nice",
+          "pick_value": "btts_yes",
+          "odds": 1.909,
+          "result": "loss"
+        },
+        {
+          "home_team": "Flavio Cobolli",
+          "away_team": "Alexander Zverev",
+          "pick_value": "2",
+          "odds": 1.17,
+          "result": "loss"
+        }
+      ],
+      "combined_odds": 2.23,
+      "stake": 6,
+      "result": "loss",
+      "profit": -6
+    }
+  ],
   "summary": {
     "wins": 2,
-    "losses": 0,
-    "total": 2,
-    "profit_units": 16.4
+    "losses": 3,
+    "total": 5,
+    "profit_units": -16.61
   }
 }
