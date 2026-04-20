@@ -1,57 +1,44 @@
 {
-  "date": "2026-04-18",
-  "settled_at": "2026-04-19T04:15:54.882943+00:00",
+  "date": "2026-04-19",
+  "settled_at": "2026-04-20T04:21:19.016236+00:00",
   "simples": [
     {
-      "home_team": "Chelsea",
-      "away_team": "Manchester United",
+      "home_team": "Union St.-Gilloise",
+      "away_team": "Club Brugge",
       "sport": "football",
       "market": "1X2",
       "pick_value": "1",
-      "odds": 2.1,
-      "stake": 8,
-      "confidence": 8,
-      "result": "loss",
-      "profit": -8,
-      "final_score": "0-1"
-    },
-    {
-      "home_team": "Udinese",
-      "away_team": "Parma",
-      "sport": "football",
-      "market": "btts",
-      "pick_value": "btts_yes",
-      "odds": 1.95,
-      "stake": 8,
-      "confidence": 8,
-      "result": "loss",
-      "profit": -8,
-      "final_score": "0-1"
-    },
-    {
-      "home_team": "Carolina Hurricanes",
-      "away_team": "Ottawa Senators",
-      "sport": "hockey",
-      "market": "1X2",
-      "pick_value": "1",
-      "odds": 1.67,
-      "stake": 7,
-      "confidence": 7,
+      "odds": 2.25,
+      "stake": 9,
+      "confidence": 9,
       "result": "win",
-      "profit": 4.69,
-      "final_score": "2-0"
+      "profit": 11.25,
+      "final_score": "2-1"
     },
     {
-      "home_team": "Tatjana Maria",
+      "home_team": "Dender",
+      "away_team": "Cercle Brugge KSV",
+      "sport": "football",
+      "market": "1X2",
+      "pick_value": "2",
+      "odds": 1.95,
+      "stake": 9,
+      "confidence": 9,
+      "result": "win",
+      "profit": 8.55,
+      "final_score": "1-4"
+    },
+    {
+      "home_team": "Veronika Podrez",
       "away_team": "Marta Kostyuk",
       "sport": "tennis",
       "market": "1X2",
       "pick_value": "2",
-      "odds": 1.07,
-      "stake": 10,
-      "confidence": 10,
+      "odds": 1.14,
+      "stake": 9,
+      "confidence": 9,
       "result": "win",
-      "profit": 0.7,
+      "profit": 1.26,
       "final_score": "0-1"
     }
   ],
@@ -59,30 +46,30 @@
     {
       "legs": [
         {
-          "home_team": "Lille",
-          "away_team": "Nice",
+          "home_team": "Sporting Gijón",
+          "away_team": "Cádiz",
           "pick_value": "btts_yes",
           "odds": 1.909,
           "result": "loss"
         },
         {
-          "home_team": "Flavio Cobolli",
-          "away_team": "Alexander Zverev",
-          "pick_value": "2",
-          "odds": 1.17,
-          "result": "loss"
+          "home_team": "Almería",
+          "away_team": "Málaga",
+          "pick_value": "btts_yes",
+          "odds": 1.571,
+          "result": "win"
         }
       ],
-      "combined_odds": 2.23,
+      "combined_odds": 3.0,
       "stake": 6,
       "result": "loss",
       "profit": -6
     }
   ],
   "summary": {
-    "wins": 2,
-    "losses": 3,
-    "total": 5,
-    "profit_units": -16.61
+    "wins": 3,
+    "losses": 1,
+    "total": 4,
+    "profit_units": 15.06
   }
 }
