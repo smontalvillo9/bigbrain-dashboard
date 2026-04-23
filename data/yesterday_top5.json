@@ -1,65 +1,65 @@
 {
-  "date": "2026-04-21",
-  "settled_at": "2026-04-22T04:09:33.448996+00:00",
+  "date": "2026-04-22",
+  "settled_at": "2026-04-23T04:14:04.763020+00:00",
   "simples": [
     {
-      "home_team": "Brighton & Hove Albion",
-      "away_team": "Chelsea",
+      "home_team": "Union St.-Gilloise",
+      "away_team": "KAA Gent",
       "sport": "football",
       "market": "1X2",
       "pick_value": "1",
-      "odds": 2.45,
-      "stake": 7,
-      "confidence": 7,
-      "result": "win",
-      "profit": 10.15,
-      "final_score": "3-0"
+      "odds": 1.44,
+      "stake": 9,
+      "confidence": 9,
+      "result": "loss",
+      "profit": -9,
+      "final_score": "0-0"
     },
     {
-      "home_team": "Racing Genk",
-      "away_team": "Royal Charleroi SC",
+      "home_team": "Club Brugge",
+      "away_team": "KV Mechelen",
       "sport": "football",
       "market": "btts",
-      "pick_value": "btts_yes",
-      "odds": 1.615,
+      "pick_value": "btts_no",
+      "odds": 2.0,
       "stake": 8,
       "confidence": 8,
-      "result": "win",
-      "profit": 4.92,
-      "final_score": "1-1"
+      "result": "loss",
+      "profit": -8,
+      "final_score": "6-1"
     },
     {
-      "home_team": "Maja Chwalinska",
-      "away_team": "Miroslava Medvedeva",
-      "sport": "tennis",
-      "market": "1X2",
-      "pick_value": "1",
-      "odds": 1.001,
-      "stake": 10,
-      "confidence": 10,
-      "result": "win",
-      "profit": 0.01,
-      "final_score": "1-0"
-    },
-    {
-      "home_team": "Angelina Voloshchuk",
-      "away_team": "Linda Klimovicova",
+      "home_team": "Adrian Mannarino",
+      "away_team": "Ignacio Buse",
       "sport": "tennis",
       "market": "1X2",
       "pick_value": "2",
-      "odds": 1.25,
+      "odds": 1.13,
       "stake": 9,
       "confidence": 9,
       "result": "win",
-      "profit": 2.25,
+      "profit": 1.17,
+      "final_score": "0-1"
+    },
+    {
+      "home_team": "Jesper de Jong",
+      "away_team": "Rafael Jodar",
+      "sport": "tennis",
+      "market": "1X2",
+      "pick_value": "2",
+      "odds": 1.17,
+      "stake": 9,
+      "confidence": 9,
+      "result": "win",
+      "profit": 1.53,
       "final_score": "0-1"
     }
   ],
   "combos": [],
   "summary": {
-    "wins": 4,
-    "losses": 0,
+    "wins": 2,
+    "losses": 2,
     "total": 4,
-    "profit_units": 17.33
+    "profit_units": -14.3
   }
 }
