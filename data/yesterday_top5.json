@@ -1,65 +1,12 @@
 {
-  "date": "2026-04-23",
-  "settled_at": "2026-04-24T04:18:43.880175+00:00",
-  "simples": [
-    {
-      "home_team": "PSV Eindhoven",
-      "away_team": "PEC Zwolle",
-      "sport": "football",
-      "market": "btts",
-      "pick_value": "btts_no",
-      "odds": 2.375,
-      "stake": 8,
-      "confidence": 8,
-      "result": "loss",
-      "profit": -8,
-      "final_score": "6-1"
-    },
-    {
-      "home_team": "Levante",
-      "away_team": "Sevilla",
-      "sport": "football",
-      "market": "btts",
-      "pick_value": "btts_yes",
-      "odds": 1.909,
-      "stake": 8,
-      "confidence": 8,
-      "result": "loss",
-      "profit": -8,
-      "final_score": "2-0"
-    },
-    {
-      "home_team": "Los Angeles Kings",
-      "away_team": "Colorado Avalanche",
-      "sport": "hockey",
-      "market": "1X2",
-      "pick_value": "2",
-      "odds": 1.63,
-      "stake": 7,
-      "confidence": 7,
-      "result": "void",
-      "profit": 0.0,
-      "final_score": ""
-    },
-    {
-      "home_team": "Adam Walton",
-      "away_team": "Martin Landaluce",
-      "sport": "tennis",
-      "market": "1X2",
-      "pick_value": "2",
-      "odds": 1.22,
-      "stake": 9,
-      "confidence": 9,
-      "result": "loss",
-      "profit": -9,
-      "final_score": "1-0"
-    }
-  ],
+  "date": "2026-04-24",
+  "settled_at": "2026-04-25T03:53:28.411780+00:00",
+  "simples": [],
   "combos": [],
   "summary": {
     "wins": 0,
-    "losses": 3,
-    "total": 3,
-    "profit_units": -25.0
+    "losses": 0,
+    "total": 0,
+    "profit_units": 0
   }
 }
