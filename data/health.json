@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-05-15T08:36:51",
-  "day_type": "pesas",
+  "last_updated": "2026-05-16T07:47:11",
+  "day_type": "descanso",
   "target": {
-    "kcal": 2450,
+    "kcal": 2000,
     "protein": 200,
-    "carbs": 305,
-    "fat": 47
+    "carbs": 195,
+    "fat": 42
   },
   "all_targets": {
     "pesas": {
