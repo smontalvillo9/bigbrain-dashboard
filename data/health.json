@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-06-23T08:55:42",
-  "day_type": "futbol",
+  "last_updated": "2026-06-24T08:50:40",
+  "day_type": "pesas",
   "target": {
-    "kcal": 2650,
+    "kcal": 2450,
     "protein": 200,
-    "carbs": 355,
-    "fat": 50
+    "carbs": 305,
+    "fat": 47
   },
   "all_targets": {
     "pesas": {
