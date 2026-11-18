@@ -1,10 +1,10 @@
 {
-  "day_type": "futbol",
+  "day_type": "pesas",
   "target": {
-    "kcal": 2650,
+    "kcal": 2450,
     "protein": 200,
-    "carbs": 355,
-    "fat": 50
+    "carbs": 305,
+    "fat": 47
   },
   "consumed": {
     "kcal": 0,
