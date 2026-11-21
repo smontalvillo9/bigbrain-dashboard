@@ -931,36 +931,6 @@
       "vocabulary": [
         {
           "word": "laid bare",
-          "translation": "**Significado correcto**: Exposed or revealed something hidden — mostrar algo que estaba oculto.",
-          "ipa": ""
-        },
-        {
-          "word": "scrambling",
-          "translation": "Rushing desperately to do something without a clear plan. Cuando algo sale mal y vas corriendo intentando arreglarlo sin mucho plan.",
-          "ipa": ""
-        },
-        {
-          "word": "looms",
-          "translation": "Something threatening is approaching, getting closer. Crea sensación de ansiedad. Siempre negativo.",
-          "ipa": ""
-        },
-        {
-          "word": "prohibitively expensive",
-          "translation": "",
-          "ipa": ""
-        },
-        {
-          "word": "absorb shocks",
-          "translation": "",
-          "ipa": ""
-        },
-        {
-          "word": "first contact with reality",
-          "translation": "",
-          "ipa": ""
-        },
-        {
-          "word": "laid bare",
           "translation": "/leɪd beər/",
           "ipa": "/leɪd beər/"
         },
@@ -1058,6 +1028,36 @@
           "word": "replicate",
           "translation": "/ˈreplɪkeɪt/",
           "ipa": "/ˈreplɪkeɪt/"
+        },
+        {
+          "word": "laid bare",
+          "translation": "**Significado correcto**: Exposed or revealed something hidden — mostrar algo que estaba oculto.",
+          "ipa": ""
+        },
+        {
+          "word": "scrambling",
+          "translation": "Rushing desperately to do something without a clear plan. Cuando algo sale mal y vas corriendo intentando arreglarlo sin mucho plan.",
+          "ipa": ""
+        },
+        {
+          "word": "looms",
+          "translation": "Something threatening is approaching, getting closer. Crea sensación de ansiedad. Siempre negativo.",
+          "ipa": ""
+        },
+        {
+          "word": "prohibitively expensive",
+          "translation": "",
+          "ipa": ""
+        },
+        {
+          "word": "absorb shocks",
+          "translation": "",
+          "ipa": ""
+        },
+        {
+          "word": "first contact with reality",
+          "translation": "",
+          "ipa": ""
         }
       ]
     },
@@ -3034,6 +3034,6 @@
   ],
   "metadata": {
     "total_lessons": 26,
-    "last_extracted": "2026-11-20T14:32:04"
+    "last_extracted": "2026-11-21T13:50:44"
   }
 }
